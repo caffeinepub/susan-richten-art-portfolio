@@ -1,213 +1,200 @@
 import { useState } from 'react';
-import { useCMS, CareerMilestone, PressMention } from '../../contexts/CMSContext';
+import { useCMS } from '../../contexts/CMSContext';
 
 export default function AboutPageEditor() {
-  const { aboutPageContent, updateAboutPageContent, updateCareerMilestones } = useCMS();
+  const {
+    siteSettings,
+    updateSiteSettings,
+    careerMilestones,
+    updateCareerMilestones,
+    pressMentions,
+    setPressMentions,
+  } = useCMS();
 
-  const [form, setForm] = useState({
-    bio: aboutPageContent.bio,
-    artistStatement: aboutPageContent.artistStatement,
-    portraitImage: aboutPageContent.portraitImage,
-    careerMilestones: aboutPageContent.careerMilestones,
-    pressLinks: aboutPageContent.pressLinks,
-  });
+  const [bio, setBio] = useState(siteSettings.aboutBio || '');
+  const [artistStatement, setArtistStatement] = useState(siteSettings.artistStatement || '');
+  const [saved, setSaved] = useState(false);
 
-  const [newPressLink, setNewPressLink] = useState<Omit<PressMention, 'id'>>({
-    publication: '',
-    date: '',
-    headline: '',
-    url: '',
-    excerpt: '',
-  });
+  const [newMilestone, setNewMilestone] = useState({ year: '', event: '' });
+  const [newPressLink, setNewPressLink] = useState({ publication: '', date: '', headline: '', url: '', excerpt: '' });
 
-  function addMilestone() {
-    setForm(f => ({
-      ...f,
-      careerMilestones: [
-        ...f.careerMilestones,
-        { id: `ml-${Date.now()}`, year: String(new Date().getFullYear()), event: '' },
-      ],
-    }));
-  }
+  const handleSave = () => {
+    updateSiteSettings({ aboutBio: bio, artistStatement });
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+  };
 
-  function removeMilestone(id: string) {
-    setForm(f => ({ ...f, careerMilestones: f.careerMilestones.filter(m => m.id !== id) }));
-  }
+  const addMilestone = () => {
+    if (!newMilestone.year || !newMilestone.event) return;
+    updateCareerMilestones([
+      ...careerMilestones,
+      { id: Date.now().toString(), year: newMilestone.year, event: newMilestone.event },
+    ]);
+    setNewMilestone({ year: '', event: '' });
+  };
 
-  function updateMilestone(id: string, field: keyof CareerMilestone, value: string) {
-    setForm(f => ({
-      ...f,
-      careerMilestones: f.careerMilestones.map(m => m.id === id ? { ...m, [field]: value } : m),
-    }));
-  }
+  const deleteMilestone = (id: string) => {
+    updateCareerMilestones(careerMilestones.filter(m => m.id !== id));
+  };
 
-  function handleSave() {
-    updateAboutPageContent({
-      bio: form.bio,
-      artistStatement: form.artistStatement,
-      portraitImage: form.portraitImage,
-      careerMilestones: form.careerMilestones,
-      pressLinks: form.pressLinks,
-    });
-    updateCareerMilestones(form.careerMilestones);
-  }
-
-  function addPressLink() {
-    if (!newPressLink.publication || !newPressLink.headline) return;
-    const link: PressMention = { ...newPressLink, id: Date.now().toString() };
-    setForm(f => ({ ...f, pressLinks: [...f.pressLinks, link] }));
+  const addPressLink = () => {
+    if (!newPressLink.publication) return;
+    setPressMentions([
+      ...pressMentions,
+      {
+        id: Date.now().toString(),
+        publication: newPressLink.publication,
+        date: newPressLink.date,
+        headline: newPressLink.headline,
+        url: newPressLink.url,
+        excerpt: newPressLink.excerpt,
+      },
+    ]);
     setNewPressLink({ publication: '', date: '', headline: '', url: '', excerpt: '' });
-  }
+  };
 
-  function removePressLink(id: string) {
-    setForm(f => ({ ...f, pressLinks: f.pressLinks.filter(p => p.id !== id) }));
-  }
-
-  const inputClass = 'w-full px-3 py-2 border border-sand/60 rounded-sm bg-warm-white text-charcoal text-sm focus:outline-none focus:border-gold';
-  const labelClass = 'block text-xs font-medium text-charcoal-muted uppercase tracking-wide mb-1';
+  const deletePressLink = (id: string) => {
+    setPressMentions(pressMentions.filter(m => m.id !== id));
+  };
 
   return (
     <div className="space-y-8">
       <div>
-        <h3 className="font-serif text-lg text-charcoal mb-4">About Page Content</h3>
+        <h2 className="text-lg font-semibold text-charcoal mb-1">About Page</h2>
+        <p className="text-sm text-charcoal/60">Edit the About page content.</p>
+      </div>
 
-        <div className="space-y-4">
-          <div>
-            <label className={labelClass}>Biography</label>
-            <textarea
-              value={form.bio}
-              onChange={e => setForm(f => ({ ...f, bio: e.target.value }))}
-              rows={5}
-              className={inputClass}
-              placeholder="Artist biography..."
-            />
-          </div>
-
-          <div>
-            <label className={labelClass}>Artist Statement</label>
-            <textarea
-              value={form.artistStatement}
-              onChange={e => setForm(f => ({ ...f, artistStatement: e.target.value }))}
-              rows={5}
-              className={inputClass}
-              placeholder="Artist statement..."
-            />
-          </div>
-
-          <div>
-            <label className={labelClass}>Portrait Image URL</label>
-            <input
-              type="text"
-              value={form.portraitImage}
-              onChange={e => setForm(f => ({ ...f, portraitImage: e.target.value }))}
-              className={inputClass}
-              placeholder="/assets/generated/artist-portrait.dim_800x1000.png"
-            />
-          </div>
+      {/* Bio */}
+      <div className="space-y-4">
+        <h3 className="text-sm font-semibold text-charcoal uppercase tracking-wide">Artist Bio</h3>
+        <div>
+          <label className="block text-sm font-medium text-charcoal mb-1">Bio</label>
+          <textarea
+            value={bio}
+            onChange={e => setBio(e.target.value)}
+            rows={5}
+            placeholder="Susan Richten is a contemporary fine artist..."
+            className="w-full border border-stone/30 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gold resize-none"
+          />
         </div>
+        <div>
+          <label className="block text-sm font-medium text-charcoal mb-1">Artist Statement</label>
+          <textarea
+            value={artistStatement}
+            onChange={e => setArtistStatement(e.target.value)}
+            rows={4}
+            placeholder="My work is an exploration..."
+            className="w-full border border-stone/30 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gold resize-none"
+          />
+        </div>
+        <button
+          onClick={handleSave}
+          className="bg-gold text-white px-4 py-2 rounded text-sm font-medium hover:bg-gold/90 transition-colors"
+        >
+          {saved ? 'Saved!' : 'Save Bio & Statement'}
+        </button>
       </div>
 
       {/* Career Milestones */}
-      <div>
-        <div className="flex items-center justify-between mb-3">
-          <h4 className="font-medium text-charcoal">Career Milestones</h4>
+      <div className="space-y-3">
+        <h3 className="text-sm font-semibold text-charcoal uppercase tracking-wide">Career Milestones</h3>
+        <ul className="space-y-2">
+          {careerMilestones.map(m => (
+            <li key={m.id} className="flex items-center justify-between bg-stone/10 rounded px-3 py-2 text-sm">
+              <span><strong>{m.year}</strong> — {m.event}</span>
+              <button
+                onClick={() => deleteMilestone(m.id)}
+                className="text-red-400 hover:text-red-600 text-xs ml-2"
+              >
+                Remove
+              </button>
+            </li>
+          ))}
+        </ul>
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={newMilestone.year}
+            onChange={e => setNewMilestone(p => ({ ...p, year: e.target.value }))}
+            placeholder="Year"
+            className="w-20 border border-stone/30 rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-gold"
+          />
+          <input
+            type="text"
+            value={newMilestone.event}
+            onChange={e => setNewMilestone(p => ({ ...p, event: e.target.value }))}
+            placeholder="Event description"
+            className="flex-1 border border-stone/30 rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-gold"
+          />
           <button
             onClick={addMilestone}
-            className="text-xs text-gold hover:text-gold/80 border border-gold/40 hover:border-gold px-3 py-1 rounded-sm transition-colors"
+            className="bg-charcoal text-white px-3 py-1.5 rounded text-sm hover:bg-charcoal/80 transition-colors"
           >
-            + Add Milestone
+            Add
           </button>
-        </div>
-        <div className="space-y-2">
-          {form.careerMilestones.map(m => (
-            <div key={m.id} className="flex gap-2 items-center">
-              <input
-                type="text"
-                value={m.year}
-                onChange={e => updateMilestone(m.id, 'year', e.target.value)}
-                className="w-20 px-2 py-1.5 border border-sand/60 rounded-sm text-sm bg-warm-white text-charcoal focus:outline-none focus:border-gold"
-                placeholder="Year"
-              />
-              <input
-                type="text"
-                value={m.event}
-                onChange={e => updateMilestone(m.id, 'event', e.target.value)}
-                className="flex-1 px-2 py-1.5 border border-sand/60 rounded-sm text-sm bg-warm-white text-charcoal focus:outline-none focus:border-gold"
-                placeholder="Event description"
-              />
-              <button
-                onClick={() => removeMilestone(m.id)}
-                className="text-red-400 hover:text-red-600 text-xs px-2 py-1 shrink-0"
-              >
-                ✕
-              </button>
-            </div>
-          ))}
         </div>
       </div>
 
       {/* Press Links */}
-      <div>
-        <h4 className="font-medium text-charcoal mb-3">Press Links</h4>
-        <div className="space-y-2 mb-4">
-          {form.pressLinks.map(p => (
-            <div key={p.id} className="flex items-center gap-2 p-2 bg-sand/20 rounded-sm text-sm">
-              <span className="flex-1 text-charcoal">{p.publication} — {p.headline}</span>
-              <button onClick={() => removePressLink(p.id)} className="text-red-400 hover:text-red-600 shrink-0">✕</button>
-            </div>
+      <div className="space-y-3">
+        <h3 className="text-sm font-semibold text-charcoal uppercase tracking-wide">Press Mentions</h3>
+        <ul className="space-y-2">
+          {pressMentions.map(m => (
+            <li key={m.id} className="flex items-center justify-between bg-stone/10 rounded px-3 py-2 text-sm">
+              <span><strong>{m.publication}</strong> — {m.headline || m.date}</span>
+              <button
+                onClick={() => deletePressLink(m.id)}
+                className="text-red-400 hover:text-red-600 text-xs ml-2"
+              >
+                Remove
+              </button>
+            </li>
           ))}
-        </div>
-        <div className="grid grid-cols-2 gap-2 mb-2">
+        </ul>
+        <div className="grid grid-cols-2 gap-2">
           <input
             type="text"
             value={newPressLink.publication}
             onChange={e => setNewPressLink(p => ({ ...p, publication: e.target.value }))}
-            className={inputClass}
             placeholder="Publication"
+            className="border border-stone/30 rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-gold"
           />
           <input
             type="text"
             value={newPressLink.headline}
             onChange={e => setNewPressLink(p => ({ ...p, headline: e.target.value }))}
-            className={inputClass}
             placeholder="Headline"
+            className="border border-stone/30 rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-gold"
           />
           <input
             type="text"
             value={newPressLink.date}
             onChange={e => setNewPressLink(p => ({ ...p, date: e.target.value }))}
-            className={inputClass}
-            placeholder="Date (YYYY-MM-DD)"
+            placeholder="Date (e.g. 2023-09)"
+            className="border border-stone/30 rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-gold"
           />
           <input
-            type="url"
+            type="text"
             value={newPressLink.url}
             onChange={e => setNewPressLink(p => ({ ...p, url: e.target.value }))}
-            className={inputClass}
             placeholder="URL"
+            className="border border-stone/30 rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-gold"
+          />
+          <textarea
+            value={newPressLink.excerpt}
+            onChange={e => setNewPressLink(p => ({ ...p, excerpt: e.target.value }))}
+            placeholder="Excerpt"
+            rows={2}
+            className="col-span-2 border border-stone/30 rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-gold resize-none"
           />
         </div>
-        <textarea
-          value={newPressLink.excerpt}
-          onChange={e => setNewPressLink(p => ({ ...p, excerpt: e.target.value }))}
-          rows={2}
-          className={inputClass}
-          placeholder="Excerpt..."
-        />
         <button
           onClick={addPressLink}
-          className="mt-2 text-xs text-gold hover:text-gold/80 border border-gold/40 hover:border-gold px-3 py-1 rounded-sm transition-colors"
+          className="bg-charcoal text-white px-3 py-1.5 rounded text-sm hover:bg-charcoal/80 transition-colors"
         >
-          + Add Press Link
+          Add Press Mention
         </button>
       </div>
-
-      <button
-        onClick={handleSave}
-        className="px-6 py-2.5 bg-gold text-warm-white text-sm font-medium rounded-sm hover:bg-gold/90 transition-colors"
-      >
-        Save About Page
-      </button>
     </div>
   );
 }

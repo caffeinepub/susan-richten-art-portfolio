@@ -1,289 +1,40 @@
 {
   "kind": "build_request",
-  "title": "Apply all suggested UX and admin improvements to Susan Richten's portfolio",
+  "title": "Replace all 'Marina Vasquez' name references with 'Susan Richten'",
   "projectName": "Susan Richten Portfolio",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-57",
-      "text": "Add skeleton loading screens to all public pages (Home, Gallery, Commissions, About, Contact, Testimonials) and the admin panel. While CMS data is loading (isLoading: true from CMSContext), render shimmer/skeleton placeholder elements in place of artwork cards, testimonial cards, press mention cards, and form sections. Use animated pulse or shimmer CSS animation consistent with the warm beige/charcoal design system.",
+      "id": "REQ-71",
+      "text": "Search the entire frontend codebase for any string literal, default value, placeholder text, sample data, or comment that contains the name 'Marina Vasquez' and replace every occurrence with 'Susan Richten'. This includes but is not limited to: CMSContext default/sample data (frontend/src/contexts/CMSContext.tsx), HeroEditor defaults (frontend/src/components/admin/HeroEditor.tsx), Header logo/wordmark (frontend/src/components/Header.tsx), Footer brand name (frontend/src/components/Footer.tsx), HTML page title (frontend/index.html), testimonial sample data, press mention sample data, blog post sample data, artwork sample data, any admin page labels, and any other component or file where 'Marina Vasquez' appears as a hardcoded string.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-3"
+          "msg-user-latest"
         ],
         "quotes": [
-          "Add skeleton screens while content loads for a more polished feel"
+          "Replace all names of \"Marina Vasquez\" and replace them with \"Susan Richten\""
         ]
       },
       "acceptanceCriteria": [
-        "A shimmer/skeleton placeholder appears in place of artwork cards while artworks are loading",
-        "Skeleton screens appear on Home, Gallery, Commissions, About, Contact, and Testimonials pages",
-        "Skeleton animation uses pulse or shimmer effect in warm beige tones",
-        "Once loading completes, skeletons are replaced by real content without layout shift"
-      ]
-    },
-    {
-      "id": "REQ-58",
-      "text": "Add a 'Back to Top' button that appears on long pages (Gallery, Commissions, About, and Testimonials). The button must become visible after the user scrolls down more than 400px and smoothly scrolls the page back to the top when clicked. Style it using the warm beige/charcoal design system (e.g., a fixed circular button in the bottom-right corner with a charcoal upward arrow on beige background).",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-3"
-        ],
-        "quotes": [
-          "Add a 'Back to Top' button on long pages like Gallery and Commissions"
-        ]
-      },
-      "acceptanceCriteria": [
-        "A 'Back to Top' button is present on Gallery, Commissions, About, and Testimonials pages",
-        "The button is hidden until the user scrolls more than 400px down",
-        "Clicking the button smoothly scrolls the page to the top",
-        "Button is fixed in the bottom-right corner and styled to match the design system"
-      ]
-    },
-    {
-      "id": "REQ-59",
-      "text": "Update the Header component (frontend/src/components/Header.tsx) so that the active navigation link is visually distinct from inactive links. Apply a bold font weight and/or an underline or bottom border accent in the gold/charcoal design token to the link matching the current route. The active state must update automatically as the user navigates between pages.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-3"
-        ],
-        "quotes": [
-          "Make the active navigation link visually distinct (bold or underlined)"
-        ]
-      },
-      "acceptanceCriteria": [
-        "The nav link for the current page is visually distinct (bold and/or underlined) from other nav links",
-        "The active state updates when the route changes",
-        "Styling is consistent with the warm beige/charcoal/gold design system"
-      ]
-    },
-    {
-      "id": "REQ-60",
-      "text": "Add breadcrumb navigation to all public pages (Gallery, Commissions, About, Contact, Testimonials). Render a breadcrumb trail below the page header/hero showing 'Home > [Page Name]'. On the Home page, breadcrumbs are not needed. Use the design system's charcoal/beige palette. Each breadcrumb segment should be a link except the current page (which is plain text).",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-3"
-        ],
-        "quotes": [
-          "Add breadcrumbs so visitors always know where they are"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Breadcrumbs appear on Gallery, Commissions, About, Contact, and Testimonials pages",
-        "Breadcrumb shows 'Home > [Current Page]' with 'Home' as a clickable link",
-        "Current page name is plain text (not a link)",
-        "Breadcrumb styling matches the warm beige/charcoal design system"
-      ]
-    },
-    {
-      "id": "REQ-61",
-      "text": "Add a search bar to the Gallery page (frontend/src/pages/Gallery.tsx) above the filter tabs. The search input filters visible artworks in real time by title, medium, or location (case-insensitive substring match against CMS artwork data). When a search term is active, combine it with the active category filter so both filters apply simultaneously. Clear the search term when the user deletes all input.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-3"
-        ],
-        "quotes": [
-          "Add a search bar so visitors can find artworks by title, medium, or location"
-        ]
-      },
-      "acceptanceCriteria": [
-        "A search input appears above the gallery filter tabs",
-        "Typing in the search bar filters artworks by title, medium, or location in real time",
-        "Search and category filter work together (both constraints apply)",
-        "Clearing the search input restores the full category-filtered view"
-      ]
-    },
-    {
-      "id": "REQ-62",
-      "text": "Add a 'Request This Style' button to ArtworkCard (frontend/src/components/ArtworkCard.tsx) that appears only on artwork cards where availability is 'Sold'. Clicking the button navigates the user to the /commissions page with a URL query parameter pre-filling the Project Description field with 'I am interested in a commission inspired by [artwork title]'. Style the button subtly (small, outlined) so it complements the card without overwhelming the design.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-3"
-        ],
-        "quotes": [
-          "Add a 'Request This Style' button on sold artwork cards to capture interest"
-        ]
-      },
-      "acceptanceCriteria": [
-        "'Request This Style' button appears only on sold artwork cards",
-        "Clicking the button navigates to /commissions",
-        "The commission inquiry form's Project Description is pre-filled with a reference to the sold artwork title",
-        "Button styling is subtle and fits the warm beige/charcoal design system"
-      ]
-    },
-    {
-      "id": "REQ-63",
-      "text": "Update ArtworkCard (frontend/src/components/ArtworkCard.tsx) to display the artwork's size/dimensions more prominently below the title or as a secondary detail line. The size field from the CMS artwork data should be shown in a legible font size (at least 12px) using Lato font in charcoal, visible without hovering.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-3"
-        ],
-        "quotes": [
-          "Show artwork dimensions more prominently on the card"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Artwork size/dimensions are displayed on each gallery card below the title",
-        "The dimensions text is visible without hovering",
-        "The text uses Lato font and charcoal color from the design system"
-      ]
-    },
-    {
-      "id": "REQ-64",
-      "text": "Update the CommissionInquiryForm (frontend/src/components/CommissionInquiryForm.tsx) and the ContactForm (frontend/src/components/ContactForm.tsx) to display a prominent estimated response time notice — 'We typically respond within 24–48 hours' — directly above the submit button, styled with the gold or charcoal accent color so it is clearly visible before the user submits.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-3"
-        ],
-        "quotes": [
-          "Show estimated response time more prominently on the inquiry form"
-        ]
-      },
-      "acceptanceCriteria": [
-        "A '24–48 hours response time' notice is visible above the submit button on both the commission and contact forms",
-        "The notice is styled to stand out (gold or charcoal accent, not grey/muted)",
-        "The notice appears before submission, not only after"
-      ]
-    },
-    {
-      "id": "REQ-65",
-      "text": "Add a multi-step progress indicator to the CommissionInquiryForm (frontend/src/components/CommissionInquiryForm.tsx). Split the form into at least 2 logical steps: Step 1 — Project Details (Name, Email, Phone, Project Type, Size, Location), Step 2 — Budget & Description (Budget Range, Timeline, Project Description, file upload). Display a step progress bar or numbered step indicators at the top of the form showing the current step and total steps. Include 'Next', 'Back', and 'Submit' buttons to navigate between steps.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-3"
-        ],
-        "quotes": [
-          "Add a progress indicator to the multi-field commission form so it feels less overwhelming"
-        ]
-      },
-      "acceptanceCriteria": [
-        "The commission inquiry form is split into at least 2 steps",
-        "A step progress bar or numbered step indicator is shown at the top",
-        "Step 1 contains contact and project type fields; Step 2 contains budget, description, and file upload",
-        "'Next' advances to step 2 with basic validation; 'Back' returns to step 1; 'Submit' on step 2 submits the form",
-        "Existing submission behavior and CMSContext integration remain unchanged"
-      ]
-    },
-    {
-      "id": "REQ-66",
-      "text": "Update the Featured Artworks section on the Home page (frontend/src/pages/Home.tsx) so that clicking on a featured artwork card opens the Gallery Lightbox directly on that artwork. Pass the clicked artwork's ID to a shared lightbox state or navigate to /gallery with a query parameter (e.g., ?open=<artworkId>) that auto-opens the lightbox on the matching artwork when the Gallery page loads.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-3"
-        ],
-        "quotes": [
-          "Make the Featured Works section link directly to those pieces in the gallery lightbox"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Clicking a featured artwork card on the Home page opens the lightbox on that artwork",
-        "The lightbox shows the correct artwork details and images",
-        "Navigation away from the lightbox returns the user to a sensible state (Home or Gallery)"
-      ]
-    },
-    {
-      "id": "REQ-67",
-      "text": "Replace the static hero background on the Home page (frontend/src/pages/Home.tsx) with an animated slideshow that cycles through the featured artwork PlaceholderImage components. Each featured artwork's image (or placeholder) should auto-advance every 4–5 seconds with a smooth crossfade or slide transition. Keep the artist name and tagline overlay on top of the slideshow. Add prev/next arrow controls and dot indicators for manual navigation.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-3"
-        ],
-        "quotes": [
-          "Add a short artist video or animated slideshow in the hero to bring the work to life"
-        ]
-      },
-      "acceptanceCriteria": [
-        "The hero section displays an animated slideshow cycling through featured artwork images",
-        "Slides auto-advance every 4–5 seconds with a crossfade or slide transition",
-        "Artist name and tagline overlay remain visible on all slides",
-        "Prev/next arrows and dot indicators allow manual navigation",
-        "Slideshow is responsive and works on mobile"
-      ]
-    },
-    {
-      "id": "REQ-68",
-      "text": "Add bulk action controls to the Admin Gallery Manager page (frontend/src/pages/admin/GalleryManager.tsx). Add a checkbox to each artwork row and a 'Select All' checkbox in the table header. When one or more artworks are selected, show a bulk actions toolbar with the following options: 'Mark as Featured', 'Remove from Featured', 'Mark as Sold', 'Mark as Available', 'Toggle Visibility', and 'Delete Selected' (with a confirmation dialog). Apply the selected action to all checked artworks via CMSContext update functions.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-3"
-        ],
-        "quotes": [
-          "Add bulk actions in the Gallery Manager (e.g., mark multiple artworks featured or sold at once)"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Each artwork row in the Gallery Manager has a checkbox",
-        "A 'Select All' checkbox in the header selects/deselects all rows",
-        "When at least one row is selected, a bulk actions toolbar appears",
-        "Bulk actions include: Mark as Featured, Remove from Featured, Mark as Sold, Mark as Available, Toggle Visibility, Delete Selected",
-        "Delete Selected shows a confirmation dialog before proceeding",
-        "All bulk actions update CMSContext immediately"
-      ]
-    },
-    {
-      "id": "REQ-69",
-      "text": "Add an 'Export as CSV' button to the Admin Commissions Manager page (frontend/src/pages/admin/CommissionsManager.tsx). When clicked, generate a CSV file containing all displayed commission inquiries (respecting the active filter tab) with columns: Name, Email, Phone, Project Type, Size, Location, Budget Range, Timeline, Description, Date Submitted, Status. Trigger a browser download of the generated CSV file named 'commission-inquiries.csv'.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-3"
-        ],
-        "quotes": [
-          "Add an export button for commission inquiries (download as CSV)"
-        ]
-      },
-      "acceptanceCriteria": [
-        "An 'Export as CSV' button is visible on the Commissions Manager page",
-        "Clicking the button triggers a download of 'commission-inquiries.csv'",
-        "The CSV includes all inquiry fields as columns",
-        "The exported data respects the active filter tab (All, Unread, or Responded)"
-      ]
-    },
-    {
-      "id": "REQ-70",
-      "text": "Add a 'Preview' button to the Admin Pages Editor (frontend/src/pages/admin/PagesEditor.tsx) and the Admin Settings page (frontend/src/pages/admin/Settings.tsx). Clicking 'Preview' opens the corresponding public page in a new browser tab so Susan can review how her edits appear before saving. For the Pages Editor, the preview button for each tab (Hero, About, Commissions, etc.) should open the relevant public page URL (/,  /about, /commissions, etc.) in a new tab.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-3"
-        ],
-        "quotes": [
-          "Add a preview button so Susan can see how edits look before saving"
-        ]
-      },
-      "acceptanceCriteria": [
-        "A 'Preview' button is present on the Pages Editor and Settings admin pages",
-        "Clicking 'Preview' opens the relevant public-facing page in a new browser tab",
-        "Each tab in the Pages Editor has its own preview button pointing to the corresponding public URL"
+        "A full-text search of the frontend source tree for 'Marina Vasquez' returns zero matches.",
+        "All locations that previously displayed 'Marina Vasquez' now display 'Susan Richten'.",
+        "No other content, logic, or styling is changed as a result of this replacement.",
+        "The Header logo/wordmark displays 'Susan Richten'.",
+        "The Footer brand name displays 'Susan Richten'.",
+        "The HTML <title> in frontend/index.html does not contain 'Marina Vasquez'.",
+        "CMS default/sample data (artworks, testimonials, blog posts, site settings) contains no 'Marina Vasquez' references."
       ]
     }
   ],
   "constraints": [
-    "Do not modify files in frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, or frontend/src/components/ui",
-    "All new UI must use the existing warm beige (#F5F0E8), charcoal (#2C2C2C), and gold design tokens",
-    "Fonts must remain Cormorant Garamond for headings and Lato for body text",
-    "All CMS mutations must continue to update CMSContext and persist to the Motoko backend via useCMSBackend",
-    "The admin password remains 'admin123' unless changed via the settings page",
-    "Do not introduce new backend routes or external API integrations"
+    "Only replace the name string 'Marina Vasquez' with 'Susan Richten'. Do not alter any other content, logic, styling, or data structures.",
+    "Do not modify any immutable frontend paths: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui."
   ],
   "nonGoals": [
-    "Real video hosting or embedding external video services in the hero",
-    "Real Instagram API or live social feed integration",
-    "Email delivery or SMS notification for form submissions",
-    "Payment processing or e-commerce functionality",
-    "Any changes to the Motoko backend data model (backend/main.mo) beyond what is already implemented"
+    "Changing any other artist metadata, biography content, or CMS sample data beyond the name string.",
+    "Modifying backend Motoko code unless 'Marina Vasquez' appears there.",
+    "Altering page layout, styling, or component logic."
   ],
   "imageRequirements": {
     "required": [],

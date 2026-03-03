@@ -2,175 +2,18 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-add-skeleton-loading-screens-to-all-public-pages-home-gallery-commissions-about-contact-testimonials-and-the-admin-panel-while-cms-data-is-loading-isloading-true-from-cmscontext-render-shimmer-skeleton-placeholder-elements-in-place-of-artwork-cards-testimonial-cards-press-mention-cards-and-form-sections-use-animated-pulse-or-shimmer-css-animation-consistent-with-the-warm-beige-charcoal-design-system",
-      "featureTitle": "Add skeleton loading screens to all public pages (Home, Gallery, Commissions, About, Contact, Testimonials) and the admin panel. While CMS data is loading (isLoading: true from CMSContext), render shimmer/skeleton placeholder elements in place of artwork cards, testimonial cards, press mention cards, and form sections. Use animated pulse or shimmer CSS animation consistent with the warm beige/charcoal design system.",
+      "featureId": "feature-search-the-entire-frontend-codebase-for-any-string-literal-default-value-placeholder-text-sample-data-or-comment-that-contains-the-name-marina-vasquez-and-replace-every-occurrence-with-susan-richten-this-includes-but-is-not-limited-to-cmscontext-default-sample-data-frontend-src-contexts-cmscontext-tsx-heroeditor-defaults-frontend-src-components-admin-heroeditor-tsx-header-logo-wordmark-frontend-src-components-header-tsx-footer-brand-name-frontend-src-components-footer-tsx-html-page-title-frontend-index-html-testimonial-sample-data-press-mention-sample-data-blog-post-sample-data-artwork-sample-data-any-admin-page-labels-and-any-other-component-or-file-where-marina-vasquez-appears-as-a-hardcoded-string",
+      "featureTitle": "Search the entire frontend codebase for any string literal, default value, placeholder text, sample data, or comment that contains the name 'Marina Vasquez' and replace every occurrence with 'Susan Richten'. This includes but is not limited to: CMSContext default/sample data (frontend/src/contexts/CMSContext.tsx), HeroEditor defaults (frontend/src/components/admin/HeroEditor.tsx), Header logo/wordmark (frontend/src/components/Header.tsx), Footer brand name (frontend/src/components/Footer.tsx), HTML page title (frontend/index.html), testimonial sample data, press mention sample data, blog post sample data, artwork sample data, any admin page labels, and any other component or file where 'Marina Vasquez' appears as a hardcoded string.",
       "files": [
-        "frontend/src/components/SkeletonCard.tsx",
-        "frontend/src/components/SkeletonForm.tsx",
+        "frontend/index.html",
+        "frontend/src/components/Footer.tsx",
+        "frontend/src/components/Header.tsx",
+        "frontend/src/components/admin/AboutPageEditor.tsx",
+        "frontend/src/components/admin/CommissionsPageEditor.tsx",
+        "frontend/src/components/admin/HeroEditor.tsx",
+        "frontend/src/contexts/CMSContext.tsx",
         "frontend/src/pages/About.tsx",
         "frontend/src/pages/Commissions.tsx",
-        "frontend/src/pages/Contact.tsx",
-        "frontend/src/pages/Gallery.tsx",
-        "frontend/src/pages/Home.tsx",
-        "frontend/src/pages/Testimonials.tsx",
-        "frontend/src/pages/admin/CommissionsManager.tsx",
-        "frontend/src/pages/admin/Dashboard.tsx",
-        "frontend/src/pages/admin/GalleryManager.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-57"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-a-back-to-top-button-that-appears-on-long-pages-gallery-commissions-about-and-testimonials-the-button-must-become-visible-after-the-user-scrolls-down-more-than-400px-and-smoothly-scrolls-the-page-back-to-the-top-when-clicked-style-it-using-the-warm-beige-charcoal-design-system-e-g-a-fixed-circular-button-in-the-bottom-right-corner-with-a-charcoal-upward-arrow-on-beige-background",
-      "featureTitle": "Add a 'Back to Top' button that appears on long pages (Gallery, Commissions, About, and Testimonials). The button must become visible after the user scrolls down more than 400px and smoothly scrolls the page back to the top when clicked. Style it using the warm beige/charcoal design system (e.g., a fixed circular button in the bottom-right corner with a charcoal upward arrow on beige background).",
-      "files": [
-        "frontend/src/components/BackToTopButton.tsx",
-        "frontend/src/pages/About.tsx",
-        "frontend/src/pages/Commissions.tsx",
-        "frontend/src/pages/Gallery.tsx",
-        "frontend/src/pages/Testimonials.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-58"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-breadcrumb-navigation-to-all-public-pages-gallery-commissions-about-contact-testimonials-render-a-breadcrumb-trail-below-the-page-header-hero-showing-home-page-name-on-the-home-page-breadcrumbs-are-not-needed-use-the-design-system-s-charcoal-beige-palette-each-breadcrumb-segment-should-be-a-link-except-the-current-page-which-is-plain-text",
-      "featureTitle": "Add breadcrumb navigation to all public pages (Gallery, Commissions, About, Contact, Testimonials). Render a breadcrumb trail below the page header/hero showing 'Home > [Page Name]'. On the Home page, breadcrumbs are not needed. Use the design system's charcoal/beige palette. Each breadcrumb segment should be a link except the current page (which is plain text).",
-      "files": [
-        "frontend/src/components/Breadcrumbs.tsx",
-        "frontend/src/pages/About.tsx",
-        "frontend/src/pages/Commissions.tsx",
-        "frontend/src/pages/Contact.tsx",
-        "frontend/src/pages/Gallery.tsx",
-        "frontend/src/pages/Testimonials.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-60"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-a-search-bar-to-the-gallery-page-frontend-src-pages-gallery-tsx-above-the-filter-tabs-the-search-input-filters-visible-artworks-in-real-time-by-title-medium-or-location-case-insensitive-substring-match-against-cms-artwork-data-when-a-search-term-is-active-combine-it-with-the-active-category-filter-so-both-filters-apply-simultaneously-clear-the-search-term-when-the-user-deletes-all-input",
-      "featureTitle": "Add a search bar to the Gallery page (frontend/src/pages/Gallery.tsx) above the filter tabs. The search input filters visible artworks in real time by title, medium, or location (case-insensitive substring match against CMS artwork data). When a search term is active, combine it with the active category filter so both filters apply simultaneously. Clear the search term when the user deletes all input.",
-      "files": [
-        "frontend/src/pages/Gallery.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-61"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-a-request-this-style-button-to-artworkcard-frontend-src-components-artworkcard-tsx-that-appears-only-on-artwork-cards-where-availability-is-sold-clicking-the-button-navigates-the-user-to-the-commissions-page-with-a-url-query-parameter-pre-filling-the-project-description-field-with-i-am-interested-in-a-commission-inspired-by-artwork-title-style-the-button-subtly-small-outlined-so-it-complements-the-card-without-overwhelming-the-design",
-      "featureTitle": "Add a 'Request This Style' button to ArtworkCard (frontend/src/components/ArtworkCard.tsx) that appears only on artwork cards where availability is 'Sold'. Clicking the button navigates the user to the /commissions page with a URL query parameter pre-filling the Project Description field with 'I am interested in a commission inspired by [artwork title]'. Style the button subtly (small, outlined) so it complements the card without overwhelming the design.",
-      "files": [
-        "frontend/src/components/ArtworkCard.tsx",
-        "frontend/src/components/CommissionInquiryForm.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-62"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-update-artworkcard-frontend-src-components-artworkcard-tsx-to-display-the-artwork-s-size-dimensions-more-prominently-below-the-title-or-as-a-secondary-detail-line-the-size-field-from-the-cms-artwork-data-should-be-shown-in-a-legible-font-size-at-least-12px-using-lato-font-in-charcoal-visible-without-hovering",
-      "featureTitle": "Update ArtworkCard (frontend/src/components/ArtworkCard.tsx) to display the artwork's size/dimensions more prominently below the title or as a secondary detail line. The size field from the CMS artwork data should be shown in a legible font size (at least 12px) using Lato font in charcoal, visible without hovering.",
-      "files": [
-        "frontend/src/components/ArtworkCard.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-63"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-update-the-commissioninquiryform-frontend-src-components-commissioninquiryform-tsx-and-the-contactform-frontend-src-components-contactform-tsx-to-display-a-prominent-estimated-response-time-notice-we-typically-respond-within-24-48-hours-directly-above-the-submit-button-styled-with-the-gold-or-charcoal-accent-color-so-it-is-clearly-visible-before-the-user-submits",
-      "featureTitle": "Update the CommissionInquiryForm (frontend/src/components/CommissionInquiryForm.tsx) and the ContactForm (frontend/src/components/ContactForm.tsx) to display a prominent estimated response time notice — 'We typically respond within 24–48 hours' — directly above the submit button, styled with the gold or charcoal accent color so it is clearly visible before the user submits.",
-      "files": [
-        "frontend/src/components/CommissionInquiryForm.tsx",
-        "frontend/src/components/ContactForm.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-64"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-a-multi-step-progress-indicator-to-the-commissioninquiryform-frontend-src-components-commissioninquiryform-tsx-split-the-form-into-at-least-2-logical-steps-step-1-project-details-name-email-phone-project-type-size-location-step-2-budget-description-budget-range-timeline-project-description-file-upload-display-a-step-progress-bar-or-numbered-step-indicators-at-the-top-of-the-form-showing-the-current-step-and-total-steps-include-next-back-and-submit-buttons-to-navigate-between-steps",
-      "featureTitle": "Add a multi-step progress indicator to the CommissionInquiryForm (frontend/src/components/CommissionInquiryForm.tsx). Split the form into at least 2 logical steps: Step 1 — Project Details (Name, Email, Phone, Project Type, Size, Location), Step 2 — Budget & Description (Budget Range, Timeline, Project Description, file upload). Display a step progress bar or numbered step indicators at the top of the form showing the current step and total steps. Include 'Next', 'Back', and 'Submit' buttons to navigate between steps.",
-      "files": [
-        "frontend/src/components/CommissionInquiryForm.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-65"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-update-the-featured-artworks-section-on-the-home-page-frontend-src-pages-home-tsx-so-that-clicking-on-a-featured-artwork-card-opens-the-gallery-lightbox-directly-on-that-artwork-pass-the-clicked-artwork-s-id-to-a-shared-lightbox-state-or-navigate-to-gallery-with-a-query-parameter-e-g-open-artworkid-that-auto-opens-the-lightbox-on-the-matching-artwork-when-the-gallery-page-loads",
-      "featureTitle": "Update the Featured Artworks section on the Home page (frontend/src/pages/Home.tsx) so that clicking on a featured artwork card opens the Gallery Lightbox directly on that artwork. Pass the clicked artwork's ID to a shared lightbox state or navigate to /gallery with a query parameter (e.g., ?open=<artworkId>) that auto-opens the lightbox on the matching artwork when the Gallery page loads.",
-      "files": [
-        "frontend/src/pages/Gallery.tsx",
         "frontend/src/pages/Home.tsx"
       ],
       "components": [
@@ -181,81 +24,7 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-66"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-replace-the-static-hero-background-on-the-home-page-frontend-src-pages-home-tsx-with-an-animated-slideshow-that-cycles-through-the-featured-artwork-placeholderimage-components-each-featured-artwork-s-image-or-placeholder-should-auto-advance-every-4-5-seconds-with-a-smooth-crossfade-or-slide-transition-keep-the-artist-name-and-tagline-overlay-on-top-of-the-slideshow-add-prev-next-arrow-controls-and-dot-indicators-for-manual-navigation",
-      "featureTitle": "Replace the static hero background on the Home page (frontend/src/pages/Home.tsx) with an animated slideshow that cycles through the featured artwork PlaceholderImage components. Each featured artwork's image (or placeholder) should auto-advance every 4–5 seconds with a smooth crossfade or slide transition. Keep the artist name and tagline overlay on top of the slideshow. Add prev/next arrow controls and dot indicators for manual navigation.",
-      "files": [
-        "frontend/src/components/HeroSlideshow.tsx",
-        "frontend/src/pages/Home.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-67"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-bulk-action-controls-to-the-admin-gallery-manager-page-frontend-src-pages-admin-gallerymanager-tsx-add-a-checkbox-to-each-artwork-row-and-a-select-all-checkbox-in-the-table-header-when-one-or-more-artworks-are-selected-show-a-bulk-actions-toolbar-with-the-following-options-mark-as-featured-remove-from-featured-mark-as-sold-mark-as-available-toggle-visibility-and-delete-selected-with-a-confirmation-dialog-apply-the-selected-action-to-all-checked-artworks-via-cmscontext-update-functions",
-      "featureTitle": "Add bulk action controls to the Admin Gallery Manager page (frontend/src/pages/admin/GalleryManager.tsx). Add a checkbox to each artwork row and a 'Select All' checkbox in the table header. When one or more artworks are selected, show a bulk actions toolbar with the following options: 'Mark as Featured', 'Remove from Featured', 'Mark as Sold', 'Mark as Available', 'Toggle Visibility', and 'Delete Selected' (with a confirmation dialog). Apply the selected action to all checked artworks via CMSContext update functions.",
-      "files": [
-        "frontend/src/pages/admin/GalleryManager.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-68"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-an-export-as-csv-button-to-the-admin-commissions-manager-page-frontend-src-pages-admin-commissionsmanager-tsx-when-clicked-generate-a-csv-file-containing-all-displayed-commission-inquiries-respecting-the-active-filter-tab-with-columns-name-email-phone-project-type-size-location-budget-range-timeline-description-date-submitted-status-trigger-a-browser-download-of-the-generated-csv-file-named-commission-inquiries-csv",
-      "featureTitle": "Add an 'Export as CSV' button to the Admin Commissions Manager page (frontend/src/pages/admin/CommissionsManager.tsx). When clicked, generate a CSV file containing all displayed commission inquiries (respecting the active filter tab) with columns: Name, Email, Phone, Project Type, Size, Location, Budget Range, Timeline, Description, Date Submitted, Status. Trigger a browser download of the generated CSV file named 'commission-inquiries.csv'.",
-      "files": [
-        "frontend/src/pages/admin/CommissionsManager.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-69"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-a-preview-button-to-the-admin-pages-editor-frontend-src-pages-admin-pageseditor-tsx-and-the-admin-settings-page-frontend-src-pages-admin-settings-tsx-clicking-preview-opens-the-corresponding-public-page-in-a-new-browser-tab-so-susan-can-review-how-her-edits-appear-before-saving-for-the-pages-editor-the-preview-button-for-each-tab-hero-about-commissions-etc-should-open-the-relevant-public-page-url-about-commissions-etc-in-a-new-tab",
-      "featureTitle": "Add a 'Preview' button to the Admin Pages Editor (frontend/src/pages/admin/PagesEditor.tsx) and the Admin Settings page (frontend/src/pages/admin/Settings.tsx). Clicking 'Preview' opens the corresponding public page in a new browser tab so Susan can review how her edits appear before saving. For the Pages Editor, the preview button for each tab (Hero, About, Commissions, etc.) should open the relevant public page URL (/,  /about, /commissions, etc.) in a new tab.",
-      "files": [
-        "frontend/src/pages/admin/PagesEditor.tsx",
-        "frontend/src/pages/admin/Settings.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-70"
+        "REQ-71"
       ],
       "confidence": "high"
     }

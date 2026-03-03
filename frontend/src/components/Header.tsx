@@ -5,32 +5,32 @@ import { useCMS } from '../contexts/CMSContext';
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { navigationItems, siteSettings } = useCMS();
+  const { siteSettings, navigationItems } = useCMS();
   const location = useLocation();
 
-  const sortedNav = [...navigationItems].sort((a, b) => a.order - b.order);
+  const navItems = [...navigationItems].sort((a, b) => a.order - b.order);
 
   return (
-    <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
+    <header className="sticky top-0 z-50 bg-warm-white/95 backdrop-blur-sm border-b border-stone/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-2">
-            <span className="font-display text-xl font-semibold text-foreground tracking-wide">
-              {siteSettings.siteTitle}
+          {/* Logo / Brand */}
+          <Link to="/" className="flex items-center gap-2 group">
+            <span className="font-display text-xl font-semibold text-charcoal tracking-wide group-hover:text-gold transition-colors">
+              {siteSettings.heroArtistName || 'Susan Richten'}
             </span>
           </Link>
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-6">
-            {sortedNav.map(item => (
+            {navItems.map(item => (
               <Link
                 key={item.id}
                 to={item.path}
-                className={`text-sm font-medium transition-colors hover:text-primary ${
+                className={`text-sm font-medium tracking-wide transition-colors hover:text-gold ${
                   location.pathname === item.path
-                    ? 'text-primary border-b-2 border-primary pb-0.5'
-                    : 'text-muted-foreground'
+                    ? 'text-gold border-b border-gold pb-0.5'
+                    : 'text-charcoal/70'
                 }`}
               >
                 {item.name}
@@ -40,34 +40,30 @@ export default function Header() {
 
           {/* Mobile hamburger */}
           <button
-            className="md:hidden p-2 rounded-md text-muted-foreground hover:text-foreground"
-            onClick={() => setMobileOpen(!mobileOpen)}
+            className="md:hidden p-2 text-charcoal hover:text-gold transition-colors"
+            onClick={() => setMobileOpen(v => !v)}
             aria-label="Toggle menu"
           >
-            {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile menu */}
+      {/* Mobile Nav */}
       {mobileOpen && (
-        <div className="md:hidden border-t border-border bg-background">
-          <nav className="flex flex-col px-4 py-3 gap-1">
-            {sortedNav.map(item => (
-              <Link
-                key={item.id}
-                to={item.path}
-                onClick={() => setMobileOpen(false)}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  location.pathname === item.path
-                    ? 'bg-primary/10 text-primary'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-                }`}
-              >
-                {item.name}
-              </Link>
-            ))}
-          </nav>
+        <div className="md:hidden bg-warm-white border-t border-stone/20 px-4 py-4 flex flex-col gap-3">
+          {navItems.map(item => (
+            <Link
+              key={item.id}
+              to={item.path}
+              className={`text-sm font-medium tracking-wide transition-colors hover:text-gold ${
+                location.pathname === item.path ? 'text-gold' : 'text-charcoal/70'
+              }`}
+              onClick={() => setMobileOpen(false)}
+            >
+              {item.name}
+            </Link>
+          ))}
         </div>
       )}
     </header>

@@ -1,172 +1,188 @@
 import { useState } from 'react';
-import { useCMS, ProcessStep, FAQItem } from '../../contexts/CMSContext';
+import { useCMS } from '../../contexts/CMSContext';
 
 export default function CommissionsPageEditor() {
-  const { commissionsPageContent, updateCommissionsPageContent, updateFAQItems, updateProcessSteps } = useCMS();
+  const {
+    siteSettings,
+    updateSiteSettings,
+    processSteps,
+    updateProcessSteps,
+    faqItems,
+    updateFAQItems,
+  } = useCMS();
 
-  const [form, setForm] = useState({
-    heroText: commissionsPageContent.heroText,
-    pricingText: commissionsPageContent.pricingText,
-    processSteps: commissionsPageContent.processSteps,
-    faqItems: commissionsPageContent.faqItems,
-  });
+  const [heroText, setHeroText] = useState(siteSettings.commissionHeroText || '');
+  const [pricingText, setPricingText] = useState(siteSettings.commissionPricingText || '');
+  const [saved, setSaved] = useState(false);
 
-  function addStep() {
-    const newStep: ProcessStep = {
-      id: Date.now().toString(),
-      stepNumber: form.processSteps.length + 1,
-      title: '',
-      description: '',
-    };
-    setForm(f => ({ ...f, processSteps: [...f.processSteps, newStep] }));
-  }
+  const [newStep, setNewStep] = useState({ title: '', description: '' });
+  const [newFAQ, setNewFAQ] = useState({ question: '', answer: '' });
 
-  function removeStep(id: string) {
-    setForm(f => ({ ...f, processSteps: f.processSteps.filter(s => s.id !== id) }));
-  }
+  const handleSave = () => {
+    updateSiteSettings({ commissionHeroText: heroText, commissionPricingText: pricingText });
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+  };
 
-  function updateStep(id: string, field: keyof ProcessStep, value: string | number) {
-    setForm(f => ({
-      ...f,
-      processSteps: f.processSteps.map(s => s.id === id ? { ...s, [field]: value } : s),
-    }));
-  }
+  const addStep = () => {
+    if (!newStep.title) return;
+    const nextStepNumber = processSteps.length + 1;
+    updateProcessSteps([
+      ...processSteps,
+      {
+        id: Date.now().toString(),
+        stepNumber: nextStepNumber,
+        title: newStep.title,
+        description: newStep.description,
+      },
+    ]);
+    setNewStep({ title: '', description: '' });
+  };
 
-  function addFAQ() {
-    const newFAQ: FAQItem = { id: Date.now().toString(), question: '', answer: '' };
-    setForm(f => ({ ...f, faqItems: [...f.faqItems, newFAQ] }));
-  }
+  const deleteStep = (id: string) => {
+    updateProcessSteps(processSteps.filter(s => s.id !== id));
+  };
 
-  function removeFAQ(id: string) {
-    setForm(f => ({ ...f, faqItems: f.faqItems.filter(q => q.id !== id) }));
-  }
+  const addFAQ = () => {
+    if (!newFAQ.question) return;
+    updateFAQItems([
+      ...faqItems,
+      { id: Date.now().toString(), question: newFAQ.question, answer: newFAQ.answer },
+    ]);
+    setNewFAQ({ question: '', answer: '' });
+  };
 
-  function updateFAQ(id: string, field: keyof FAQItem, value: string) {
-    setForm(f => ({
-      ...f,
-      faqItems: f.faqItems.map(q => q.id === id ? { ...q, [field]: value } : q),
-    }));
-  }
-
-  function handleSave() {
-    updateCommissionsPageContent({
-      heroText: form.heroText,
-      pricingText: form.pricingText,
-      processSteps: form.processSteps,
-      faqItems: form.faqItems,
-    });
-    updateProcessSteps(form.processSteps);
-    updateFAQItems(form.faqItems);
-  }
-
-  const inputClass = 'w-full px-3 py-2 border border-sand/60 rounded-sm bg-warm-white text-charcoal text-sm focus:outline-none focus:border-gold';
-  const labelClass = 'block text-xs font-medium text-charcoal-muted uppercase tracking-wide mb-1';
+  const deleteFAQ = (id: string) => {
+    updateFAQItems(faqItems.filter(f => f.id !== id));
+  };
 
   return (
     <div className="space-y-8">
       <div>
-        <h3 className="font-serif text-lg text-charcoal mb-4">Commissions Page Content</h3>
-        <div className="space-y-4">
-          <div>
-            <label className={labelClass}>Hero Text</label>
-            <textarea
-              value={form.heroText}
-              onChange={e => setForm(f => ({ ...f, heroText: e.target.value }))}
-              rows={4}
-              className={inputClass}
-            />
-          </div>
-          <div>
-            <label className={labelClass}>Pricing Text</label>
-            <textarea
-              value={form.pricingText}
-              onChange={e => setForm(f => ({ ...f, pricingText: e.target.value }))}
-              rows={4}
-              className={inputClass}
-            />
-          </div>
+        <h2 className="text-lg font-semibold text-charcoal mb-1">Commissions Page</h2>
+        <p className="text-sm text-charcoal/60">Edit the Commissions page content.</p>
+      </div>
+
+      {/* Hero & Pricing Text */}
+      <div className="space-y-4">
+        <h3 className="text-sm font-semibold text-charcoal uppercase tracking-wide">Hero & Pricing</h3>
+        <div>
+          <label className="block text-sm font-medium text-charcoal mb-1">Hero Text</label>
+          <textarea
+            value={heroText}
+            onChange={e => setHeroText(e.target.value)}
+            rows={3}
+            placeholder="Every commission is a collaboration..."
+            className="w-full border border-stone/30 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gold resize-none"
+          />
         </div>
+        <div>
+          <label className="block text-sm font-medium text-charcoal mb-1">Pricing Text</label>
+          <textarea
+            value={pricingText}
+            onChange={e => setPricingText(e.target.value)}
+            rows={4}
+            placeholder="Pricing varies based on size..."
+            className="w-full border border-stone/30 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gold resize-none"
+          />
+        </div>
+        <button
+          onClick={handleSave}
+          className="bg-gold text-white px-4 py-2 rounded text-sm font-medium hover:bg-gold/90 transition-colors"
+        >
+          {saved ? 'Saved!' : 'Save Text'}
+        </button>
       </div>
 
       {/* Process Steps */}
-      <div>
-        <div className="flex items-center justify-between mb-3">
-          <h4 className="font-medium text-charcoal">Process Steps</h4>
-          <button onClick={addStep} className="text-xs text-gold hover:text-gold/80 border border-gold/40 hover:border-gold px-3 py-1 rounded-sm transition-colors">
-            + Add Step
+      <div className="space-y-3">
+        <h3 className="text-sm font-semibold text-charcoal uppercase tracking-wide">Process Steps</h3>
+        <ul className="space-y-2">
+          {[...processSteps]
+            .sort((a, b) => a.stepNumber - b.stepNumber)
+            .map(step => (
+              <li
+                key={step.id}
+                className="flex items-center justify-between bg-stone/10 rounded px-3 py-2 text-sm"
+              >
+                <span>
+                  <strong>Step {step.stepNumber}:</strong> {step.title}
+                </span>
+                <button
+                  onClick={() => deleteStep(step.id)}
+                  className="text-red-400 hover:text-red-600 text-xs ml-2"
+                >
+                  Remove
+                </button>
+              </li>
+            ))}
+        </ul>
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={newStep.title}
+            onChange={e => setNewStep(p => ({ ...p, title: e.target.value }))}
+            placeholder="Step title"
+            className="flex-1 border border-stone/30 rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-gold"
+          />
+          <input
+            type="text"
+            value={newStep.description}
+            onChange={e => setNewStep(p => ({ ...p, description: e.target.value }))}
+            placeholder="Description"
+            className="flex-1 border border-stone/30 rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-gold"
+          />
+          <button
+            onClick={addStep}
+            className="bg-charcoal text-white px-3 py-1.5 rounded text-sm hover:bg-charcoal/80 transition-colors"
+          >
+            Add
           </button>
-        </div>
-        <div className="space-y-3">
-          {form.processSteps.map(step => (
-            <div key={step.id} className="p-3 border border-sand/40 rounded-sm space-y-2">
-              <div className="flex items-center gap-2">
-                <input
-                  type="number"
-                  value={step.stepNumber}
-                  onChange={e => updateStep(step.id, 'stepNumber', Number(e.target.value))}
-                  className="w-16 px-2 py-1.5 border border-sand/60 rounded-sm text-sm bg-warm-white text-charcoal focus:outline-none focus:border-gold"
-                  placeholder="#"
-                />
-                <input
-                  type="text"
-                  value={step.title}
-                  onChange={e => updateStep(step.id, 'title', e.target.value)}
-                  className="flex-1 px-2 py-1.5 border border-sand/60 rounded-sm text-sm bg-warm-white text-charcoal focus:outline-none focus:border-gold"
-                  placeholder="Step title"
-                />
-                <button onClick={() => removeStep(step.id)} className="text-red-400 hover:text-red-600 shrink-0 text-xs px-2">✕</button>
-              </div>
-              <textarea
-                value={step.description}
-                onChange={e => updateStep(step.id, 'description', e.target.value)}
-                rows={2}
-                className={inputClass}
-                placeholder="Step description..."
-              />
-            </div>
-          ))}
         </div>
       </div>
 
       {/* FAQ Items */}
-      <div>
-        <div className="flex items-center justify-between mb-3">
-          <h4 className="font-medium text-charcoal">FAQ Items</h4>
-          <button onClick={addFAQ} className="text-xs text-gold hover:text-gold/80 border border-gold/40 hover:border-gold px-3 py-1 rounded-sm transition-colors">
-            + Add FAQ
+      <div className="space-y-3">
+        <h3 className="text-sm font-semibold text-charcoal uppercase tracking-wide">FAQ Items</h3>
+        <ul className="space-y-2">
+          {faqItems.map(faq => (
+            <li
+              key={faq.id}
+              className="flex items-center justify-between bg-stone/10 rounded px-3 py-2 text-sm"
+            >
+              <span className="truncate flex-1">{faq.question}</span>
+              <button
+                onClick={() => deleteFAQ(faq.id)}
+                className="text-red-400 hover:text-red-600 text-xs ml-2 shrink-0"
+              >
+                Remove
+              </button>
+            </li>
+          ))}
+        </ul>
+        <div className="space-y-2">
+          <input
+            type="text"
+            value={newFAQ.question}
+            onChange={e => setNewFAQ(p => ({ ...p, question: e.target.value }))}
+            placeholder="Question"
+            className="w-full border border-stone/30 rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-gold"
+          />
+          <textarea
+            value={newFAQ.answer}
+            onChange={e => setNewFAQ(p => ({ ...p, answer: e.target.value }))}
+            placeholder="Answer"
+            rows={2}
+            className="w-full border border-stone/30 rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-gold resize-none"
+          />
+          <button
+            onClick={addFAQ}
+            className="bg-charcoal text-white px-3 py-1.5 rounded text-sm hover:bg-charcoal/80 transition-colors"
+          >
+            Add FAQ
           </button>
         </div>
-        <div className="space-y-3">
-          {form.faqItems.map(faq => (
-            <div key={faq.id} className="p-3 border border-sand/40 rounded-sm space-y-2">
-              <div className="flex items-center gap-2">
-                <input
-                  type="text"
-                  value={faq.question}
-                  onChange={e => updateFAQ(faq.id, 'question', e.target.value)}
-                  className="flex-1 px-2 py-1.5 border border-sand/60 rounded-sm text-sm bg-warm-white text-charcoal focus:outline-none focus:border-gold"
-                  placeholder="Question"
-                />
-                <button onClick={() => removeFAQ(faq.id)} className="text-red-400 hover:text-red-600 shrink-0 text-xs px-2">✕</button>
-              </div>
-              <textarea
-                value={faq.answer}
-                onChange={e => updateFAQ(faq.id, 'answer', e.target.value)}
-                rows={2}
-                className={inputClass}
-                placeholder="Answer..."
-              />
-            </div>
-          ))}
-        </div>
       </div>
-
-      <button
-        onClick={handleSave}
-        className="px-6 py-2.5 bg-gold text-warm-white text-sm font-medium rounded-sm hover:bg-gold/90 transition-colors"
-      >
-        Save Commissions Page
-      </button>
     </div>
   );
 }

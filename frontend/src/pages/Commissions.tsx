@@ -12,7 +12,7 @@ import SkeletonForm from '../components/SkeletonForm';
 
 export function Commissions() {
   usePageMeta('commissions');
-  const { artworks, commissionsPageContent, isLoading } = useCMS();
+  const { artworks, siteSettings, processSteps, faqItems, isLoading } = useCMS();
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const portfolioArtworks = artworks.filter(a => a.visible).slice(0, 6);
@@ -25,7 +25,7 @@ export function Commissions() {
           <h1 className="font-heading text-5xl md:text-6xl text-beige mb-6">Commission a Painting</h1>
           <div className="w-12 h-px bg-gold mx-auto mb-8" />
           <p className="font-body text-base text-beige/80 leading-relaxed">
-            {commissionsPageContent.heroText}
+            {siteSettings.commissionHeroText}
           </p>
         </div>
       </section>
@@ -34,7 +34,7 @@ export function Commissions() {
       <Breadcrumbs currentPageName="Commissions" />
 
       {/* Process Steps */}
-      {(isLoading || commissionsPageContent.processSteps.length > 0) && (
+      {(isLoading || processSteps.length > 0) && (
         <section className="section-padding bg-beige">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
@@ -53,8 +53,7 @@ export function Commissions() {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                {commissionsPageContent.processSteps
-                  .slice()
+                {[...processSteps]
                   .sort((a, b) => a.stepNumber - b.stepNumber)
                   .map(step => (
                     <div key={step.id} className="text-center">
@@ -77,7 +76,7 @@ export function Commissions() {
           <h2 className="font-heading text-4xl md:text-5xl text-charcoal mb-6">Pricing</h2>
           <div className="w-12 h-px bg-gold mx-auto mb-8" />
           <p className="font-body text-base text-charcoal-light leading-relaxed">
-            {commissionsPageContent.pricingText}
+            {siteSettings.commissionPricingText}
           </p>
         </div>
       </section>
@@ -124,7 +123,7 @@ export function Commissions() {
       </section>
 
       {/* FAQ */}
-      {(isLoading || commissionsPageContent.faqItems.length > 0) && (
+      {(isLoading || faqItems.length > 0) && (
         <section className="section-padding bg-beige">
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-12">
@@ -138,7 +137,7 @@ export function Commissions() {
                 ))}
               </div>
             ) : (
-              <FAQAccordion items={commissionsPageContent.faqItems} />
+              <FAQAccordion items={faqItems} />
             )}
           </div>
         </section>

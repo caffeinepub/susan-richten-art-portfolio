@@ -2,72 +2,76 @@ import { useState } from 'react';
 import { useCMS } from '../../contexts/CMSContext';
 
 export default function HeroEditor() {
-  const { homepageSettings, updateHomepageSettings } = useCMS();
-
+  const { siteSettings, updateSiteSettings } = useCMS();
   const [form, setForm] = useState({
-    heroArtistName: homepageSettings.heroArtistName,
-    heroTagline: homepageSettings.heroTagline,
-    heroImage: homepageSettings.heroImage,
-    artistIntro: homepageSettings.artistIntro,
+    heroArtistName: siteSettings.heroArtistName || 'Susan Richten',
+    heroTagline: siteSettings.heroTagline || 'Fine Art & Commissions',
+    heroIntroText: siteSettings.heroIntroText || '',
+    artistIntro: siteSettings.heroIntroText || '',
   });
+  const [saved, setSaved] = useState(false);
 
-  function handleSave() {
-    updateHomepageSettings(form);
-  }
+  const handleChange = (field: string, value: string) => {
+    setForm(prev => ({ ...prev, [field]: value }));
+  };
 
-  const inputClass = 'w-full px-3 py-2 border border-sand/60 rounded-sm bg-warm-white text-charcoal text-sm focus:outline-none focus:border-gold';
-  const labelClass = 'block text-xs font-medium text-charcoal-muted uppercase tracking-wide mb-1';
+  const handleSave = () => {
+    updateSiteSettings({
+      heroArtistName: form.heroArtistName,
+      heroTagline: form.heroTagline,
+      heroIntroText: form.heroIntroText,
+    });
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+  };
 
   return (
-    <div className="space-y-5">
-      <h3 className="font-serif text-lg text-charcoal">Homepage Hero</h3>
-
+    <div className="space-y-6">
       <div>
-        <label className={labelClass}>Artist Name</label>
-        <input
-          type="text"
-          value={form.heroArtistName}
-          onChange={e => setForm(f => ({ ...f, heroArtistName: e.target.value }))}
-          className={inputClass}
-        />
+        <h2 className="text-lg font-semibold text-charcoal mb-1">Hero Section</h2>
+        <p className="text-sm text-charcoal/60">Edit the homepage hero content.</p>
       </div>
 
-      <div>
-        <label className={labelClass}>Tagline</label>
-        <input
-          type="text"
-          value={form.heroTagline}
-          onChange={e => setForm(f => ({ ...f, heroTagline: e.target.value }))}
-          className={inputClass}
-        />
-      </div>
+      <div className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-charcoal mb-1">Artist Name</label>
+          <input
+            type="text"
+            value={form.heroArtistName}
+            onChange={e => handleChange('heroArtistName', e.target.value)}
+            placeholder="Susan Richten"
+            className="w-full border border-stone/30 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gold"
+          />
+        </div>
 
-      <div>
-        <label className={labelClass}>Hero Image URL</label>
-        <input
-          type="text"
-          value={form.heroImage}
-          onChange={e => setForm(f => ({ ...f, heroImage: e.target.value }))}
-          className={inputClass}
-          placeholder="/assets/generated/hero-bg.dim_1920x1080.png"
-        />
-      </div>
+        <div>
+          <label className="block text-sm font-medium text-charcoal mb-1">Tagline</label>
+          <input
+            type="text"
+            value={form.heroTagline}
+            onChange={e => handleChange('heroTagline', e.target.value)}
+            placeholder="Fine Art & Commissions"
+            className="w-full border border-stone/30 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gold"
+          />
+        </div>
 
-      <div>
-        <label className={labelClass}>Artist Intro Text</label>
-        <textarea
-          value={form.artistIntro}
-          onChange={e => setForm(f => ({ ...f, artistIntro: e.target.value }))}
-          rows={4}
-          className={inputClass}
-        />
+        <div>
+          <label className="block text-sm font-medium text-charcoal mb-1">Intro Text</label>
+          <textarea
+            value={form.heroIntroText}
+            onChange={e => handleChange('heroIntroText', e.target.value)}
+            rows={3}
+            placeholder="Welcome to my studio..."
+            className="w-full border border-stone/30 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gold resize-none"
+          />
+        </div>
       </div>
 
       <button
         onClick={handleSave}
-        className="px-6 py-2.5 bg-gold text-warm-white text-sm font-medium rounded-sm hover:bg-gold/90 transition-colors"
+        className="bg-gold text-white px-4 py-2 rounded text-sm font-medium hover:bg-gold/90 transition-colors"
       >
-        Save Hero
+        {saved ? 'Saved!' : 'Save Changes'}
       </button>
     </div>
   );

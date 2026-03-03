@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 37,
+  "projectStateVersion": 39,
   "summary": "Full-featured art portfolio website for artist Susan Richten (Ocean View, HI) built with React + TypeScript, Tailwind CSS, and a local JSON-based CMS. Features 5 public pages (Home, Gallery, Commissions, About, Contact, Testimonials/Press) plus a password-protected admin panel (/admin, password: SusanAdmin2024). Design is clean/minimal with warm beige, white, charcoal palette, Cormorant Garamond + Lato fonts, and high-end gallery aesthetic.",
   "architectural_notes": [
     "React + TypeScript + Tailwind CSS + React Router; local Context API simulates CMS backend with JSON data store",
@@ -519,6 +519,14 @@
       "title": "Add a 'Preview' button to the Admin Pages Editor (frontend/src/pages/admin/PagesEditor.tsx) and the Admin Settings page (frontend/src/pages/admin/Settings.tsx). Clicking 'Preview' opens the corresponding public page in a new browser tab so Susan can review how her edits appear before saving. For the Pages Editor, the preview button for each tab (Hero, About, Commissions, etc.) should open the relevant public page URL (/,  /about, /commissions, etc.) in a new tab.",
       "reqIds": [
         "REQ-70"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-search-the-entire-frontend-codebase-for-any-string-literal-default-value-placeholder-text-sample-data-or-comment-that-contains-the-name-marina-vasquez-and-replace-every-occurrence-with-susan-richten-this-includes-but-is-not-limited-to-cmscontext-default-sample-data-frontend-src-contexts-cmscontext-tsx-heroeditor-defaults-frontend-src-components-admin-heroeditor-tsx-header-logo-wordmark-frontend-src-components-header-tsx-footer-brand-name-frontend-src-components-footer-tsx-html-page-title-frontend-index-html-testimonial-sample-data-press-mention-sample-data-blog-post-sample-data-artwork-sample-data-any-admin-page-labels-and-any-other-component-or-file-where-marina-vasquez-appears-as-a-hardcoded-string",
+      "title": "Search the entire frontend codebase for any string literal, default value, placeholder text, sample data, or comment that contains the name 'Marina Vasquez' and replace every occurrence with 'Susan Richten'. This includes but is not limited to: CMSContext default/sample data (frontend/src/contexts/CMSContext.tsx), HeroEditor defaults (frontend/src/components/admin/HeroEditor.tsx), Header logo/wordmark (frontend/src/components/Header.tsx), Footer brand name (frontend/src/components/Footer.tsx), HTML page title (frontend/index.html), testimonial sample data, press mention sample data, blog post sample data, artwork sample data, any admin page labels, and any other component or file where 'Marina Vasquez' appears as a hardcoded string.",
+      "reqIds": [
+        "REQ-71"
       ],
       "version": 1
     }

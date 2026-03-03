@@ -9,7 +9,7 @@ import SkeletonCard from '../components/SkeletonCard';
 
 export function Home() {
   usePageMeta('home');
-  const { artworks, testimonials, homepageSettings, siteSettings, isLoading } = useCMS();
+  const { artworks, testimonials, siteSettings, isLoading } = useCMS();
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const navigate = useNavigate();
 
@@ -27,8 +27,8 @@ export function Home() {
       {/* Hero Slideshow */}
       <HeroSlideshow
         artworks={featuredArtworks}
-        artistName={homepageSettings.heroArtistName}
-        tagline={homepageSettings.heroTagline}
+        artistName={siteSettings.heroArtistName}
+        tagline={siteSettings.heroTagline}
         onArtworkClick={handleFeaturedClick}
       />
 
@@ -37,7 +37,7 @@ export function Home() {
         <div className="max-w-3xl mx-auto">
           <div className="w-12 h-px bg-gold mx-auto mb-8" />
           <p className="font-body text-lg text-charcoal-light leading-relaxed">
-            {homepageSettings.artistIntro}
+            {siteSettings.heroIntroText}
           </p>
           <div className="w-12 h-px bg-gold mx-auto mt-8" />
         </div>
