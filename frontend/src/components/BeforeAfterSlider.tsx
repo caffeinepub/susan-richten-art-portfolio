@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback } from 'react';
 
 interface BeforeAfterSliderProps {
   beforeSrc: string;
@@ -7,7 +7,7 @@ interface BeforeAfterSliderProps {
   afterLabel?: string;
 }
 
-export function BeforeAfterSlider({
+export default function BeforeAfterSlider({
   beforeSrc,
   afterSrc,
   beforeLabel = 'Before',
@@ -20,88 +20,63 @@ export function BeforeAfterSlider({
   const updatePosition = useCallback((clientX: number) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
-    const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
-    setPosition((x / rect.width) * 100);
+    const x = clientX - rect.left;
+    const pct = Math.max(0, Math.min(100, (x / rect.width) * 100));
+    setPosition(pct);
   }, []);
 
-  const handleMouseDown = (e: React.MouseEvent) => {
+  const onMouseDown = (e: React.MouseEvent) => {
     isDragging.current = true;
     updatePosition(e.clientX);
   };
 
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+  const onMouseMove = (e: React.MouseEvent) => {
     if (!isDragging.current) return;
     updatePosition(e.clientX);
-  }, [updatePosition]);
-
-  const handleMouseUp = () => { isDragging.current = false; };
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    isDragging.current = true;
-    updatePosition(e.touches[0].clientX);
   };
 
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isDragging.current) return;
+  const onMouseUp = () => { isDragging.current = false; };
+
+  const onTouchMove = (e: React.TouchEvent) => {
     updatePosition(e.touches[0].clientX);
   };
-
-  const handleTouchEnd = () => { isDragging.current = false; };
 
   return (
     <div
       ref={containerRef}
-      className="relative w-full overflow-hidden select-none cursor-col-resize"
-      style={{ aspectRatio: '3/2' }}
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-      onMouseLeave={handleMouseUp}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
+      className="relative overflow-hidden rounded-sm select-none cursor-col-resize aspect-[3/2]"
+      onMouseDown={onMouseDown}
+      onMouseMove={onMouseMove}
+      onMouseUp={onMouseUp}
+      onMouseLeave={onMouseUp}
+      onTouchMove={onTouchMove}
     >
-      {/* Before image (full width) */}
-      <div className="absolute inset-0">
-        <img
-          src={beforeSrc}
-          alt="Before"
-          className="w-full h-full object-cover"
-          draggable={false}
-        />
-        <div className="absolute top-2 left-2 bg-black/60 text-white text-xs font-body px-2 py-1 rounded">
-          {beforeLabel} · Replace
-        </div>
-      </div>
+      {/* After image (full) */}
+      <img src={afterSrc} alt={afterLabel} className="absolute inset-0 w-full h-full object-cover" />
 
-      {/* After image (clipped) */}
-      <div
-        className="absolute inset-0 overflow-hidden"
-        style={{ width: `${position}%` }}
-      >
-        <img
-          src={afterSrc}
-          alt="After"
-          className="absolute inset-0 w-full h-full object-cover"
-          style={{ width: containerRef.current ? `${containerRef.current.offsetWidth}px` : '100%', maxWidth: 'none' }}
-          draggable={false}
-        />
-        <div className="absolute top-2 left-2 bg-black/60 text-white text-xs font-body px-2 py-1 rounded">
-          {afterLabel} · Replace
-        </div>
+      {/* Before image (clipped) */}
+      <div className="absolute inset-0 overflow-hidden" style={{ width: `${position}%` }}>
+        <img src={beforeSrc} alt={beforeLabel} className="absolute inset-0 w-full h-full object-cover" style={{ width: containerRef.current?.offsetWidth || '100%' }} />
       </div>
 
       {/* Divider */}
       <div
-        className="absolute top-0 bottom-0 w-0.5 bg-white shadow-lg"
-        style={{ left: `${position}%`, transform: 'translateX(-50%)' }}
+        className="absolute top-0 bottom-0 w-0.5 bg-warm-white shadow-lg"
+        style={{ left: `${position}%` }}
       >
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center">
-          <div className="flex gap-0.5">
-            <div className="w-0.5 h-4 bg-charcoal-light rounded" />
-            <div className="w-0.5 h-4 bg-charcoal-light rounded" />
-          </div>
+        <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-warm-white shadow-lg flex items-center justify-center">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M5 8H11M5 8L3 6M5 8L3 10M11 8L13 6M11 8L13 10" stroke="#333" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
         </div>
+      </div>
+
+      {/* Labels */}
+      <div className="absolute bottom-3 left-3 bg-charcoal/70 text-warm-white text-xs px-2 py-1 rounded-sm pointer-events-none">
+        {beforeLabel}
+      </div>
+      <div className="absolute bottom-3 right-3 bg-charcoal/70 text-warm-white text-xs px-2 py-1 rounded-sm pointer-events-none">
+        {afterLabel}
       </div>
     </div>
   );

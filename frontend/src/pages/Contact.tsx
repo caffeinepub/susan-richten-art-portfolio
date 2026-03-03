@@ -4,11 +4,15 @@ import { SiInstagram, SiFacebook, SiPinterest } from 'react-icons/si';
 import { useCMS } from '../contexts/CMSContext';
 import { usePageMeta } from '../hooks/usePageMeta';
 import ContactForm from '../components/ContactForm';
-import { MissingInfoText } from '../components/MissingInfoText';
+import MissingInfoText from '../components/MissingInfoText';
 
 export function Contact() {
   usePageMeta('contact');
   const { siteSettings } = useCMS();
+
+  const igUrl = siteSettings.socialPlatforms.find(p => p.icon === 'instagram' || p.name.toLowerCase() === 'instagram')?.url || '';
+  const fbUrl = siteSettings.socialPlatforms.find(p => p.icon === 'facebook' || p.name.toLowerCase() === 'facebook')?.url || '';
+  const ptUrl = siteSettings.socialPlatforms.find(p => p.icon === 'pinterest' || p.name.toLowerCase() === 'pinterest')?.url || '';
 
   return (
     <div className="page-transition pt-20">
@@ -63,31 +67,31 @@ export function Contact() {
               <h3 className="font-heading text-2xl text-charcoal mb-4">Follow Along</h3>
               <div className="flex flex-col gap-3">
                 <a
-                  href={siteSettings.socialInstagram || '#'}
+                  href={igUrl || '#'}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 font-body text-sm text-charcoal-light hover:text-charcoal transition-colors"
                 >
                   <SiInstagram size={16} />
-                  {siteSettings.socialInstagram ? 'Instagram' : <MissingInfoText className="text-xs" />}
+                  {igUrl ? 'Instagram' : <MissingInfoText className="text-xs" />}
                 </a>
                 <a
-                  href={siteSettings.socialFacebook || '#'}
+                  href={fbUrl || '#'}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 font-body text-sm text-charcoal-light hover:text-charcoal transition-colors"
                 >
                   <SiFacebook size={16} />
-                  {siteSettings.socialFacebook ? 'Facebook' : <MissingInfoText className="text-xs" />}
+                  {fbUrl ? 'Facebook' : <MissingInfoText className="text-xs" />}
                 </a>
                 <a
-                  href={siteSettings.socialPinterest || '#'}
+                  href={ptUrl || '#'}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 font-body text-sm text-charcoal-light hover:text-charcoal transition-colors"
                 >
-                  <SiFacebook size={16} />
-                  {siteSettings.socialPinterest ? 'Pinterest' : <MissingInfoText className="text-xs" />}
+                  <SiPinterest size={16} />
+                  {ptUrl ? 'Pinterest' : <MissingInfoText className="text-xs" />}
                 </a>
               </div>
             </div>

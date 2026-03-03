@@ -10,11 +10,153 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
+export interface Artwork {
+  'id' : bigint,
+  'title' : string,
+  'featured' : boolean,
+  'order' : bigint,
+  'size' : string,
+  'year' : bigint,
+  'description' : string,
+  'additionalImages' : Array<string>,
+  'available' : boolean,
+  'visible' : boolean,
+  'category' : string,
+  'image' : string,
+  'location' : string,
+  'medium' : string,
+}
+export interface BlogPost {
+  'id' : bigint,
+  'status' : string,
+  'title' : string,
+  'content' : string,
+  'publishDate' : Time,
+  'slug' : string,
+}
+export interface CareerMilestone {
+  'id' : bigint,
+  'year' : string,
+  'event' : string,
+}
+export interface CommissionInquiry {
+  'id' : bigint,
+  'status' : string,
+  'name' : string,
+  'description' : string,
+  'email' : string,
+  'timestamp' : Time,
+  'budget' : string,
+}
+export interface CommissionProcessStep {
+  'id' : bigint,
+  'title' : string,
+  'description' : string,
+  'stepNumber' : bigint,
+}
+export interface ContactInquiry {
+  'id' : bigint,
+  'status' : string,
+  'name' : string,
+  'email' : string,
+  'message' : string,
+  'timestamp' : Time,
+}
+export interface FAQItem {
+  'id' : bigint,
+  'question' : string,
+  'answer' : string,
+}
+export interface NavigationItem {
+  'id' : bigint,
+  'order' : bigint,
+  'name' : string,
+  'path' : string,
+}
+export interface Notification {
+  'id' : bigint,
+  'status' : string,
+  'fullPayload' : string,
+  'submitterName' : string,
+  'messagePreview' : string,
+  'sourceType' : string,
+  'timestamp' : Time,
+  'submitterEmail' : string,
+}
+export interface PressMention {
+  'id' : bigint,
+  'url' : string,
+  'date' : string,
+  'headline' : string,
+  'excerpt' : string,
+  'publication' : string,
+}
+export interface SEOSettings {
+  'title' : string,
+  'page' : string,
+  'description' : string,
+  'keywords' : string,
+}
+export interface SiteSettings {
+  'siteTitle' : string,
+  'commissionPricingText' : string,
+  'newsletterPlaceholder' : string,
+  'heroIntroText' : string,
+  'socialPlatforms' : Array<SocialPlatform>,
+  'heroArtistName' : string,
+  'googleAnalyticsId' : string,
+  'seoSettings' : Array<SEOSettings>,
+  'artistStatement' : string,
+  'aboutBio' : string,
+  'siteTagline' : string,
+  'commissionHeroText' : string,
+  'heroTagline' : string,
+}
+export interface SocialPlatform {
+  'url' : string,
+  'icon' : string,
+  'name' : string,
+}
+export interface Testimonial {
+  'id' : bigint,
+  'name' : string,
+  'role' : string,
+  'quote' : string,
+  'location' : string,
+}
+export type Time = bigint;
 export interface _SERVICE {
   'addUniqueVisitor' : ActorMethod<[string], boolean>,
+  'getArtworks' : ActorMethod<[], Array<Artwork>>,
+  'getBlogPosts' : ActorMethod<[], Array<BlogPost>>,
+  'getCareerMilestones' : ActorMethod<[], Array<CareerMilestone>>,
+  'getCommissionInquiries' : ActorMethod<[], Array<CommissionInquiry>>,
+  'getCommissionProcessSteps' : ActorMethod<[], Array<CommissionProcessStep>>,
+  'getContactInquiries' : ActorMethod<[], Array<ContactInquiry>>,
+  'getFAQItems' : ActorMethod<[], Array<FAQItem>>,
+  'getNavigationItems' : ActorMethod<[], Array<NavigationItem>>,
+  'getNotifications' : ActorMethod<[], Array<Notification>>,
   'getPageViewCount' : ActorMethod<[], bigint>,
+  'getPressMentions' : ActorMethod<[], Array<PressMention>>,
+  'getSiteSettings' : ActorMethod<[], [] | [SiteSettings]>,
+  'getTestimonials' : ActorMethod<[], Array<Testimonial>>,
   'getUniqueVisitorCount' : ActorMethod<[], bigint>,
   'incrementPageView' : ActorMethod<[], undefined>,
+  'setArtworks' : ActorMethod<[Array<Artwork>], undefined>,
+  'setBlogPosts' : ActorMethod<[Array<BlogPost>], undefined>,
+  'setCareerMilestones' : ActorMethod<[Array<CareerMilestone>], undefined>,
+  'setCommissionInquiries' : ActorMethod<[Array<CommissionInquiry>], undefined>,
+  'setCommissionProcessSteps' : ActorMethod<
+    [Array<CommissionProcessStep>],
+    undefined
+  >,
+  'setContactInquiries' : ActorMethod<[Array<ContactInquiry>], undefined>,
+  'setFAQItems' : ActorMethod<[Array<FAQItem>], undefined>,
+  'setNavigationItems' : ActorMethod<[Array<NavigationItem>], undefined>,
+  'setNotifications' : ActorMethod<[Array<Notification>], undefined>,
+  'setPressMentions' : ActorMethod<[Array<PressMention>], undefined>,
+  'setSiteSettings' : ActorMethod<[SiteSettings], undefined>,
+  'setTestimonials' : ActorMethod<[Array<Testimonial>], undefined>,
 }
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];

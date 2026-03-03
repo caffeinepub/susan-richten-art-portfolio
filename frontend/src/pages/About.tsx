@@ -3,14 +3,18 @@ import { SiInstagram, SiFacebook, SiPinterest } from 'react-icons/si';
 import { Download } from 'lucide-react';
 import { useCMS } from '../contexts/CMSContext';
 import { usePageMeta } from '../hooks/usePageMeta';
-import { CareerTimeline } from '../components/CareerTimeline';
-import { PressMentionCard } from '../components/PressMentionCard';
-import { MissingInfoText } from '../components/MissingInfoText';
+import CareerTimeline from '../components/CareerTimeline';
+import PressMentionCard from '../components/PressMentionCard';
+import MissingInfoText from '../components/MissingInfoText';
 
 export function About() {
   usePageMeta('about');
   const { aboutPageContent, siteSettings } = useCMS();
   const [pressKitMsg, setPressKitMsg] = useState(false);
+
+  const igUrl = siteSettings.socialPlatforms.find(p => p.icon === 'instagram' || p.name.toLowerCase() === 'instagram')?.url || '';
+  const fbUrl = siteSettings.socialPlatforms.find(p => p.icon === 'facebook' || p.name.toLowerCase() === 'facebook')?.url || '';
+  const ptUrl = siteSettings.socialPlatforms.find(p => p.icon === 'pinterest' || p.name.toLowerCase() === 'pinterest')?.url || '';
 
   return (
     <div className="page-transition pt-20">
@@ -46,11 +50,11 @@ export function About() {
 
           {/* Bio */}
           <div>
-            <h2 className="font-heading text-3xl md:text-4xl text-charcoal mb-2">Malia Fonoti</h2>
+            <h2 className="font-heading text-3xl md:text-4xl text-charcoal mb-2">Marina Vasquez</h2>
             <p className="font-body text-xs tracking-widest uppercase text-charcoal-muted mb-6">Ocean View, HI</p>
             <div className="font-body text-base text-charcoal-light leading-relaxed">
-              {aboutPageContent.biography ? (
-                <p>{aboutPageContent.biography}</p>
+              {aboutPageContent.bio ? (
+                <p>{aboutPageContent.bio}</p>
               ) : (
                 <MissingInfoText />
               )}
@@ -60,31 +64,31 @@ export function About() {
             <div className="mt-8 flex flex-col gap-3">
               <h4 className="font-body text-xs tracking-widest uppercase text-charcoal-muted">Follow</h4>
               <a
-                href={siteSettings.socialInstagram || '#'}
+                href={igUrl || '#'}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 font-body text-sm text-charcoal-light hover:text-charcoal transition-colors"
               >
                 <SiInstagram size={16} />
-                {siteSettings.socialInstagram ? 'Instagram' : <MissingInfoText className="text-xs" />}
+                {igUrl ? 'Instagram' : <MissingInfoText className="text-xs" />}
               </a>
               <a
-                href={siteSettings.socialFacebook || '#'}
+                href={fbUrl || '#'}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 font-body text-sm text-charcoal-light hover:text-charcoal transition-colors"
               >
                 <SiFacebook size={16} />
-                {siteSettings.socialFacebook ? 'Facebook' : <MissingInfoText className="text-xs" />}
+                {fbUrl ? 'Facebook' : <MissingInfoText className="text-xs" />}
               </a>
               <a
-                href={siteSettings.socialPinterest || '#'}
+                href={ptUrl || '#'}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 font-body text-sm text-charcoal-light hover:text-charcoal transition-colors"
               >
                 <SiPinterest size={16} />
-                {siteSettings.socialPinterest ? 'Pinterest' : <MissingInfoText className="text-xs" />}
+                {ptUrl ? 'Pinterest' : <MissingInfoText className="text-xs" />}
               </a>
             </div>
           </div>
@@ -113,7 +117,7 @@ export function About() {
             <h2 className="font-heading text-4xl md:text-5xl text-charcoal mb-3">Career Milestones</h2>
             <div className="w-12 h-px bg-gold mx-auto" />
           </div>
-          <CareerTimeline milestones={aboutPageContent.milestones} />
+          <CareerTimeline milestones={aboutPageContent.careerMilestones} />
         </div>
       </section>
 
@@ -127,7 +131,14 @@ export function About() {
           {aboutPageContent.pressLinks.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {aboutPageContent.pressLinks.map(mention => (
-                <PressMentionCard key={mention.id} mention={mention} />
+                <PressMentionCard
+                  key={mention.id}
+                  publication={mention.publication}
+                  date={mention.date}
+                  headline={mention.headline}
+                  url={mention.url}
+                  excerpt={mention.excerpt}
+                />
               ))}
             </div>
           ) : (

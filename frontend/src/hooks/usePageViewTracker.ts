@@ -1,20 +1,13 @@
-import { useEffect, useRef } from 'react';
-import { useIncrementPageView, useGetPageViewCount } from './useQueries';
+import { useEffect } from 'react';
+import { useIncrementPageView, usePageViewCount } from './useQueries';
 
 export function usePageViewTracker() {
-  const { mutate: incrementPageView } = useIncrementPageView();
-  const pageViewQuery = useGetPageViewCount();
-  const hasTracked = useRef(false);
+  const incrementPageView = useIncrementPageView();
+  const { data: pageViewCount } = usePageViewCount();
 
   useEffect(() => {
-    if (!hasTracked.current) {
-      hasTracked.current = true;
-      incrementPageView();
-    }
-  }, [incrementPageView]);
+    incrementPageView.mutate();
+  }, []);
 
-  return {
-    pageViewCount: pageViewQuery.data ?? BigInt(0),
-    isLoading: pageViewQuery.isLoading,
-  };
+  return { pageViewCount };
 }

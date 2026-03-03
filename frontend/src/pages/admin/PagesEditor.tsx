@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { HeroEditor } from '../../components/admin/HeroEditor';
-import { NavigationEditor } from '../../components/admin/NavigationEditor';
-import { AboutPageEditor } from '../../components/admin/AboutPageEditor';
-import { CommissionsPageEditor } from '../../components/admin/CommissionsPageEditor';
+import HeroEditor from '../../components/admin/HeroEditor';
+import NavigationEditor from '../../components/admin/NavigationEditor';
+import AboutPageEditor from '../../components/admin/AboutPageEditor';
+import CommissionsPageEditor from '../../components/admin/CommissionsPageEditor';
 import { TestimonialsEditor } from '../../components/admin/TestimonialsEditor';
 import { PressEditor } from '../../components/admin/PressEditor';
 

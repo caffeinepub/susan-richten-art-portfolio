@@ -1,76 +1,70 @@
-import React from 'react';
-import { createRouter, createRoute, createRootRoute, RouterProvider, Outlet } from '@tanstack/react-router';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { RouterProvider, createRouter, createRoute, createRootRoute, Outlet } from '@tanstack/react-router';
+import { ThemeProvider } from 'next-themes';
+import { Toaster } from '@/components/ui/sonner';
 import { CMSProvider } from './contexts/CMSContext';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
-import { Header } from './components/Header';
-import { Footer } from './components/Footer';
-import { Home } from './pages/Home';
-import { Gallery } from './pages/Gallery';
-import { Commissions } from './pages/Commissions';
-import { About } from './pages/About';
-import { Contact } from './pages/Contact';
-import { Testimonials } from './pages/Testimonials';
-import { AdminLogin } from './pages/admin/AdminLogin';
-import AdminLayout from './components/admin/AdminLayout';
+import { AuthProvider } from './contexts/AuthContext';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import Home from './pages/Home';
+import About from './pages/About';
+import Gallery from './pages/Gallery';
+import Commissions from './pages/Commissions';
+import Contact from './pages/Contact';
+import Testimonials from './pages/Testimonials';
+import AdminLogin from './pages/admin/AdminLogin';
 import Dashboard from './pages/admin/Dashboard';
-import { GalleryManager } from './pages/admin/GalleryManager';
-import { MediaLibrary } from './pages/admin/MediaLibrary';
-import { PagesEditor } from './pages/admin/PagesEditor';
-import { CommissionsManager } from './pages/admin/CommissionsManager';
-import { BlogManager } from './pages/admin/BlogManager';
-import { Settings } from './pages/admin/Settings';
-import { Toaster } from './components/ui/sonner';
+import GalleryManager from './pages/admin/GalleryManager';
+import BlogManager from './pages/admin/BlogManager';
+import CommissionsManager from './pages/admin/CommissionsManager';
+import MediaLibrary from './pages/admin/MediaLibrary';
+import MessagesInbox from './pages/admin/MessagesInbox';
+import PagesEditor from './pages/admin/PagesEditor';
+import Settings from './pages/admin/Settings';
+import AdminLayout from './components/admin/AdminLayout';
 import { usePageViewTracker } from './hooks/usePageViewTracker';
 import { useUniqueVisitorTracker } from './hooks/useUniqueVisitorTracker';
 
 const queryClient = new QueryClient();
 
+// Layout component for public pages
 function PublicLayout() {
+  usePageViewTracker();
+  useUniqueVisitorTracker();
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <Header />
-      <main>
+      <main className="flex-1">
         <Outlet />
       </main>
       <Footer />
-    </>
+    </div>
   );
 }
 
-function AdminGuard({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated } = useAuth();
-  if (!isAuthenticated) {
-    return <AdminLogin />;
-  }
-  return <>{children}</>;
-}
-
-function AppTrackers() {
-  usePageViewTracker();
-  useUniqueVisitorTracker();
-  return null;
-}
-
+// Root route
 const rootRoute = createRootRoute({
-  component: () => (
-    <>
-      <AppTrackers />
-      <Outlet />
-    </>
-  ),
+  component: () => <Outlet />,
 });
 
+// Public layout route
 const publicLayoutRoute = createRoute({
   getParentRoute: () => rootRoute,
-  id: 'public',
+  id: 'public-layout',
   component: PublicLayout,
 });
 
+// Public routes
 const homeRoute = createRoute({
   getParentRoute: () => publicLayoutRoute,
   path: '/',
   component: Home,
+});
+
+const aboutRoute = createRoute({
+  getParentRoute: () => publicLayoutRoute,
+  path: '/about',
+  component: About,
 });
 
 const galleryRoute = createRoute({
@@ -85,12 +79,6 @@ const commissionsRoute = createRoute({
   component: Commissions,
 });
 
-const aboutRoute = createRoute({
-  getParentRoute: () => publicLayoutRoute,
-  path: '/about',
-  component: About,
-});
-
 const contactRoute = createRoute({
   getParentRoute: () => publicLayoutRoute,
   path: '/contact',
@@ -103,60 +91,63 @@ const testimonialsRoute = createRoute({
   component: Testimonials,
 });
 
-const adminRootRoute = createRoute({
+// Admin routes
+const adminLoginRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/admin',
-  component: () => (
-    <AdminGuard>
-      <AdminLayout />
-    </AdminGuard>
-  ),
+  path: '/admin/login',
+  component: AdminLogin,
 });
 
-const adminIndexRoute = createRoute({
-  getParentRoute: () => adminRootRoute,
+const adminLayoutRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/admin',
+  component: AdminLayout,
+});
+
+const adminDashboardRoute = createRoute({
+  getParentRoute: () => adminLayoutRoute,
   path: '/',
   component: Dashboard,
 });
 
-const adminDashboardRoute = createRoute({
-  getParentRoute: () => adminRootRoute,
-  path: '/dashboard',
-  component: Dashboard,
-});
-
 const adminGalleryRoute = createRoute({
-  getParentRoute: () => adminRootRoute,
+  getParentRoute: () => adminLayoutRoute,
   path: '/gallery',
   component: GalleryManager,
 });
 
-const adminMediaRoute = createRoute({
-  getParentRoute: () => adminRootRoute,
-  path: '/media',
-  component: MediaLibrary,
-});
-
-const adminPagesRoute = createRoute({
-  getParentRoute: () => adminRootRoute,
-  path: '/pages',
-  component: PagesEditor,
-});
-
-const adminCommissionsRoute = createRoute({
-  getParentRoute: () => adminRootRoute,
-  path: '/commissions',
-  component: CommissionsManager,
-});
-
 const adminBlogRoute = createRoute({
-  getParentRoute: () => adminRootRoute,
+  getParentRoute: () => adminLayoutRoute,
   path: '/blog',
   component: BlogManager,
 });
 
+const adminCommissionsRoute = createRoute({
+  getParentRoute: () => adminLayoutRoute,
+  path: '/commissions',
+  component: CommissionsManager,
+});
+
+const adminMediaRoute = createRoute({
+  getParentRoute: () => adminLayoutRoute,
+  path: '/media',
+  component: MediaLibrary,
+});
+
+const adminMessagesRoute = createRoute({
+  getParentRoute: () => adminLayoutRoute,
+  path: '/messages',
+  component: MessagesInbox,
+});
+
+const adminPagesRoute = createRoute({
+  getParentRoute: () => adminLayoutRoute,
+  path: '/pages',
+  component: PagesEditor,
+});
+
 const adminSettingsRoute = createRoute({
-  getParentRoute: () => adminRootRoute,
+  getParentRoute: () => adminLayoutRoute,
   path: '/settings',
   component: Settings,
 });
@@ -164,20 +155,21 @@ const adminSettingsRoute = createRoute({
 const routeTree = rootRoute.addChildren([
   publicLayoutRoute.addChildren([
     homeRoute,
+    aboutRoute,
     galleryRoute,
     commissionsRoute,
-    aboutRoute,
     contactRoute,
     testimonialsRoute,
   ]),
-  adminRootRoute.addChildren([
-    adminIndexRoute,
+  adminLoginRoute,
+  adminLayoutRoute.addChildren([
     adminDashboardRoute,
     adminGalleryRoute,
-    adminMediaRoute,
-    adminPagesRoute,
-    adminCommissionsRoute,
     adminBlogRoute,
+    adminCommissionsRoute,
+    adminMediaRoute,
+    adminMessagesRoute,
+    adminPagesRoute,
     adminSettingsRoute,
   ]),
 ]);
@@ -190,15 +182,19 @@ declare module '@tanstack/react-router' {
   }
 }
 
-export default function App() {
+function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <CMSProvider>
-        <AuthProvider>
-          <RouterProvider router={router} />
-          <Toaster />
-        </AuthProvider>
-      </CMSProvider>
-    </QueryClientProvider>
+    <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+      <QueryClientProvider client={queryClient}>
+        <CMSProvider>
+          <AuthProvider>
+            <RouterProvider router={router} />
+            <Toaster />
+          </AuthProvider>
+        </CMSProvider>
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 }
+
+export default App;

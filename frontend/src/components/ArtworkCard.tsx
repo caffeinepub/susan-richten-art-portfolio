@@ -1,60 +1,45 @@
-import React from 'react';
 import { Camera } from 'lucide-react';
-import { Artwork } from '../contexts/CMSContext';
-import { useLazyLoad } from '../hooks/useLazyLoad';
+import type { Artwork } from '../contexts/CMSContext';
 
 interface ArtworkCardProps {
   artwork: Artwork;
-  onClick: (artwork: Artwork) => void;
+  onClick?: () => void;
 }
 
-export function ArtworkCard({ artwork, onClick }: ArtworkCardProps) {
-  const { ref, isVisible } = useLazyLoad();
-  const extraPhotoCount = artwork.additionalImages?.length ?? 0;
-  const totalPhotos = 1 + extraPhotoCount;
+export default function ArtworkCard({ artwork, onClick }: ArtworkCardProps) {
+  const totalPhotos = 1 + (artwork.additionalImages?.length || 0);
 
   return (
     <div
-      ref={ref}
-      className={`group cursor-pointer bg-white shadow-gallery hover:shadow-gallery-hover transition-all duration-300 ${
-        isVisible ? 'animate-fade-in' : 'opacity-0'
-      }`}
-      onClick={() => onClick(artwork)}
+      className="group cursor-pointer"
+      onClick={onClick}
     >
-      <div className="relative overflow-hidden aspect-[4/3]">
-        {isVisible ? (
-          <img
-            src={artwork.imageUrl}
-            alt={artwork.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          />
-        ) : (
-          <div className="w-full h-full bg-beige" />
-        )}
-
+      <div className="relative overflow-hidden bg-warm-beige aspect-[4/3]">
+        <img
+          src={artwork.image}
+          alt={artwork.title}
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
         {/* Availability badge */}
-        <div className={`absolute top-2 right-2 text-xs font-body px-2 py-1 rounded ${
-          artwork.availability === 'Available'
-            ? 'bg-sage text-white'
-            : 'bg-charcoal-light text-white'
-        }`}>
-          {artwork.availability}
-        </div>
-
-        {/* Multi-photo badge */}
-        {extraPhotoCount > 0 && (
-          <div className="absolute bottom-2 left-2 flex items-center gap-1 bg-gold/90 text-charcoal text-xs font-body px-2 py-1 rounded">
-            <Camera size={11} />
+        {artwork.available && (
+          <div className="absolute top-3 right-3 bg-gold text-charcoal text-xs font-semibold px-2 py-1 rounded-sm">
+            Available
+          </div>
+        )}
+        {/* Photo count badge */}
+        {artwork.additionalImages && artwork.additionalImages.length > 0 && (
+          <div className="absolute bottom-3 left-3 bg-charcoal/80 text-warm-white text-xs font-medium px-2 py-1 rounded-sm flex items-center gap-1">
+            <Camera size={11} className="text-gold" />
             <span>{totalPhotos}</span>
           </div>
         )}
+        {/* Hover overlay */}
+        <div className="absolute inset-0 bg-charcoal/0 group-hover:bg-charcoal/20 transition-colors duration-300" />
       </div>
-      <div className="p-4">
-        <h3 className="font-heading text-lg text-charcoal">{artwork.title}</h3>
-        <p className="font-body text-xs text-charcoal-muted mt-1">{artwork.year} · {artwork.category}</p>
+      <div className="pt-3 pb-1">
+        <h3 className="font-display text-base font-medium text-foreground">{artwork.title}</h3>
+        <p className="text-sm text-muted-foreground mt-0.5">{artwork.medium} · {artwork.year}</p>
       </div>
     </div>
   );
 }
-
-export default ArtworkCard;

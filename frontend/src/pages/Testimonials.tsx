@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useCMS } from '../contexts/CMSContext';
 import { usePageMeta } from '../hooks/usePageMeta';
-import { TestimonialCarousel } from '../components/TestimonialCarousel';
-import { TestimonialGrid } from '../components/TestimonialGrid';
-import { PressMentionCard } from '../components/PressMentionCard';
+import TestimonialCarousel from '../components/TestimonialCarousel';
+import TestimonialGrid from '../components/TestimonialGrid';
+import PressMentionCard from '../components/PressMentionCard';
 
 export function Testimonials() {
   usePageMeta('testimonials');
@@ -61,14 +61,21 @@ export function Testimonials() {
       {/* Press Mentions */}
       {pressMentions.length > 0 && (
         <section className="section-padding bg-white">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-5xl mx-auto">
             <div className="text-center mb-10">
-              <h2 className="font-heading text-4xl md:text-5xl text-charcoal mb-3">Press</h2>
+              <h2 className="font-heading text-4xl md:text-5xl text-charcoal mb-3">Press & Media</h2>
               <div className="w-12 h-px bg-gold mx-auto" />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {pressMentions.map(mention => (
-                <PressMentionCard key={mention.id} mention={mention} />
+                <PressMentionCard
+                  key={mention.id}
+                  publication={mention.publication}
+                  date={mention.date}
+                  headline={mention.headline}
+                  url={mention.url}
+                  excerpt={mention.excerpt}
+                />
               ))}
             </div>
           </div>

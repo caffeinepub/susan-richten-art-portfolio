@@ -1,42 +1,25 @@
-import { useEffect, useRef } from 'react';
-import { useAddUniqueVisitor, useGetUniqueVisitorCount } from './useQueries';
+import { useEffect } from 'react';
+import { useAddUniqueVisitor, useUniqueVisitorCount } from './useQueries';
 
-const VISITOR_UUID_KEY = 'visitor_uuid';
+const VISITOR_ID_KEY = 'visitor_id';
 
-function generateUUID(): string {
-  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
-    return crypto.randomUUID();
+function getOrCreateVisitorId(): string {
+  let visitorId = localStorage.getItem(VISITOR_ID_KEY);
+  if (!visitorId) {
+    visitorId = 'visitor_' + Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
+    localStorage.setItem(VISITOR_ID_KEY, visitorId);
   }
-  // Fallback UUID v4 generation
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-    const r = (Math.random() * 16) | 0;
-    const v = c === 'x' ? r : (r & 0x3) | 0x8;
-    return v.toString(16);
-  });
+  return visitorId;
 }
 
 export function useUniqueVisitorTracker() {
-  const { mutate: addUniqueVisitor } = useAddUniqueVisitor();
-  const uniqueVisitorQuery = useGetUniqueVisitorCount();
-  const hasTracked = useRef(false);
+  const addUniqueVisitor = useAddUniqueVisitor();
+  const { data: uniqueVisitorCount } = useUniqueVisitorCount();
 
   useEffect(() => {
-    if (hasTracked.current) return;
-    hasTracked.current = true;
+    const visitorId = getOrCreateVisitorId();
+    addUniqueVisitor.mutate(visitorId);
+  }, []);
 
-    let visitorId = localStorage.getItem(VISITOR_UUID_KEY);
-    if (!visitorId) {
-      visitorId = generateUUID();
-      localStorage.setItem(VISITOR_UUID_KEY, visitorId);
-      // New visitor — register with backend
-      addUniqueVisitor(visitorId);
-    }
-    // If visitorId already existed, we don't call addUniqueVisitor again
-    // The backend also deduplicates, but we avoid the call entirely for returning visitors
-  }, [addUniqueVisitor]);
-
-  return {
-    uniqueVisitorCount: uniqueVisitorQuery.data ?? BigInt(0),
-    isLoading: uniqueVisitorQuery.isLoading,
-  };
+  return { uniqueVisitorCount };
 }

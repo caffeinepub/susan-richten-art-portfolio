@@ -89,12 +89,152 @@ export class ExternalBlob {
         return this;
     }
 }
+export interface NavigationItem {
+    id: bigint;
+    order: bigint;
+    name: string;
+    path: string;
+}
+export interface BlogPost {
+    id: bigint;
+    status: string;
+    title: string;
+    content: string;
+    publishDate: Time;
+    slug: string;
+}
+export interface Testimonial {
+    id: bigint;
+    name: string;
+    role: string;
+    quote: string;
+    location: string;
+}
+export type Time = bigint;
+export interface SEOSettings {
+    title: string;
+    page: string;
+    description: string;
+    keywords: string;
+}
+export interface PressMention {
+    id: bigint;
+    url: string;
+    date: string;
+    headline: string;
+    excerpt: string;
+    publication: string;
+}
+export interface SiteSettings {
+    siteTitle: string;
+    commissionPricingText: string;
+    newsletterPlaceholder: string;
+    heroIntroText: string;
+    socialPlatforms: Array<SocialPlatform>;
+    heroArtistName: string;
+    googleAnalyticsId: string;
+    seoSettings: Array<SEOSettings>;
+    artistStatement: string;
+    aboutBio: string;
+    siteTagline: string;
+    commissionHeroText: string;
+    heroTagline: string;
+}
+export interface Artwork {
+    id: bigint;
+    title: string;
+    featured: boolean;
+    order: bigint;
+    size: string;
+    year: bigint;
+    description: string;
+    additionalImages: Array<string>;
+    available: boolean;
+    visible: boolean;
+    category: string;
+    image: string;
+    location: string;
+    medium: string;
+}
+export interface Notification {
+    id: bigint;
+    status: string;
+    fullPayload: string;
+    submitterName: string;
+    messagePreview: string;
+    sourceType: string;
+    timestamp: Time;
+    submitterEmail: string;
+}
+export interface CommissionProcessStep {
+    id: bigint;
+    title: string;
+    description: string;
+    stepNumber: bigint;
+}
+export interface SocialPlatform {
+    url: string;
+    icon: string;
+    name: string;
+}
+export interface CommissionInquiry {
+    id: bigint;
+    status: string;
+    name: string;
+    description: string;
+    email: string;
+    timestamp: Time;
+    budget: string;
+}
+export interface CareerMilestone {
+    id: bigint;
+    year: string;
+    event: string;
+}
+export interface FAQItem {
+    id: bigint;
+    question: string;
+    answer: string;
+}
+export interface ContactInquiry {
+    id: bigint;
+    status: string;
+    name: string;
+    email: string;
+    message: string;
+    timestamp: Time;
+}
 export interface backendInterface {
     addUniqueVisitor(visitorId: string): Promise<boolean>;
+    getArtworks(): Promise<Array<Artwork>>;
+    getBlogPosts(): Promise<Array<BlogPost>>;
+    getCareerMilestones(): Promise<Array<CareerMilestone>>;
+    getCommissionInquiries(): Promise<Array<CommissionInquiry>>;
+    getCommissionProcessSteps(): Promise<Array<CommissionProcessStep>>;
+    getContactInquiries(): Promise<Array<ContactInquiry>>;
+    getFAQItems(): Promise<Array<FAQItem>>;
+    getNavigationItems(): Promise<Array<NavigationItem>>;
+    getNotifications(): Promise<Array<Notification>>;
     getPageViewCount(): Promise<bigint>;
+    getPressMentions(): Promise<Array<PressMention>>;
+    getSiteSettings(): Promise<SiteSettings | null>;
+    getTestimonials(): Promise<Array<Testimonial>>;
     getUniqueVisitorCount(): Promise<bigint>;
     incrementPageView(): Promise<void>;
+    setArtworks(artworksArray: Array<Artwork>): Promise<void>;
+    setBlogPosts(blogPostsArray: Array<BlogPost>): Promise<void>;
+    setCareerMilestones(milestonesArray: Array<CareerMilestone>): Promise<void>;
+    setCommissionInquiries(commissionInquiriesArray: Array<CommissionInquiry>): Promise<void>;
+    setCommissionProcessSteps(stepsArray: Array<CommissionProcessStep>): Promise<void>;
+    setContactInquiries(contactInquiriesArray: Array<ContactInquiry>): Promise<void>;
+    setFAQItems(faqItemsArray: Array<FAQItem>): Promise<void>;
+    setNavigationItems(navigationItemsArray: Array<NavigationItem>): Promise<void>;
+    setNotifications(notificationsArray: Array<Notification>): Promise<void>;
+    setPressMentions(pressMentionsArray: Array<PressMention>): Promise<void>;
+    setSiteSettings(settings: SiteSettings): Promise<void>;
+    setTestimonials(testimonialsArray: Array<Testimonial>): Promise<void>;
 }
+import type { SiteSettings as _SiteSettings } from "./declarations/backend.did.d.ts";
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
     async addUniqueVisitor(arg0: string): Promise<boolean> {
@@ -111,6 +251,132 @@ export class Backend implements backendInterface {
             return result;
         }
     }
+    async getArtworks(): Promise<Array<Artwork>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getArtworks();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getArtworks();
+            return result;
+        }
+    }
+    async getBlogPosts(): Promise<Array<BlogPost>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getBlogPosts();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getBlogPosts();
+            return result;
+        }
+    }
+    async getCareerMilestones(): Promise<Array<CareerMilestone>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getCareerMilestones();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getCareerMilestones();
+            return result;
+        }
+    }
+    async getCommissionInquiries(): Promise<Array<CommissionInquiry>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getCommissionInquiries();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getCommissionInquiries();
+            return result;
+        }
+    }
+    async getCommissionProcessSteps(): Promise<Array<CommissionProcessStep>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getCommissionProcessSteps();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getCommissionProcessSteps();
+            return result;
+        }
+    }
+    async getContactInquiries(): Promise<Array<ContactInquiry>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getContactInquiries();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getContactInquiries();
+            return result;
+        }
+    }
+    async getFAQItems(): Promise<Array<FAQItem>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getFAQItems();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getFAQItems();
+            return result;
+        }
+    }
+    async getNavigationItems(): Promise<Array<NavigationItem>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getNavigationItems();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getNavigationItems();
+            return result;
+        }
+    }
+    async getNotifications(): Promise<Array<Notification>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getNotifications();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getNotifications();
+            return result;
+        }
+    }
     async getPageViewCount(): Promise<bigint> {
         if (this.processError) {
             try {
@@ -122,6 +388,48 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.getPageViewCount();
+            return result;
+        }
+    }
+    async getPressMentions(): Promise<Array<PressMention>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getPressMentions();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getPressMentions();
+            return result;
+        }
+    }
+    async getSiteSettings(): Promise<SiteSettings | null> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getSiteSettings();
+                return from_candid_opt_n1(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getSiteSettings();
+            return from_candid_opt_n1(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getTestimonials(): Promise<Array<Testimonial>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getTestimonials();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getTestimonials();
             return result;
         }
     }
@@ -153,6 +461,177 @@ export class Backend implements backendInterface {
             return result;
         }
     }
+    async setArtworks(arg0: Array<Artwork>): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.setArtworks(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.setArtworks(arg0);
+            return result;
+        }
+    }
+    async setBlogPosts(arg0: Array<BlogPost>): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.setBlogPosts(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.setBlogPosts(arg0);
+            return result;
+        }
+    }
+    async setCareerMilestones(arg0: Array<CareerMilestone>): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.setCareerMilestones(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.setCareerMilestones(arg0);
+            return result;
+        }
+    }
+    async setCommissionInquiries(arg0: Array<CommissionInquiry>): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.setCommissionInquiries(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.setCommissionInquiries(arg0);
+            return result;
+        }
+    }
+    async setCommissionProcessSteps(arg0: Array<CommissionProcessStep>): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.setCommissionProcessSteps(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.setCommissionProcessSteps(arg0);
+            return result;
+        }
+    }
+    async setContactInquiries(arg0: Array<ContactInquiry>): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.setContactInquiries(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.setContactInquiries(arg0);
+            return result;
+        }
+    }
+    async setFAQItems(arg0: Array<FAQItem>): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.setFAQItems(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.setFAQItems(arg0);
+            return result;
+        }
+    }
+    async setNavigationItems(arg0: Array<NavigationItem>): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.setNavigationItems(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.setNavigationItems(arg0);
+            return result;
+        }
+    }
+    async setNotifications(arg0: Array<Notification>): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.setNotifications(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.setNotifications(arg0);
+            return result;
+        }
+    }
+    async setPressMentions(arg0: Array<PressMention>): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.setPressMentions(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.setPressMentions(arg0);
+            return result;
+        }
+    }
+    async setSiteSettings(arg0: SiteSettings): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.setSiteSettings(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.setSiteSettings(arg0);
+            return result;
+        }
+    }
+    async setTestimonials(arg0: Array<Testimonial>): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.setTestimonials(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.setTestimonials(arg0);
+            return result;
+        }
+    }
+}
+function from_candid_opt_n1(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_SiteSettings]): SiteSettings | null {
+    return value.length === 0 ? null : value[0];
 }
 export interface CreateActorOptions {
     agent?: Agent;

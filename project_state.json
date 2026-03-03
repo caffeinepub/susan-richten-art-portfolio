@@ -1,18 +1,20 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 23,
+  "projectStateVersion": 35,
   "summary": "Full-featured art portfolio website for artist Susan Richten (Ocean View, HI) built with React + TypeScript, Tailwind CSS, and a local JSON-based CMS. Features 5 public pages (Home, Gallery, Commissions, About, Contact, Testimonials/Press) plus a password-protected admin panel (/admin, password: SusanAdmin2024). Design is clean/minimal with warm beige, white, charcoal palette, Cormorant Garamond + Lato fonts, and high-end gallery aesthetic.",
   "architectural_notes": [
     "React + TypeScript + Tailwind CSS + React Router; local Context API simulates CMS backend with JSON data store",
     "Design: white/#F5F0E8 beige/#2C2C2C charcoal palette; Cormorant Garamond (headings) + Lato (body) from Google Fonts",
     "Admin panel at /admin, hardcoded password 'SusanAdmin2024', full CRUD for artworks, pages, commissions, blog, settings",
     "Lazy loading via IntersectionObserver; mobile-first responsive; SEO meta tags per page",
-    "Placeholder images should be clean styled divs (warm beige bg, no 'Replace' text overlay, no diagonal/texture lines)"
+    "Placeholder images should be clean styled divs (warm beige bg, no 'Replace' text overlay, no diagonal/texture lines)",
+    "Persistent backend planned: Motoko canister to store CMS data (artworks, settings, testimonials, etc.) so admin changes survive redeployments"
   ],
   "known_issues": [
     "Lightbox/enlarged view still shows 'Replace' text and diagonal lines on placeholder images instead of a clean beige fill",
     "Admin sidebar navigation text is not visible until hovered — text color blends into the background",
-    "Home page Instagram/social feed section still shows diagonal lines and 'Replace' placeholder text"
+    "Home page Instagram/social feed section still shows diagonal lines and 'Replace' placeholder text",
+    "Admin password protection at /admin appears to be missing or broken — login screen not shown when navigating to /admin"
   ],
   "isFixRequest": true,
   "existing_features": [
@@ -343,6 +345,78 @@
         "REQ-45"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-create-a-new-custom-react-hook-frontend-src-hooks-usecmsbackend-ts-that-provides-async-functions-to-load-all-cms-data-from-the-motoko-backend-and-save-each-cms-data-type-back-to-the-backend-using-the-actor-from-useactor-the-hook-must-expose-loadallcmsdata-fetches-all-data-types-from-backend-in-parallel-and-returns-them-and-individual-save-functions-for-each-data-type-saveartworks-savetestimonials-savepressmentions-savecommissioninquiries-savecontactinquiries-savenotifications-saveblogposts-savefaqitems-saveprocesssteps-savecareermilestones-savesitesettings-savenavigationitems-all-functions-must-handle-errors-gracefully-and-return-typed-results-matching-the-cmscontext-data-structures",
+      "title": "Create a new custom React hook (frontend/src/hooks/useCMSBackend.ts) that provides async functions to load all CMS data from the Motoko backend and save each CMS data type back to the backend using the actor from useActor. The hook must expose: loadAllCMSData() (fetches all data types from backend in parallel and returns them), and individual save functions for each data type (saveArtworks, saveTestimonials, savePressMentions, saveCommissionInquiries, saveContactInquiries, saveNotifications, saveBlogPosts, saveFAQItems, saveProcessSteps, saveCareerMilestones, saveSiteSettings, saveNavigationItems). All functions must handle errors gracefully and return typed results matching the CMSContext data structures.",
+      "reqIds": [
+        "REQ-47"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-cmscontext-frontend-src-contexts-cmscontext-tsx-to-initialize-by-loading-all-cms-data-from-the-motoko-backend-via-the-usecmsbackend-hook-on-first-mount-while-data-is-loading-show-a-loading-state-isloading-true-accessible-via-context-if-the-backend-returns-empty-data-e-g-first-deploy-fall-back-to-the-existing-in-memory-sample-default-data-so-the-site-is-never-blank-after-loading-completes-set-isloading-to-false-and-replace-the-in-memory-state-with-the-backend-data-expose-isloading-and-a-syncerror-field-from-the-context",
+      "title": "Update CMSContext (frontend/src/contexts/CMSContext.tsx) to initialize by loading all CMS data from the Motoko backend via the useCMSBackend hook on first mount. While data is loading show a loading state (isLoading: true) accessible via context. If the backend returns empty data (e.g., first deploy), fall back to the existing in-memory sample/default data so the site is never blank. After loading completes, set isLoading to false and replace the in-memory state with the backend data. Expose isLoading and a syncError field from the context.",
+      "reqIds": [
+        "REQ-48"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-every-cms-mutation-action-in-cmscontext-addartwork-updateartwork-deleteartwork-addtestimonial-updatetestimonial-deletetestimonial-addpressmention-updatepressmention-deletepressmention-addcommissioninquiry-updatecommissioninquiry-addcontactinquiry-addnotification-marknotificationread-marknotificationresponded-deletenotification-addblogpost-updateblogpost-deleteblogpost-updatefaqitems-updateprocesssteps-updatecareermilestones-updatesitesettings-updatenavigationitems-and-all-other-crud-actions-so-that-after-updating-local-react-state-they-also-call-the-corresponding-backend-save-function-from-usecmsbackend-to-persist-the-change-to-the-motoko-canister-the-local-state-update-must-happen-immediately-optimistic-so-the-ui-responds-without-waiting-for-the-backend-write-to-complete-backend-writes-should-happen-asynchronously-in-the-background",
+      "title": "Update every CMS mutation action in CMSContext (addArtwork, updateArtwork, deleteArtwork, addTestimonial, updateTestimonial, deleteTestimonial, addPressMention, updatePressMention, deletePressMention, addCommissionInquiry, updateCommissionInquiry, addContactInquiry, addNotification, markNotificationRead, markNotificationResponded, deleteNotification, addBlogPost, updateBlogPost, deleteBlogPost, updateFAQItems, updateProcessSteps, updateCareerMilestones, updateSiteSettings, updateNavigationItems, and all other CRUD actions) so that after updating local React state they also call the corresponding backend save function from useCMSBackend to persist the change to the Motoko canister. The local state update must happen immediately (optimistic) so the UI responds without waiting for the backend write to complete. Backend writes should happen asynchronously in the background.",
+      "reqIds": [
+        "REQ-49"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-all-hardcoded-artist-name-references-across-the-frontend-codebase-from-any-current-value-to-susan-richten-this-includes-the-hero-section-artist-name-default-value-in-cmscontext-frontend-src-contexts-cmscontext-tsx-the-heroeditor-default-value-frontend-src-components-admin-heroeditor-tsx-the-header-logo-wordmark-text-frontend-src-components-header-tsx-the-footer-brand-name-frontend-src-components-footer-tsx-the-html-page-title-in-frontend-index-html-and-any-other-component-or-file-that-hardcodes-the-artist-s-name-as-a-string-literal-the-cms-site-settings-default-for-heroartistname-or-equivalent-field-must-also-be-set-to-susan-richten",
+      "title": "Update all hardcoded artist name references across the frontend codebase from any current value to 'Susan Richten'. This includes: the hero section artist name default value in CMSContext (frontend/src/contexts/CMSContext.tsx), the HeroEditor default value (frontend/src/components/admin/HeroEditor.tsx), the Header logo/wordmark text (frontend/src/components/Header.tsx), the Footer brand name (frontend/src/components/Footer.tsx), the HTML page title in frontend/index.html, and any other component or file that hardcodes the artist's name as a string literal. The CMS site settings default for heroArtistName (or equivalent field) must also be set to 'Susan Richten'.",
+      "reqIds": [
+        "REQ-51"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-revert-the-entire-project-to-version-12-all-files-frontend-and-backend-must-be-restored-to-their-exact-state-at-version-12-any-changes-introduced-after-version-12-must-be-fully-undone-the-resulting-codebase-must-be-identical-to-version-12",
+      "title": "Revert the entire project to Version 12. All files — frontend and backend — must be restored to their exact state at Version 12. Any changes introduced after Version 12 must be fully undone. The resulting codebase must be identical to Version 12.",
+      "reqIds": [
+        "REQ-52"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-audit-and-fix-the-admin-area-password-protection-at-admin-ensure-that-navigating-to-any-admin-route-or-subroutes-redirects-unauthenticated-users-to-a-login-screen-the-login-screen-must-accept-the-password-admin123-matching-the-value-already-set-in-authcontext-if-authcontext-or-the-route-guard-is-missing-or-broken-restore-it-so-that-the-login-screen-is-always-shown-before-any-admin-content-is-accessible-no-authenticated-session-should-bypass-the-login-screen-on-a-fresh-visit",
+      "title": "Audit and fix the admin area password protection at /admin. Ensure that navigating to any /admin route (or subroutes) redirects unauthenticated users to a login screen. The login screen must accept the password 'admin123' (matching the value already set in AuthContext). If AuthContext or the route guard is missing or broken, restore it so that the login screen is always shown before any admin content is accessible. No authenticated session should bypass the login screen on a fresh visit.",
+      "reqIds": [
+        "REQ-53"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-change-password-section-to-the-admin-settings-page-frontend-src-pages-admin-settings-tsx-this-section-must-include-a-current-password-field-a-new-password-field-and-a-confirm-new-password-field-on-submit-validate-that-the-current-password-matches-the-stored-password-in-authcontext-that-the-new-password-and-confirm-fields-match-and-that-the-new-password-is-at-least-6-characters-on-success-update-the-stored-password-in-authcontext-and-localstorage-so-it-persists-across-sessions-and-show-a-success-message-password-updated-successfully-on-failure-show-an-appropriate-inline-error-the-initial-default-password-remains-admin123-until-changed",
+      "title": "Add a 'Change Password' section to the Admin Settings page (frontend/src/pages/admin/Settings.tsx). This section must include: a 'Current Password' field, a 'New Password' field, and a 'Confirm New Password' field. On submit, validate that the current password matches the stored password in AuthContext, that the new password and confirm fields match, and that the new password is at least 6 characters. On success, update the stored password in AuthContext (and localStorage so it persists across sessions) and show a success message 'Password updated successfully'. On failure, show an appropriate inline error. The initial/default password remains 'admin123' until changed.",
+      "reqIds": [
+        "REQ-54"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-footer-component-frontend-src-components-footer-tsx-so-that-the-admin-sign-in-link-is-always-clearly-visible-at-the-bottom-of-every-public-page-the-link-must-have-sufficient-contrast-against-the-footer-background-use-a-legible-color-from-the-design-system-e-g-warm-beige-f5f0e8-or-charcoal-2c2c2c-depending-on-footer-background-and-must-not-be-hidden-transparent-or-require-hovering-to-become-visible-ensure-it-is-positioned-in-the-footer-near-the-copyright-line-and-is-rendered-unconditionally-regardless-of-scroll-position-viewport-size-or-any-css-overflow-z-index-issues-that-might-clip-or-hide-it-the-link-must-navigate-to-admin-when-clicked",
+      "title": "Update the Footer component (frontend/src/components/Footer.tsx) so that the 'Admin Sign In' link is always clearly visible at the bottom of every public page. The link must have sufficient contrast against the footer background — use a legible color from the design system (e.g., warm beige #F5F0E8 or charcoal #2C2C2C depending on footer background) and must not be hidden, transparent, or require hovering to become visible. Ensure it is positioned in the footer near the copyright line and is rendered unconditionally regardless of scroll position, viewport size, or any CSS overflow/z-index issues that might clip or hide it. The link must navigate to /admin when clicked.",
+      "reqIds": [
+        "REQ-55"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-footer-component-frontend-src-components-footer-tsx-so-that-the-bottom-section-of-the-footer-where-the-admin-sign-in-link-visitor-counters-and-copyright-text-are-displayed-has-a-background-color-that-provides-sufficient-contrast-for-all-text-to-be-clearly-readable-if-the-current-footer-background-is-dark-e-g-charcoal-2c2c2c-ensure-all-text-and-links-in-that-area-use-a-light-color-e-g-warm-beige-f5f0e8-or-white-ffffff-if-the-footer-background-is-light-use-charcoal-2c2c2c-for-text-the-admin-sign-in-link-in-particular-must-be-fully-visible-without-hovering-scrolling-or-any-user-interaction-apply-consistent-contrast-compliant-color-tokens-from-the-existing-design-system-to-all-text-elements-in-the-footer-bottom-bar",
+      "title": "Update the Footer component (frontend/src/components/Footer.tsx) so that the bottom section of the footer — where the 'Admin Sign In' link, visitor counters, and copyright text are displayed — has a background color that provides sufficient contrast for all text to be clearly readable. If the current footer background is dark (e.g., charcoal #2C2C2C), ensure all text and links in that area use a light color (e.g., warm beige #F5F0E8 or white #FFFFFF). If the footer background is light, use charcoal #2C2C2C for text. The 'Admin Sign In' link in particular must be fully visible without hovering, scrolling, or any user interaction. Apply consistent contrast-compliant color tokens from the existing design system to all text elements in the footer bottom bar.",
+      "reqIds": [
+        "REQ-56"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -502,6 +576,34 @@
       "reqIds": [
         "REQ-43"
       ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-26",
+      "summary": "Connect site to persistent Motoko canister backend to store admin/CMS data permanently across deployments (artworks, settings, testimonials, etc.), replacing the current in-memory React Context data store",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-27",
+      "summary": "Extend the Motoko backend actor (backend/main.mo) to store and manage all CMS admin data persistently using stable variables. Add stable storage for: artworks (array of records with all artwork fields: id, title, year, medium, size, location, description, category, image, additionalImages, available, featured, visible, order), testimonials (array of records with id, quote, name, location, role), press mentions (array of records with id, publication, date, headline, url, excerpt), commission inquiries (array of records with all inquiry fields and status), contact inquiries (array of records with all contact form fields and status), notifications (array of records with id, sourceType, submitterName, submitterEmail, messagePreview, fullPayload as text, timestamp, status), blog posts (array of records with id, title, slug, content, publishDate, status), FAQ items (array of records with id, question, answer), commission process steps (array of records with id, stepNumber, title, description), career milestones (array of records with id, year, event), site settings (a single record holding siteTitle, siteTagline, socialPlatforms, SEO settings per page, googleAnalyticsId, newsletterPlaceholder, aboutBio, artistStatement, heroArtistName, heroTagline, heroIntroText, commissionHeroText, commissionPricingText), and navigation items (array of records with id, label, path, order). Expose update functions to write each data type and query functions to read each data type. All variables must be declared as stable so data survives canister upgrades.",
+      "reqIds": [
+        "REQ-46"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-31",
+      "summary": "Add a backend migration file (backend/migration.mo) that handles upgrading the existing canister state. The migration must preserve the existing stable variables (totalViews and the unique visitor set/count) from the current backend/main.mo while adding all the new stable CMS data variables introduced in REQ-46. Ensure the preupgrade and postupgrade hooks are correctly defined so no existing visitor counter data is lost during the canister upgrade.",
+      "reqIds": [
+        "REQ-50"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-32",
+      "summary": "Ensure admin area at /admin is password-protected with initial password 'admin123'; add ability to change the admin password from within the admin settings section",
+      "reqIds": [],
       "status": "pending"
     }
   ],

@@ -5,9 +5,6 @@ export function useLazyLoad(threshold = 0.1) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -18,7 +15,10 @@ export function useLazyLoad(threshold = 0.1) {
       { threshold }
     );
 
-    observer.observe(el);
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
     return () => observer.disconnect();
   }, [threshold]);
 

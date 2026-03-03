@@ -8,21 +8,325 @@
 
 import { IDL } from '@icp-sdk/core/candid';
 
+export const Artwork = IDL.Record({
+  'id' : IDL.Nat,
+  'title' : IDL.Text,
+  'featured' : IDL.Bool,
+  'order' : IDL.Nat,
+  'size' : IDL.Text,
+  'year' : IDL.Nat,
+  'description' : IDL.Text,
+  'additionalImages' : IDL.Vec(IDL.Text),
+  'available' : IDL.Bool,
+  'visible' : IDL.Bool,
+  'category' : IDL.Text,
+  'image' : IDL.Text,
+  'location' : IDL.Text,
+  'medium' : IDL.Text,
+});
+export const Time = IDL.Int;
+export const BlogPost = IDL.Record({
+  'id' : IDL.Nat,
+  'status' : IDL.Text,
+  'title' : IDL.Text,
+  'content' : IDL.Text,
+  'publishDate' : Time,
+  'slug' : IDL.Text,
+});
+export const CareerMilestone = IDL.Record({
+  'id' : IDL.Nat,
+  'year' : IDL.Text,
+  'event' : IDL.Text,
+});
+export const CommissionInquiry = IDL.Record({
+  'id' : IDL.Nat,
+  'status' : IDL.Text,
+  'name' : IDL.Text,
+  'description' : IDL.Text,
+  'email' : IDL.Text,
+  'timestamp' : Time,
+  'budget' : IDL.Text,
+});
+export const CommissionProcessStep = IDL.Record({
+  'id' : IDL.Nat,
+  'title' : IDL.Text,
+  'description' : IDL.Text,
+  'stepNumber' : IDL.Nat,
+});
+export const ContactInquiry = IDL.Record({
+  'id' : IDL.Nat,
+  'status' : IDL.Text,
+  'name' : IDL.Text,
+  'email' : IDL.Text,
+  'message' : IDL.Text,
+  'timestamp' : Time,
+});
+export const FAQItem = IDL.Record({
+  'id' : IDL.Nat,
+  'question' : IDL.Text,
+  'answer' : IDL.Text,
+});
+export const NavigationItem = IDL.Record({
+  'id' : IDL.Nat,
+  'order' : IDL.Nat,
+  'name' : IDL.Text,
+  'path' : IDL.Text,
+});
+export const Notification = IDL.Record({
+  'id' : IDL.Nat,
+  'status' : IDL.Text,
+  'fullPayload' : IDL.Text,
+  'submitterName' : IDL.Text,
+  'messagePreview' : IDL.Text,
+  'sourceType' : IDL.Text,
+  'timestamp' : Time,
+  'submitterEmail' : IDL.Text,
+});
+export const PressMention = IDL.Record({
+  'id' : IDL.Nat,
+  'url' : IDL.Text,
+  'date' : IDL.Text,
+  'headline' : IDL.Text,
+  'excerpt' : IDL.Text,
+  'publication' : IDL.Text,
+});
+export const SocialPlatform = IDL.Record({
+  'url' : IDL.Text,
+  'icon' : IDL.Text,
+  'name' : IDL.Text,
+});
+export const SEOSettings = IDL.Record({
+  'title' : IDL.Text,
+  'page' : IDL.Text,
+  'description' : IDL.Text,
+  'keywords' : IDL.Text,
+});
+export const SiteSettings = IDL.Record({
+  'siteTitle' : IDL.Text,
+  'commissionPricingText' : IDL.Text,
+  'newsletterPlaceholder' : IDL.Text,
+  'heroIntroText' : IDL.Text,
+  'socialPlatforms' : IDL.Vec(SocialPlatform),
+  'heroArtistName' : IDL.Text,
+  'googleAnalyticsId' : IDL.Text,
+  'seoSettings' : IDL.Vec(SEOSettings),
+  'artistStatement' : IDL.Text,
+  'aboutBio' : IDL.Text,
+  'siteTagline' : IDL.Text,
+  'commissionHeroText' : IDL.Text,
+  'heroTagline' : IDL.Text,
+});
+export const Testimonial = IDL.Record({
+  'id' : IDL.Nat,
+  'name' : IDL.Text,
+  'role' : IDL.Text,
+  'quote' : IDL.Text,
+  'location' : IDL.Text,
+});
+
 export const idlService = IDL.Service({
   'addUniqueVisitor' : IDL.Func([IDL.Text], [IDL.Bool], []),
+  'getArtworks' : IDL.Func([], [IDL.Vec(Artwork)], ['query']),
+  'getBlogPosts' : IDL.Func([], [IDL.Vec(BlogPost)], ['query']),
+  'getCareerMilestones' : IDL.Func([], [IDL.Vec(CareerMilestone)], ['query']),
+  'getCommissionInquiries' : IDL.Func(
+      [],
+      [IDL.Vec(CommissionInquiry)],
+      ['query'],
+    ),
+  'getCommissionProcessSteps' : IDL.Func(
+      [],
+      [IDL.Vec(CommissionProcessStep)],
+      ['query'],
+    ),
+  'getContactInquiries' : IDL.Func([], [IDL.Vec(ContactInquiry)], ['query']),
+  'getFAQItems' : IDL.Func([], [IDL.Vec(FAQItem)], ['query']),
+  'getNavigationItems' : IDL.Func([], [IDL.Vec(NavigationItem)], ['query']),
+  'getNotifications' : IDL.Func([], [IDL.Vec(Notification)], ['query']),
   'getPageViewCount' : IDL.Func([], [IDL.Nat], ['query']),
+  'getPressMentions' : IDL.Func([], [IDL.Vec(PressMention)], ['query']),
+  'getSiteSettings' : IDL.Func([], [IDL.Opt(SiteSettings)], ['query']),
+  'getTestimonials' : IDL.Func([], [IDL.Vec(Testimonial)], ['query']),
   'getUniqueVisitorCount' : IDL.Func([], [IDL.Nat], ['query']),
   'incrementPageView' : IDL.Func([], [], []),
+  'setArtworks' : IDL.Func([IDL.Vec(Artwork)], [], []),
+  'setBlogPosts' : IDL.Func([IDL.Vec(BlogPost)], [], []),
+  'setCareerMilestones' : IDL.Func([IDL.Vec(CareerMilestone)], [], []),
+  'setCommissionInquiries' : IDL.Func([IDL.Vec(CommissionInquiry)], [], []),
+  'setCommissionProcessSteps' : IDL.Func(
+      [IDL.Vec(CommissionProcessStep)],
+      [],
+      [],
+    ),
+  'setContactInquiries' : IDL.Func([IDL.Vec(ContactInquiry)], [], []),
+  'setFAQItems' : IDL.Func([IDL.Vec(FAQItem)], [], []),
+  'setNavigationItems' : IDL.Func([IDL.Vec(NavigationItem)], [], []),
+  'setNotifications' : IDL.Func([IDL.Vec(Notification)], [], []),
+  'setPressMentions' : IDL.Func([IDL.Vec(PressMention)], [], []),
+  'setSiteSettings' : IDL.Func([SiteSettings], [], []),
+  'setTestimonials' : IDL.Func([IDL.Vec(Testimonial)], [], []),
 });
 
 export const idlInitArgs = [];
 
 export const idlFactory = ({ IDL }) => {
+  const Artwork = IDL.Record({
+    'id' : IDL.Nat,
+    'title' : IDL.Text,
+    'featured' : IDL.Bool,
+    'order' : IDL.Nat,
+    'size' : IDL.Text,
+    'year' : IDL.Nat,
+    'description' : IDL.Text,
+    'additionalImages' : IDL.Vec(IDL.Text),
+    'available' : IDL.Bool,
+    'visible' : IDL.Bool,
+    'category' : IDL.Text,
+    'image' : IDL.Text,
+    'location' : IDL.Text,
+    'medium' : IDL.Text,
+  });
+  const Time = IDL.Int;
+  const BlogPost = IDL.Record({
+    'id' : IDL.Nat,
+    'status' : IDL.Text,
+    'title' : IDL.Text,
+    'content' : IDL.Text,
+    'publishDate' : Time,
+    'slug' : IDL.Text,
+  });
+  const CareerMilestone = IDL.Record({
+    'id' : IDL.Nat,
+    'year' : IDL.Text,
+    'event' : IDL.Text,
+  });
+  const CommissionInquiry = IDL.Record({
+    'id' : IDL.Nat,
+    'status' : IDL.Text,
+    'name' : IDL.Text,
+    'description' : IDL.Text,
+    'email' : IDL.Text,
+    'timestamp' : Time,
+    'budget' : IDL.Text,
+  });
+  const CommissionProcessStep = IDL.Record({
+    'id' : IDL.Nat,
+    'title' : IDL.Text,
+    'description' : IDL.Text,
+    'stepNumber' : IDL.Nat,
+  });
+  const ContactInquiry = IDL.Record({
+    'id' : IDL.Nat,
+    'status' : IDL.Text,
+    'name' : IDL.Text,
+    'email' : IDL.Text,
+    'message' : IDL.Text,
+    'timestamp' : Time,
+  });
+  const FAQItem = IDL.Record({
+    'id' : IDL.Nat,
+    'question' : IDL.Text,
+    'answer' : IDL.Text,
+  });
+  const NavigationItem = IDL.Record({
+    'id' : IDL.Nat,
+    'order' : IDL.Nat,
+    'name' : IDL.Text,
+    'path' : IDL.Text,
+  });
+  const Notification = IDL.Record({
+    'id' : IDL.Nat,
+    'status' : IDL.Text,
+    'fullPayload' : IDL.Text,
+    'submitterName' : IDL.Text,
+    'messagePreview' : IDL.Text,
+    'sourceType' : IDL.Text,
+    'timestamp' : Time,
+    'submitterEmail' : IDL.Text,
+  });
+  const PressMention = IDL.Record({
+    'id' : IDL.Nat,
+    'url' : IDL.Text,
+    'date' : IDL.Text,
+    'headline' : IDL.Text,
+    'excerpt' : IDL.Text,
+    'publication' : IDL.Text,
+  });
+  const SocialPlatform = IDL.Record({
+    'url' : IDL.Text,
+    'icon' : IDL.Text,
+    'name' : IDL.Text,
+  });
+  const SEOSettings = IDL.Record({
+    'title' : IDL.Text,
+    'page' : IDL.Text,
+    'description' : IDL.Text,
+    'keywords' : IDL.Text,
+  });
+  const SiteSettings = IDL.Record({
+    'siteTitle' : IDL.Text,
+    'commissionPricingText' : IDL.Text,
+    'newsletterPlaceholder' : IDL.Text,
+    'heroIntroText' : IDL.Text,
+    'socialPlatforms' : IDL.Vec(SocialPlatform),
+    'heroArtistName' : IDL.Text,
+    'googleAnalyticsId' : IDL.Text,
+    'seoSettings' : IDL.Vec(SEOSettings),
+    'artistStatement' : IDL.Text,
+    'aboutBio' : IDL.Text,
+    'siteTagline' : IDL.Text,
+    'commissionHeroText' : IDL.Text,
+    'heroTagline' : IDL.Text,
+  });
+  const Testimonial = IDL.Record({
+    'id' : IDL.Nat,
+    'name' : IDL.Text,
+    'role' : IDL.Text,
+    'quote' : IDL.Text,
+    'location' : IDL.Text,
+  });
+  
   return IDL.Service({
     'addUniqueVisitor' : IDL.Func([IDL.Text], [IDL.Bool], []),
+    'getArtworks' : IDL.Func([], [IDL.Vec(Artwork)], ['query']),
+    'getBlogPosts' : IDL.Func([], [IDL.Vec(BlogPost)], ['query']),
+    'getCareerMilestones' : IDL.Func([], [IDL.Vec(CareerMilestone)], ['query']),
+    'getCommissionInquiries' : IDL.Func(
+        [],
+        [IDL.Vec(CommissionInquiry)],
+        ['query'],
+      ),
+    'getCommissionProcessSteps' : IDL.Func(
+        [],
+        [IDL.Vec(CommissionProcessStep)],
+        ['query'],
+      ),
+    'getContactInquiries' : IDL.Func([], [IDL.Vec(ContactInquiry)], ['query']),
+    'getFAQItems' : IDL.Func([], [IDL.Vec(FAQItem)], ['query']),
+    'getNavigationItems' : IDL.Func([], [IDL.Vec(NavigationItem)], ['query']),
+    'getNotifications' : IDL.Func([], [IDL.Vec(Notification)], ['query']),
     'getPageViewCount' : IDL.Func([], [IDL.Nat], ['query']),
+    'getPressMentions' : IDL.Func([], [IDL.Vec(PressMention)], ['query']),
+    'getSiteSettings' : IDL.Func([], [IDL.Opt(SiteSettings)], ['query']),
+    'getTestimonials' : IDL.Func([], [IDL.Vec(Testimonial)], ['query']),
     'getUniqueVisitorCount' : IDL.Func([], [IDL.Nat], ['query']),
     'incrementPageView' : IDL.Func([], [], []),
+    'setArtworks' : IDL.Func([IDL.Vec(Artwork)], [], []),
+    'setBlogPosts' : IDL.Func([IDL.Vec(BlogPost)], [], []),
+    'setCareerMilestones' : IDL.Func([IDL.Vec(CareerMilestone)], [], []),
+    'setCommissionInquiries' : IDL.Func([IDL.Vec(CommissionInquiry)], [], []),
+    'setCommissionProcessSteps' : IDL.Func(
+        [IDL.Vec(CommissionProcessStep)],
+        [],
+        [],
+      ),
+    'setContactInquiries' : IDL.Func([IDL.Vec(ContactInquiry)], [], []),
+    'setFAQItems' : IDL.Func([IDL.Vec(FAQItem)], [], []),
+    'setNavigationItems' : IDL.Func([IDL.Vec(NavigationItem)], [], []),
+    'setNotifications' : IDL.Func([IDL.Vec(Notification)], [], []),
+    'setPressMentions' : IDL.Func([IDL.Vec(PressMention)], [], []),
+    'setSiteSettings' : IDL.Func([SiteSettings], [], []),
+    'setTestimonials' : IDL.Func([IDL.Vec(Testimonial)], [], []),
   });
 };
 

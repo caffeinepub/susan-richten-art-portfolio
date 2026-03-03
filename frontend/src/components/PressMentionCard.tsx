@@ -1,36 +1,33 @@
-import React from 'react';
 import { ExternalLink } from 'lucide-react';
-import { PressMention } from '../contexts/CMSContext';
 
 interface PressMentionCardProps {
-  mention: PressMention;
+  publication: string;
+  date: string;
+  headline: string;
+  url: string;
+  excerpt: string;
 }
 
-export function PressMentionCard({ mention }: PressMentionCardProps) {
+export default function PressMentionCard({ publication, date, headline, url, excerpt }: PressMentionCardProps) {
   return (
-    <a
-      href={mention.url || '#'}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="block bg-white p-6 shadow-gallery hover:shadow-gallery-hover transition-all duration-300 group"
-    >
-      <div className="flex items-start justify-between gap-3 mb-3">
+    <div className="border border-border rounded-sm p-5 hover:border-primary/40 transition-colors">
+      <div className="flex items-start justify-between gap-3 mb-2">
         <div>
-          <h4 className="font-heading text-lg text-charcoal group-hover:text-gold transition-colors">
-            {mention.publication}
-          </h4>
-          <p className="font-body text-xs text-charcoal-muted mt-0.5">{mention.date}</p>
+          <span className="text-xs font-semibold uppercase tracking-widest text-primary">{publication}</span>
+          <p className="text-xs text-muted-foreground mt-0.5">{date}</p>
         </div>
-        <ExternalLink size={16} className="text-charcoal-muted group-hover:text-gold transition-colors shrink-0 mt-1" />
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="shrink-0 text-muted-foreground hover:text-primary transition-colors mt-0.5"
+          aria-label="Read article"
+        >
+          <ExternalLink size={15} />
+        </a>
       </div>
-      {mention.headline && (
-        <p className="font-body text-sm font-semibold text-charcoal mb-2">{mention.headline}</p>
-      )}
-      <p className="font-body text-sm text-charcoal-light leading-relaxed line-clamp-3">
-        {mention.excerpt}
-      </p>
-    </a>
+      <h3 className="font-display text-base font-medium text-foreground mb-2">{headline}</h3>
+      <p className="text-sm text-muted-foreground leading-relaxed italic">"{excerpt}"</p>
+    </div>
   );
 }
-
-export default PressMentionCard;

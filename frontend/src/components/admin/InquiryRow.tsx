@@ -1,64 +1,60 @@
-import { CommissionInquiry, useCMS } from "../../contexts/CMSContext";
+import { CommissionInquiry } from '../../contexts/CMSContext';
 
 interface InquiryRowProps {
   inquiry: CommissionInquiry;
+  onStatusChange: (id: string, status: CommissionInquiry['status']) => void;
 }
 
-const statusOrder: CommissionInquiry["status"][] = ["unread", "read", "responded"];
+const statusColors: Record<CommissionInquiry['status'], string> = {
+  'new': 'bg-amber-100 text-amber-800',
+  'in-progress': 'bg-blue-100 text-blue-800',
+  'completed': 'bg-green-100 text-green-800',
+  'declined': 'bg-red-100 text-red-800',
+};
 
-export function InquiryRow({ inquiry }: InquiryRowProps) {
-  const { updateCommissionInquiry } = useCMS();
+const nextStatus: Record<CommissionInquiry['status'], CommissionInquiry['status']> = {
+  'new': 'in-progress',
+  'in-progress': 'completed',
+  'completed': 'declined',
+  'declined': 'new',
+};
 
-  const cycleStatus = () => {
-    const currentIndex = statusOrder.indexOf(inquiry.status);
-    const next = statusOrder[(currentIndex + 1) % statusOrder.length];
-    updateCommissionInquiry(inquiry.id, { status: next });
-  };
+const statusLabels: Record<CommissionInquiry['status'], string> = {
+  'new': 'New',
+  'in-progress': 'In Progress',
+  'completed': 'Completed',
+  'declined': 'Declined',
+};
 
-  const statusColors: Record<CommissionInquiry["status"], string> = {
-    unread: "bg-amber-100 text-amber-700",
-    read: "bg-blue-100 text-blue-700",
-    responded: "bg-green-100 text-green-700",
-  };
+export default function InquiryRow({ inquiry, onStatusChange }: InquiryRowProps) {
+  const date = new Date(inquiry.timestamp).toLocaleDateString();
 
   return (
-    <div
-      className={`border border-border rounded-md p-4 ${
-        inquiry.status === "unread" ? "border-l-4 border-l-amber-400 bg-amber-50/30" : ""
-      }`}
-    >
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 flex-wrap mb-1">
-            <span className="font-medium text-foreground">{inquiry.name}</span>
-            <span className="text-xs text-muted-foreground">{inquiry.email}</span>
-            <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${statusColors[inquiry.status]}`}>
-              {inquiry.status}
-            </span>
-          </div>
-          <div className="flex items-center gap-3 flex-wrap text-xs text-muted-foreground mb-2">
-            <span>Budget: {inquiry.budget || inquiry.budgetRange || "—"}</span>
-            <span>Timeline: {inquiry.timeline || "—"}</span>
-            {inquiry.projectType && <span>Type: {inquiry.projectType}</span>}
-          </div>
-          {(inquiry.projectDescription || inquiry.description) && (
-            <p className="text-sm text-muted-foreground line-clamp-2">
-              {inquiry.projectDescription || inquiry.description}
-            </p>
-          )}
-          <p className="text-xs text-muted-foreground mt-2">
-            {new Date(inquiry.submittedAt).toLocaleDateString()}
-          </p>
-        </div>
+    <tr className={`border-b border-sand/30 ${inquiry.status === 'new' ? 'bg-amber-50/50' : ''}`}>
+      <td className="py-3 px-4">
+        <div className="font-medium text-charcoal text-sm">{inquiry.name}</div>
+        <div className="text-xs text-charcoal-muted">{inquiry.email}</div>
+      </td>
+      <td className="py-3 px-4 text-sm text-charcoal-muted hidden md:table-cell">
+        {inquiry.projectType || '—'}
+      </td>
+      <td className="py-3 px-4 text-sm text-charcoal-muted hidden lg:table-cell">
+        {inquiry.budgetRange || inquiry.budget || '—'}
+      </td>
+      <td className="py-3 px-4 text-xs text-charcoal-muted hidden lg:table-cell shrink-0">
+        {date}
+      </td>
+      <td className="py-3 px-4">
         <button
-          onClick={cycleStatus}
-          className="shrink-0 text-xs px-3 py-1.5 border border-border rounded-md hover:bg-muted transition-colors"
+          onClick={() => onStatusChange(inquiry.id, nextStatus[inquiry.status])}
+          className={`px-2 py-1 rounded-sm text-xs font-medium transition-colors ${statusColors[inquiry.status]}`}
         >
-          Mark {statusOrder[(statusOrder.indexOf(inquiry.status) + 1) % statusOrder.length]}
+          {statusLabels[inquiry.status]}
         </button>
-      </div>
-    </div>
+      </td>
+      <td className="py-3 px-4 text-sm text-charcoal-muted max-w-xs hidden xl:table-cell">
+        <p className="truncate">{inquiry.projectDescription || inquiry.description}</p>
+      </td>
+    </tr>
   );
 }
-
-export default InquiryRow;

@@ -5,11 +5,17 @@ import {
   ClipboardList, BookOpen, Settings, LogOut, Menu,
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
+import AdminLogin from '../../pages/admin/AdminLogin';
 
 export function AdminLayout() {
-  const { logout } = useAuth();
+  const { logout, isAuthenticated } = useAuth();
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // Guard: show login screen if not authenticated
+  if (!isAuthenticated) {
+    return <AdminLogin />;
+  }
 
   const navItems = [
     { label: 'Dashboard', path: '/admin/dashboard', icon: LayoutDashboard },

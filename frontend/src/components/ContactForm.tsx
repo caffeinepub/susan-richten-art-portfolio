@@ -1,142 +1,86 @@
-import { useState } from "react";
-import { useCMS } from "../contexts/CMSContext";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { CheckCircle } from "lucide-react";
+import { useState } from 'react';
+import { useCMS } from '../contexts/CMSContext';
 
 export default function ContactForm() {
   const { addContactInquiry } = useCMS();
-  const [submitted, setSubmitted] = useState(false);
+  const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  });
+  const [submitted, setSubmitted] = useState(false);
 
   const validate = () => {
-    const newErrors: Record<string, string> = {};
-    if (!form.name.trim()) newErrors.name = "Name is required";
-    if (!form.email.trim()) newErrors.email = "Email is required";
-    else if (!/\S+@\S+\.\S+/.test(form.email))
-      newErrors.email = "Invalid email address";
-    if (!form.subject.trim()) newErrors.subject = "Subject is required";
-    if (!form.message.trim()) newErrors.message = "Message is required";
-    return newErrors;
+    const errs: Record<string, string> = {};
+    if (!form.name.trim()) errs.name = 'Name is required';
+    if (!form.email.trim()) errs.email = 'Email is required';
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) errs.email = 'Invalid email address';
+    if (!form.message.trim()) errs.message = 'Message is required';
+    return errs;
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const newErrors = validate();
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
+    const errs = validate();
+    if (Object.keys(errs).length > 0) {
+      setErrors(errs);
       return;
     }
-
     addContactInquiry({
-      id: Date.now().toString(),
       name: form.name,
       email: form.email,
-      subject: form.subject,
       message: form.message,
-      status: "unread",
-      submittedAt: new Date().toISOString(),
     });
-
     setSubmitted(true);
-  };
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   if (submitted) {
     return (
-      <div className="text-center py-12">
-        <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-        <h3 className="text-2xl font-display font-semibold text-foreground mb-2">
-          Message Sent!
-        </h3>
-        <p className="text-muted-foreground">
-          Thank you for reaching out. Malia will get back to you within 2–3
-          business days.
-        </p>
+      <div className="text-center py-8">
+        <p className="text-foreground font-medium text-lg">Message sent!</p>
+        <p className="text-sm text-muted-foreground mt-2">Thank you for reaching out. I'll be in touch soon.</p>
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
-      <div className="grid sm:grid-cols-2 gap-5">
-        <div className="space-y-1.5">
-          <Label htmlFor="name">Name *</Label>
-          <Input
-            id="name"
-            name="name"
-            value={form.name}
-            onChange={handleChange}
-            placeholder="Your full name"
-            className={errors.name ? "border-destructive" : ""}
-          />
-          {errors.name && (
-            <p className="text-xs text-destructive">{errors.name}</p>
-          )}
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="email">Email *</Label>
-          <Input
-            id="email"
-            name="email"
-            type="email"
-            value={form.email}
-            onChange={handleChange}
-            placeholder="your@email.com"
-            className={errors.email ? "border-destructive" : ""}
-          />
-          {errors.email && (
-            <p className="text-xs text-destructive">{errors.email}</p>
-          )}
-        </div>
-      </div>
-      <div className="space-y-1.5">
-        <Label htmlFor="subject">Subject *</Label>
-        <Input
-          id="subject"
-          name="subject"
-          value={form.subject}
-          onChange={handleChange}
-          placeholder="What is this regarding?"
-          className={errors.subject ? "border-destructive" : ""}
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <label className="block text-sm font-medium text-foreground mb-1">Name</label>
+        <input
+          type="text"
+          value={form.name}
+          onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
+          className="w-full px-4 py-2.5 border border-border rounded-sm bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+          placeholder="Your name"
         />
-        {errors.subject && (
-          <p className="text-xs text-destructive">{errors.subject}</p>
-        )}
+        {errors.name && <p className="text-xs text-destructive mt-1">{errors.name}</p>}
       </div>
-      <div className="space-y-1.5">
-        <Label htmlFor="message">Message *</Label>
-        <Textarea
-          id="message"
-          name="message"
+      <div>
+        <label className="block text-sm font-medium text-foreground mb-1">Email</label>
+        <input
+          type="email"
+          value={form.email}
+          onChange={e => setForm(p => ({ ...p, email: e.target.value }))}
+          className="w-full px-4 py-2.5 border border-border rounded-sm bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+          placeholder="your@email.com"
+        />
+        {errors.email && <p className="text-xs text-destructive mt-1">{errors.email}</p>}
+      </div>
+      <div>
+        <label className="block text-sm font-medium text-foreground mb-1">Message</label>
+        <textarea
           value={form.message}
-          onChange={handleChange}
-          placeholder="Tell Malia about your inquiry..."
+          onChange={e => setForm(p => ({ ...p, message: e.target.value }))}
           rows={5}
-          className={errors.message ? "border-destructive" : ""}
+          className="w-full px-4 py-2.5 border border-border rounded-sm bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none"
+          placeholder="How can I help you?"
         />
-        {errors.message && (
-          <p className="text-xs text-destructive">{errors.message}</p>
-        )}
+        {errors.message && <p className="text-xs text-destructive mt-1">{errors.message}</p>}
       </div>
-      <Button type="submit" className="w-full bg-gold hover:bg-gold/90 text-white">
+      <button
+        type="submit"
+        className="w-full py-3 bg-primary text-primary-foreground font-medium rounded-sm hover:bg-primary/90 transition-colors"
+      >
         Send Message
-      </Button>
+      </button>
     </form>
   );
 }

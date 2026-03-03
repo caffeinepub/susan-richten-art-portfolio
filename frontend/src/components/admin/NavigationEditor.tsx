@@ -1,99 +1,90 @@
-import { useState } from "react";
-import { useCMS, NavItem } from "../../contexts/CMSContext";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Plus, Trash2, CheckCircle } from "lucide-react";
+import { useState } from 'react';
+import { useCMS, NavigationItem } from '../../contexts/CMSContext';
 
-export function NavigationEditor() {
-  const { navItems, setNavItems } = useCMS();
-  const [items, setItems] = useState<NavItem[]>([...navItems]);
+export default function NavigationEditor() {
+  const { navigationItems, updateNavigationItems } = useCMS();
+  const [items, setItems] = useState<NavigationItem[]>([...navigationItems]);
   const [saved, setSaved] = useState(false);
 
-  const handleSave = () => {
-    setNavItems(items);
+  function addItem() {
+    const newItem: NavigationItem = {
+      id: Date.now().toString(),
+      name: 'New Page',
+      path: '/new-page',
+      order: items.length + 1,
+    };
+    setItems(prev => [...prev, newItem]);
+  }
+
+  function removeItem(id: string) {
+    setItems(prev => prev.filter(i => i.id !== id));
+  }
+
+  function updateItem(id: string, field: keyof NavigationItem, value: string | number) {
+    setItems(prev => prev.map(i => i.id === id ? { ...i, [field]: value } : i));
+  }
+
+  function handleSave() {
+    updateNavigationItems(items);
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
-  };
+  }
 
-  const addItem = () => {
-    const newItem: NavItem = {
-      id: `nav-${Date.now()}`,
-      label: "New Page",
-      path: "/new-page",
-    };
-    setItems((prev) => [...prev, newItem]);
-  };
-
-  const updateItem = (id: string, field: keyof NavItem, value: string) => {
-    setItems((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, [field]: value } : item))
-    );
-  };
-
-  const removeItem = (id: string) => {
-    setItems((prev) => prev.filter((item) => item.id !== id));
-  };
-
-  const inputClass = "mt-1 w-full border border-input rounded-md px-3 py-2 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-ring";
+  const inputClass = 'w-full px-3 py-2 border border-sand/60 rounded-sm bg-warm-white text-charcoal text-sm focus:outline-none focus:border-gold';
 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <Label>Navigation Items</Label>
-        <Button size="sm" variant="outline" onClick={addItem}>
-          <Plus className="w-3 h-3 mr-1" /> Add Item
-        </Button>
+        <h3 className="font-serif text-lg text-charcoal">Navigation Items</h3>
+        <button
+          onClick={addItem}
+          className="text-xs text-gold hover:text-gold/80 border border-gold/40 hover:border-gold px-3 py-1 rounded-sm transition-colors"
+        >
+          + Add Item
+        </button>
       </div>
 
-      <div className="space-y-3">
-        {items.map((item) => (
-          <div key={item.id} className="flex gap-2 items-center border border-border rounded-md p-3">
+      <div className="space-y-2">
+        {items.map(item => (
+          <div key={item.id} className="flex gap-2 items-center p-3 border border-sand/40 rounded-sm">
             <div className="flex-1 grid grid-cols-2 gap-2">
               <div>
-                <label className="text-xs text-muted-foreground">Label</label>
+                <label className="text-xs text-charcoal-muted mb-1 block">Label</label>
                 <input
                   type="text"
-                  value={item.label}
-                  onChange={(e) => updateItem(item.id, "label", e.target.value)}
+                  value={item.name}
+                  onChange={e => updateItem(item.id, 'name', e.target.value)}
                   className={inputClass}
                   placeholder="Page name"
                 />
               </div>
               <div>
-                <label className="text-xs text-muted-foreground">Path</label>
+                <label className="text-xs text-charcoal-muted mb-1 block">Path</label>
                 <input
                   type="text"
                   value={item.path}
-                  onChange={(e) => updateItem(item.id, "path", e.target.value)}
+                  onChange={e => updateItem(item.id, 'path', e.target.value)}
                   className={inputClass}
                   placeholder="/path"
                 />
               </div>
             </div>
-            <Button
-              size="icon"
-              variant="ghost"
-              className="shrink-0 text-destructive hover:text-destructive"
+            <button
               onClick={() => removeItem(item.id)}
+              className="text-red-400 hover:text-red-600 transition-colors shrink-0 text-xs px-2 py-1"
             >
-              <Trash2 className="w-4 h-4" />
-            </Button>
+              ✕
+            </button>
           </div>
         ))}
       </div>
 
-      <Button onClick={handleSave} className="bg-gold hover:bg-gold/90 text-white">
-        {saved ? (
-          <span className="flex items-center gap-2">
-            <CheckCircle className="w-4 h-4" /> Saved!
-          </span>
-        ) : (
-          "Save Navigation"
-        )}
-      </Button>
+      <button
+        onClick={handleSave}
+        className="px-6 py-2.5 bg-gold text-warm-white text-sm font-medium rounded-sm hover:bg-gold/90 transition-colors"
+      >
+        {saved ? 'Saved!' : 'Save Navigation'}
+      </button>
     </div>
   );
 }
-
-export default NavigationEditor;

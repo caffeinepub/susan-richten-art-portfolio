@@ -1,30 +1,26 @@
-import React from 'react';
-import { Testimonial } from '../contexts/CMSContext';
-import { MissingInfoText } from './MissingInfoText';
+import type { Testimonial } from '../contexts/CMSContext';
 
 interface TestimonialGridProps {
   testimonials: Testimonial[];
 }
 
-export function TestimonialGrid({ testimonials }: TestimonialGridProps) {
+export default function TestimonialGrid({ testimonials }: TestimonialGridProps) {
+  if (!testimonials.length) return null;
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {testimonials.map(t => (
-        <div key={t.id} className="bg-white p-8 shadow-gallery">
-          <div className="font-heading text-5xl text-gold/30 leading-none mb-3 select-none">"</div>
-          <blockquote className="font-heading text-lg italic text-charcoal leading-relaxed mb-4">
-            {t.quote || <MissingInfoText />}
+        <div key={t.id} className="border border-border rounded-sm p-6 hover:border-primary/40 transition-colors">
+          <blockquote className="text-foreground leading-relaxed mb-4">
+            "{t.quote}"
           </blockquote>
-          <div className="font-body text-sm tracking-widest uppercase text-charcoal-light">
-            {t.name || <MissingInfoText />}
+          <div className="text-sm text-muted-foreground">
+            <span className="font-semibold text-foreground">{t.name}</span>
+            {t.location && <span> · {t.location}</span>}
+            {t.role && <span className="block mt-0.5 text-xs">{t.role}</span>}
           </div>
-          {t.location && (
-            <div className="font-body text-xs text-charcoal-muted mt-1">{t.location}</div>
-          )}
         </div>
       ))}
     </div>
   );
 }
-
-export default TestimonialGrid;

@@ -1,21 +1,23 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { useCMS } from '../contexts/CMSContext';
 
-export function NewsletterSignup() {
+export default function NewsletterSignup() {
+  const { siteSettings } = useCMS();
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email.trim()) return;
-    setSubmitted(true);
+    if (email.trim()) {
+      setSubmitted(true);
+    }
   };
 
   if (submitted) {
     return (
-      <div className="text-center animate-fade-in">
-        <p className="font-body text-sm text-beige/80">
-          Thank you for subscribing! You'll hear from us soon.
-        </p>
+      <div className="text-center py-4">
+        <p className="text-foreground font-medium">Thank you for subscribing!</p>
+        <p className="text-sm text-muted-foreground mt-1">You'll receive studio updates in your inbox.</p>
       </div>
     );
   }
@@ -26,18 +28,16 @@ export function NewsletterSignup() {
         type="email"
         value={email}
         onChange={e => setEmail(e.target.value)}
-        placeholder="your@email.com"
+        placeholder={siteSettings.newsletterPlaceholder}
         required
-        className="flex-1 px-4 py-3 font-body text-sm bg-white/10 border border-white/20 text-white placeholder:text-white/40 focus:outline-none focus:border-white/50 transition-colors"
+        className="flex-1 px-4 py-2.5 border border-border rounded-sm bg-background text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
       />
       <button
         type="submit"
-        className="px-6 py-3 bg-gold text-white font-body text-sm tracking-widest uppercase hover:bg-gold/90 transition-colors whitespace-nowrap"
+        className="px-6 py-2.5 bg-primary text-primary-foreground text-sm font-medium rounded-sm hover:bg-primary/90 transition-colors"
       >
         Subscribe
       </button>
     </form>
   );
 }
-
-export default NewsletterSignup;

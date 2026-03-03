@@ -1,23 +1,29 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useCMS } from '../../contexts/CMSContext';
-import { toast } from 'sonner';
 
-export function HeroEditor() {
-  const { homepageSettings, setHomepageSettings } = useCMS();
-  const [form, setForm] = useState({ ...homepageSettings });
+export default function HeroEditor() {
+  const { homepageSettings, updateHomepageSettings } = useCMS();
 
-  const handleSave = () => {
-    setHomepageSettings(form);
-    toast.success('Homepage hero updated');
-  };
+  const [form, setForm] = useState({
+    heroArtistName: homepageSettings.heroArtistName,
+    heroTagline: homepageSettings.heroTagline,
+    heroImage: homepageSettings.heroImage,
+    artistIntro: homepageSettings.artistIntro,
+  });
 
-  const inputClass = 'w-full px-3 py-2 font-body text-sm border border-beige-dark bg-white text-charcoal focus:outline-none focus:border-charcoal transition-colors';
+  function handleSave() {
+    updateHomepageSettings(form);
+  }
+
+  const inputClass = 'w-full px-3 py-2 border border-sand/60 rounded-sm bg-warm-white text-charcoal text-sm focus:outline-none focus:border-gold';
+  const labelClass = 'block text-xs font-medium text-charcoal-muted uppercase tracking-wide mb-1';
 
   return (
-    <div className="space-y-4">
-      <h3 className="font-heading text-xl text-charcoal">Homepage Hero</h3>
+    <div className="space-y-5">
+      <h3 className="font-serif text-lg text-charcoal">Homepage Hero</h3>
+
       <div>
-        <label className="block font-body text-xs tracking-widest uppercase text-charcoal-muted mb-1">Artist Name</label>
+        <label className={labelClass}>Artist Name</label>
         <input
           type="text"
           value={form.heroArtistName}
@@ -25,51 +31,44 @@ export function HeroEditor() {
           className={inputClass}
         />
       </div>
+
       <div>
-        <label className="block font-body text-xs tracking-widest uppercase text-charcoal-muted mb-1">Tagline</label>
+        <label className={labelClass}>Tagline</label>
         <input
           type="text"
           value={form.heroTagline}
           onChange={e => setForm(f => ({ ...f, heroTagline: e.target.value }))}
           className={inputClass}
-          placeholder="Artist needs to enter info here"
         />
       </div>
+
       <div>
-        <label className="block font-body text-xs tracking-widest uppercase text-charcoal-muted mb-1">Artist Intro (Homepage)</label>
+        <label className={labelClass}>Hero Image URL</label>
+        <input
+          type="text"
+          value={form.heroImage}
+          onChange={e => setForm(f => ({ ...f, heroImage: e.target.value }))}
+          className={inputClass}
+          placeholder="/assets/generated/hero-bg.dim_1920x1080.png"
+        />
+      </div>
+
+      <div>
+        <label className={labelClass}>Artist Intro Text</label>
         <textarea
           value={form.artistIntro}
           onChange={e => setForm(f => ({ ...f, artistIntro: e.target.value }))}
-          rows={3}
+          rows={4}
           className={inputClass}
-          placeholder="Brief introduction paragraph..."
         />
       </div>
-      <div>
-        <label className="block font-body text-xs tracking-widest uppercase text-charcoal-muted mb-1">Hero Image Upload</label>
-        <input
-          type="file"
-          accept="image/*"
-          className="w-full font-body text-xs text-charcoal-light file:mr-3 file:py-1.5 file:px-3 file:border-0 file:bg-beige-dark file:text-charcoal file:font-body file:text-xs file:cursor-pointer"
-          onChange={e => {
-            const file = e.target.files?.[0];
-            if (file) setForm(f => ({ ...f, heroImage: URL.createObjectURL(file) }));
-          }}
-        />
-        {form.heroImage && (
-          <div className="mt-2 w-24 h-16 overflow-hidden rounded border border-beige-dark">
-            <img src={form.heroImage} alt="Hero preview" className="w-full h-full object-cover" />
-          </div>
-        )}
-      </div>
+
       <button
         onClick={handleSave}
-        className="px-6 py-2.5 bg-charcoal text-beige font-body text-sm tracking-wide hover:bg-charcoal-light transition-colors"
+        className="px-6 py-2.5 bg-gold text-warm-white text-sm font-medium rounded-sm hover:bg-gold/90 transition-colors"
       >
-        Save Hero Content
+        Save Hero
       </button>
     </div>
   );
 }
-
-export default HeroEditor;

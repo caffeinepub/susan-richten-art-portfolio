@@ -1,82 +1,82 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useCMS } from '../contexts/CMSContext';
 import { usePageMeta } from '../hooks/usePageMeta';
-import { BeforeAfterSlider } from '../components/BeforeAfterSlider';
+import ArtworkCard from '../components/ArtworkCard';
+import Lightbox from '../components/Lightbox';
 import CommissionInquiryForm from '../components/CommissionInquiryForm';
-import { FAQAccordion } from '../components/FAQAccordion';
-import { ArtworkCard } from '../components/ArtworkCard';
-import { MissingInfoText } from '../components/MissingInfoText';
-import { Lightbox } from '../components/Lightbox';
-import { Artwork } from '../contexts/CMSContext';
+import FAQAccordion from '../components/FAQAccordion';
 
 export function Commissions() {
   usePageMeta('commissions');
   const { artworks, commissionsPageContent } = useCMS();
-  const [selectedArtwork, setSelectedArtwork] = React.useState<Artwork | null>(null);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
-  const portfolioExamples = artworks.filter(a => a.visible).slice(0, 4);
+  const portfolioArtworks = artworks.filter(a => a.visible).slice(0, 6);
 
   return (
     <div className="page-transition pt-20">
       {/* Hero */}
       <section className="py-20 px-4 bg-charcoal text-center">
-        <h1 className="font-heading text-5xl md:text-6xl text-beige mb-6">Commission a Work</h1>
-        <div className="w-12 h-px bg-gold mx-auto mb-6" />
-        <p className="font-body text-base md:text-lg text-beige/70 max-w-2xl mx-auto leading-relaxed">
-          {commissionsPageContent.heroText || <MissingInfoText className="text-beige/50" />}
-        </p>
+        <div className="max-w-3xl mx-auto">
+          <h1 className="font-heading text-5xl md:text-6xl text-beige mb-6">Commission a Painting</h1>
+          <div className="w-12 h-px bg-gold mx-auto mb-8" />
+          <p className="font-body text-base text-beige/80 leading-relaxed">
+            {commissionsPageContent.heroText}
+          </p>
+        </div>
       </section>
 
       {/* Process Steps */}
-      <section className="section-padding bg-white">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="font-heading text-4xl md:text-5xl text-charcoal mb-3">The Process</h2>
-            <div className="w-12 h-px bg-gold mx-auto" />
+      {commissionsPageContent.processSteps.length > 0 && (
+        <section className="section-padding bg-beige">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="font-heading text-4xl md:text-5xl text-charcoal mb-3">The Process</h2>
+              <div className="w-12 h-px bg-gold mx-auto" />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {commissionsPageContent.processSteps
+                .slice()
+                .sort((a, b) => a.stepNumber - b.stepNumber)
+                .map(step => (
+                  <div key={step.id} className="text-center">
+                    <div className="w-12 h-12 rounded-full bg-gold/10 border-2 border-gold flex items-center justify-center mx-auto mb-4">
+                      <span className="font-heading text-xl text-gold">{step.stepNumber}</span>
+                    </div>
+                    <h3 className="font-heading text-xl text-charcoal mb-2">{step.title}</h3>
+                    <p className="font-body text-sm text-charcoal-light leading-relaxed">{step.description}</p>
+                  </div>
+                ))}
+            </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {commissionsPageContent.processSteps.map(step => (
-              <div key={step.id} className="flex gap-5">
-                <div className="shrink-0 w-10 h-10 rounded-full bg-gold/20 flex items-center justify-center">
-                  <span className="font-heading text-lg text-gold">{step.stepNumber}</span>
-                </div>
-                <div>
-                  <h3 className="font-heading text-xl text-charcoal mb-2">{step.title}</h3>
-                  <p className="font-body text-sm text-charcoal-light leading-relaxed">{step.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Pricing */}
-      <section className="section-padding bg-beige-dark">
+      <section className="section-padding bg-white">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="font-heading text-4xl md:text-5xl text-charcoal mb-6">Pricing</h2>
           <div className="w-12 h-px bg-gold mx-auto mb-8" />
-          <div className="bg-white p-8 md:p-12">
-            <p className="font-body text-base text-charcoal-light leading-relaxed">
-              {commissionsPageContent.pricingText || <MissingInfoText />}
-            </p>
-          </div>
+          <p className="font-body text-base text-charcoal-light leading-relaxed">
+            {commissionsPageContent.pricingText}
+          </p>
         </div>
       </section>
 
-      {/* Portfolio Examples */}
-      {portfolioExamples.length > 0 && (
-        <section className="section-padding bg-white">
+      {/* Portfolio Sample */}
+      {portfolioArtworks.length > 0 && (
+        <section className="section-padding bg-beige">
           <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-10">
+            <div className="text-center mb-12">
               <h2 className="font-heading text-4xl md:text-5xl text-charcoal mb-3">Recent Work</h2>
               <div className="w-12 h-px bg-gold mx-auto" />
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-              {portfolioExamples.map(artwork => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {portfolioArtworks.map((artwork, index) => (
                 <ArtworkCard
                   key={artwork.id}
                   artwork={artwork}
-                  onClick={setSelectedArtwork}
+                  onClick={() => setLightboxIndex(index)}
                 />
               ))}
             </div>
@@ -84,29 +84,14 @@ export function Commissions() {
         </section>
       )}
 
-      {/* Before/After */}
-      <section className="section-padding bg-beige">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-10">
-            <h2 className="font-heading text-4xl md:text-5xl text-charcoal mb-3">Before & After</h2>
-            <div className="w-12 h-px bg-gold mx-auto mb-4" />
-            <p className="font-body text-sm text-charcoal-muted">Drag to reveal the transformation</p>
-          </div>
-          <BeforeAfterSlider
-            beforeSrc="/assets/generated/before-wall.dim_900x600.png"
-            afterSrc="/assets/generated/after-wall.dim_900x600.png"
-          />
-        </div>
-      </section>
-
       {/* Inquiry Form */}
-      <section className="section-padding bg-white">
+      <section className="section-padding bg-white" id="inquiry">
         <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-10">
-            <h2 className="font-heading text-4xl md:text-5xl text-charcoal mb-3">Start Your Project</h2>
-            <div className="w-12 h-px bg-gold mx-auto mb-4" />
+          <div className="text-center mb-12">
+            <h2 className="font-heading text-4xl md:text-5xl text-charcoal mb-3">Start Your Commission</h2>
+            <div className="w-12 h-px bg-gold mx-auto mb-6" />
             <p className="font-body text-sm text-charcoal-muted">
-              Fill out the form below and you'll receive a response within 24–48 hours.
+              Fill out the form below and I'll be in touch within 2–3 business days.
             </p>
           </div>
           <CommissionInquiryForm />
@@ -115,9 +100,9 @@ export function Commissions() {
 
       {/* FAQ */}
       {commissionsPageContent.faqItems.length > 0 && (
-        <section className="section-padding bg-beige-dark">
+        <section className="section-padding bg-beige">
           <div className="max-w-3xl mx-auto">
-            <div className="text-center mb-10">
+            <div className="text-center mb-12">
               <h2 className="font-heading text-4xl md:text-5xl text-charcoal mb-3">FAQ</h2>
               <div className="w-12 h-px bg-gold mx-auto" />
             </div>
@@ -126,12 +111,11 @@ export function Commissions() {
         </section>
       )}
 
-      {selectedArtwork && (
+      {lightboxIndex !== null && (
         <Lightbox
-          artwork={selectedArtwork}
-          artworks={portfolioExamples}
-          onClose={() => setSelectedArtwork(null)}
-          onNavigate={setSelectedArtwork}
+          artworks={portfolioArtworks}
+          initialIndex={lightboxIndex}
+          onClose={() => setLightboxIndex(null)}
         />
       )}
     </div>

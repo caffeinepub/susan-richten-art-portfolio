@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Upload, Search } from 'lucide-react';
 import { useCMS, MediaItem } from '../../contexts/CMSContext';
-import { MediaTile } from '../../components/admin/MediaTile';
+import MediaTile from '../../components/admin/MediaTile';
 
 export function MediaLibrary() {
   const { mediaLibrary, addMediaItem } = useCMS();
@@ -18,15 +18,13 @@ export function MediaLibrary() {
       const url = URL.createObjectURL(file);
       const img = new Image();
       img.onload = () => {
-        const item: MediaItem = {
-          id: `media-${Date.now()}-${Math.random()}`,
+        const item: Omit<MediaItem, 'id'> = {
           url,
           filename: file.name,
           width: img.naturalWidth,
           height: img.naturalHeight,
           tags: [],
           usedIn: [],
-          uploadedAt: new Date().toISOString(),
         };
         addMediaItem(item);
       };

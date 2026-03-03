@@ -1,16 +1,12 @@
-import React from 'react';
-
 interface MissingInfoTextProps {
   text?: string;
   className?: string;
 }
 
-export function MissingInfoText({ text = 'Artist needs to enter info here', className = '' }: MissingInfoTextProps) {
+export default function MissingInfoText({ text = 'Information not available', className = '' }: MissingInfoTextProps) {
   return (
-    <span className={`italic text-charcoal-muted/60 ${className}`}>
+    <span className={`text-muted-foreground italic text-sm ${className}`}>
       {text}
     </span>
   );
 }
-
-export default MissingInfoText;

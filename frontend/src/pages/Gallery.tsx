@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { useCMS } from '../contexts/CMSContext';
+import { useCMS, Artwork } from '../contexts/CMSContext';
 import { usePageMeta } from '../hooks/usePageMeta';
-import { ArtworkCard } from '../components/ArtworkCard';
-import { Lightbox } from '../components/Lightbox';
-import { Artwork } from '../contexts/CMSContext';
+import ArtworkCard from '../components/ArtworkCard';
+import Lightbox from '../components/Lightbox';
 
 type Category = 'All' | string;
 
@@ -11,7 +10,7 @@ export function Gallery() {
   usePageMeta('gallery');
   const { artworks } = useCMS();
   const [activeCategory, setActiveCategory] = useState<Category>('All');
-  const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const categories: Category[] = ['All', ...Array.from(new Set(artworks.map(a => a.category)))];
 
@@ -20,8 +19,6 @@ export function Gallery() {
     if (activeCategory === 'All') return true;
     return a.category === activeCategory;
   });
-
-  const selectedIndex = selectedArtwork ? filtered.findIndex(a => a.id === selectedArtwork.id) : -1;
 
   return (
     <div className="page-transition pt-20">
@@ -60,15 +57,15 @@ export function Gallery() {
         <div className="max-w-7xl mx-auto">
           {filtered.length === 0 ? (
             <div className="text-center py-20">
-              <p className="font-body text-charcoal-muted italic">No works in this category yet.</p>
+              <p className="font-body text-charcoal-muted italic">No artworks in this category.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filtered.map(artwork => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {filtered.map((artwork, index) => (
                 <ArtworkCard
                   key={artwork.id}
                   artwork={artwork}
-                  onClick={setSelectedArtwork}
+                  onClick={() => setLightboxIndex(index)}
                 />
               ))}
             </div>
@@ -76,12 +73,11 @@ export function Gallery() {
         </div>
       </section>
 
-      {selectedArtwork && selectedIndex >= 0 && (
+      {lightboxIndex !== null && (
         <Lightbox
-          artwork={selectedArtwork}
           artworks={filtered}
-          onClose={() => setSelectedArtwork(null)}
-          onNavigate={setSelectedArtwork}
+          initialIndex={lightboxIndex}
+          onClose={() => setLightboxIndex(null)}
         />
       )}
     </div>

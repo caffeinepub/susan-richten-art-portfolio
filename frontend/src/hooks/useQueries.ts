@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useActor } from './useActor';
 
-export function useGetPageViewCount() {
+export function usePageViewCount() {
   const { actor, isFetching } = useActor();
 
   return useQuery<bigint>({
@@ -11,7 +11,6 @@ export function useGetPageViewCount() {
       return actor.getPageViewCount();
     },
     enabled: !!actor && !isFetching,
-    staleTime: 30_000,
   });
 }
 
@@ -30,7 +29,7 @@ export function useIncrementPageView() {
   });
 }
 
-export function useGetUniqueVisitorCount() {
+export function useUniqueVisitorCount() {
   const { actor, isFetching } = useActor();
 
   return useQuery<bigint>({
@@ -40,7 +39,6 @@ export function useGetUniqueVisitorCount() {
       return actor.getUniqueVisitorCount();
     },
     enabled: !!actor && !isFetching,
-    staleTime: 30_000,
   });
 }
 

@@ -1,103 +1,75 @@
-import { useState } from "react";
-import { useNavigate, useLocation } from "@tanstack/react-router";
-import { useCMS } from "../contexts/CMSContext";
-import { Menu, X, Palette } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useState } from 'react';
+import { Link, useLocation } from '@tanstack/react-router';
+import { Menu, X } from 'lucide-react';
+import { useCMS } from '../contexts/CMSContext';
 
-export function Header() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { navItems, siteSettings } = useCMS();
+export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { navigationItems, siteSettings } = useCMS();
+  const location = useLocation();
+
+  const sortedNav = [...navigationItems].sort((a, b) => a.order - b.order);
 
   return (
     <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <button
-            onClick={() => navigate({ to: "/" })}
-            className="flex items-center gap-2 group"
-          >
-            <Palette className="w-6 h-6 text-gold" />
-            <span className="font-display font-bold text-lg text-foreground group-hover:text-gold transition-colors">
+          <Link to="/" className="flex items-center gap-2">
+            <span className="font-display text-xl font-semibold text-foreground tracking-wide">
               {siteSettings.siteTitle}
             </span>
-          </button>
+          </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-1">
-            {navItems.map((item) => (
-              <button
+          <nav className="hidden md:flex items-center gap-6">
+            {sortedNav.map(item => (
+              <Link
                 key={item.id}
-                onClick={() => navigate({ to: item.path })}
-                className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+                to={item.path}
+                className={`text-sm font-medium transition-colors hover:text-primary ${
                   location.pathname === item.path
-                    ? "text-gold bg-gold/10"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                    ? 'text-primary border-b-2 border-primary pb-0.5'
+                    : 'text-muted-foreground'
                 }`}
               >
-                {item.label}
-              </button>
+                {item.name}
+              </Link>
             ))}
           </nav>
 
-          {/* CTA + Mobile Toggle */}
-          <div className="flex items-center gap-3">
-            <Button
-              size="sm"
-              className="hidden md:flex bg-gold hover:bg-gold/90 text-white"
-              onClick={() => navigate({ to: "/commissions" })}
-            >
-              Commission a Painting
-            </Button>
-            <button
-              className="md:hidden text-foreground"
-              onClick={() => setMobileOpen(!mobileOpen)}
-            >
-              {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-          </div>
+          {/* Mobile hamburger */}
+          <button
+            className="md:hidden p-2 rounded-md text-muted-foreground hover:text-foreground"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label="Toggle menu"
+          >
+            {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile menu */}
       {mobileOpen && (
         <div className="md:hidden border-t border-border bg-background">
-          <nav className="px-4 py-3 space-y-1">
-            {navItems.map((item) => (
-              <button
+          <nav className="flex flex-col px-4 py-3 gap-1">
+            {sortedNav.map(item => (
+              <Link
                 key={item.id}
-                onClick={() => {
-                  navigate({ to: item.path });
-                  setMobileOpen(false);
-                }}
-                className={`w-full text-left px-3 py-2.5 text-sm font-medium rounded-md transition-colors ${
+                to={item.path}
+                onClick={() => setMobileOpen(false)}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                   location.pathname === item.path
-                    ? "text-gold bg-gold/10"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                    ? 'bg-primary/10 text-primary'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                 }`}
               >
-                {item.label}
-              </button>
+                {item.name}
+              </Link>
             ))}
-            <div className="pt-2 pb-1">
-              <Button
-                size="sm"
-                className="w-full bg-gold hover:bg-gold/90 text-white"
-                onClick={() => {
-                  navigate({ to: "/commissions" });
-                  setMobileOpen(false);
-                }}
-              >
-                Commission a Painting
-              </Button>
-            </div>
           </nav>
         </div>
       )}
     </header>
   );
 }
-
-export default Header;

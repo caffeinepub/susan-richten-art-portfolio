@@ -1,127 +1,96 @@
-import React from 'react';
 import { Link } from '@tanstack/react-router';
+import { Heart, Lock } from 'lucide-react';
 import { SiInstagram, SiFacebook, SiPinterest } from 'react-icons/si';
-import { Heart, Eye, Users, Lock } from 'lucide-react';
 import { useCMS } from '../contexts/CMSContext';
-import { MissingInfoText } from './MissingInfoText';
-import { useGetPageViewCount, useGetUniqueVisitorCount } from '../hooks/useQueries';
+import { usePageViewCount } from '../hooks/useQueries';
+import { useUniqueVisitorCount } from '../hooks/useQueries';
 
-export function Footer() {
-  const { navItems, siteSettings } = useCMS();
-  const year = new Date().getFullYear();
-  const hostname = typeof window !== 'undefined' ? encodeURIComponent(window.location.hostname) : 'unknown-app';
+export default function Footer() {
+  const { siteSettings, navigationItems } = useCMS();
+  const { data: pageViews } = usePageViewCount();
+  const { data: uniqueVisitors } = useUniqueVisitorCount();
 
-  const { data: pageViewCount } = useGetPageViewCount();
-  const { data: uniqueVisitorCount } = useGetUniqueVisitorCount();
+  const sortedNav = [...navigationItems].sort((a, b) => a.order - b.order);
+
+  const getSocialIcon = (icon: string) => {
+    switch (icon.toLowerCase()) {
+      case 'instagram': return <SiInstagram size={18} />;
+      case 'facebook': return <SiFacebook size={18} />;
+      case 'pinterest': return <SiPinterest size={18} />;
+      default: return null;
+    }
+  };
+
+  const appId = encodeURIComponent(window.location.hostname || 'marina-vasquez-art');
 
   return (
-    <footer className="bg-charcoal text-beige py-12 md:py-16 px-4 md:px-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
+    <footer className="bg-charcoal text-beige border-t border-beige/10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Brand */}
           <div>
-            <h3 className="font-heading text-2xl text-beige mb-3">{siteSettings.siteTitle}</h3>
-            <p className="font-body text-sm text-beige/70 leading-relaxed">
-              {siteSettings.siteTagline || 'Artist · Ocean View, HI'}
-            </p>
+            <h3 className="font-display text-lg font-semibold mb-2 text-beige">{siteSettings.siteTitle}</h3>
+            <p className="text-sm text-beige/70 mb-4">{siteSettings.siteTagline}</p>
+            {/* Social links */}
+            <div className="flex gap-3">
+              {siteSettings.socialPlatforms.map(platform => (
+                <a
+                  key={platform.name}
+                  href={platform.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-beige/60 hover:text-gold transition-colors"
+                  aria-label={platform.name}
+                >
+                  {getSocialIcon(platform.icon)}
+                </a>
+              ))}
+            </div>
           </div>
 
           {/* Navigation */}
           <div>
-            <h4 className="font-body text-xs tracking-widest uppercase text-beige/50 mb-4">Navigation</h4>
+            <h4 className="text-sm font-semibold uppercase tracking-widest text-beige/50 mb-3">Navigation</h4>
             <ul className="space-y-2">
-              {navItems.map(item => (
+              {sortedNav.map(item => (
                 <li key={item.id}>
                   <Link
                     to={item.path}
-                    className="font-body text-sm text-beige/70 hover:text-beige transition-colors"
+                    className="text-sm text-beige/70 hover:text-gold transition-colors"
                   >
-                    {item.label}
+                    {item.name}
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Social */}
+          {/* Stats & Admin */}
           <div>
-            <h4 className="font-body text-xs tracking-widest uppercase text-beige/50 mb-4">Follow</h4>
-            <div className="flex flex-col gap-3">
-              <a
-                href={siteSettings.socialInstagram || '#'}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 font-body text-sm text-beige/70 hover:text-beige transition-colors"
-              >
-                <SiInstagram size={16} />
-                {siteSettings.socialInstagram ? 'Instagram' : <MissingInfoText className="text-beige/50 text-xs" />}
-              </a>
-              <a
-                href={siteSettings.socialFacebook || '#'}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 font-body text-sm text-beige/70 hover:text-beige transition-colors"
-              >
-                <SiFacebook size={16} />
-                {siteSettings.socialFacebook ? 'Facebook' : <MissingInfoText className="text-beige/50 text-xs" />}
-              </a>
-              <a
-                href={siteSettings.socialPinterest || '#'}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 font-body text-sm text-beige/70 hover:text-beige transition-colors"
-              >
-                <SiPinterest size={16} />
-                {siteSettings.socialPinterest ? 'Pinterest' : <MissingInfoText className="text-beige/50 text-xs" />}
-              </a>
+            <h4 className="text-sm font-semibold uppercase tracking-widest text-beige/50 mb-3">Studio</h4>
+            <div className="space-y-1 text-sm text-beige/70 mb-6">
+              <p>Visitors: {uniqueVisitors !== undefined ? Number(uniqueVisitors).toLocaleString() : '—'}</p>
+              <p>Page Views: {pageViews !== undefined ? Number(pageViews).toLocaleString() : '—'}</p>
             </div>
+            <Link
+              to="/admin"
+              className="inline-flex items-center gap-2 px-3 py-2 rounded border border-beige/30 text-sm text-beige hover:text-beige hover:border-beige/60 hover:bg-beige/10 transition-all"
+            >
+              <Lock size={13} />
+              Admin Sign In
+            </Link>
           </div>
         </div>
 
-        {/* Visitor counters */}
-        <div className="border-t border-beige/10 pt-6 mb-4">
-          <div className="flex flex-wrap items-center gap-6 justify-center md:justify-start">
-            <div className="flex items-center gap-2 font-body text-xs text-beige/50">
-              <Eye size={13} className="text-gold/70" />
-              <span>
-                Total Visits:{' '}
-                <span className="text-beige/70 font-medium">
-                  {pageViewCount !== undefined ? pageViewCount.toString() : '—'}
-                </span>
-              </span>
-            </div>
-            <div className="flex items-center gap-2 font-body text-xs text-beige/50">
-              <Users size={13} className="text-gold/70" />
-              <span>
-                Unique Visitors:{' '}
-                <span className="text-beige/70 font-medium">
-                  {uniqueVisitorCount !== undefined ? uniqueVisitorCount.toString() : '—'}
-                </span>
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div className="border-t border-beige/10 pt-6 flex flex-col md:flex-row items-center justify-between gap-3">
-          <p className="font-body text-xs text-beige/40">
-            © {year} {siteSettings.siteTitle}. All rights reserved.
-          </p>
-
-          <Link
-            to="/admin"
-            className="flex items-center gap-1.5 font-body text-xs text-beige/30 hover:text-beige/60 transition-colors group"
-          >
-            <Lock size={11} className="group-hover:text-gold/60 transition-colors" />
-            Admin Sign In
-          </Link>
-
-          <p className="font-body text-xs text-beige/40 flex items-center gap-1">
+        <div className="mt-10 pt-6 border-t border-beige/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-beige/50">
+          <p>© {new Date().getFullYear()} {siteSettings.siteTitle}. All rights reserved.</p>
+          <p className="flex items-center gap-1">
             Built with <Heart size={12} className="text-gold fill-gold" /> using{' '}
             <a
-              href={`https://caffeine.ai/?utm_source=Caffeine-footer&utm_medium=referral&utm_content=${hostname}`}
+              href={`https://caffeine.ai/?utm_source=Caffeine-footer&utm_medium=referral&utm_content=${appId}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-beige/60 hover:text-beige transition-colors underline"
+              className="hover:text-beige/80 transition-colors underline underline-offset-2"
             >
               caffeine.ai
             </a>
@@ -131,5 +100,3 @@ export function Footer() {
     </footer>
   );
 }
-
-export default Footer;

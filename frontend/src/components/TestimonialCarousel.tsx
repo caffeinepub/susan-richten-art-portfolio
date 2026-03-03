@@ -1,80 +1,61 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { Testimonial } from '../contexts/CMSContext';
-import { MissingInfoText } from './MissingInfoText';
+import type { Testimonial } from '../contexts/CMSContext';
 
 interface TestimonialCarouselProps {
   testimonials: Testimonial[];
-  autoRotateMs?: number;
 }
 
-export function TestimonialCarousel({ testimonials, autoRotateMs = 4000 }: TestimonialCarouselProps) {
-  const [current, setCurrent] = useState(0);
-
-  const next = useCallback(() => {
-    setCurrent(c => (c + 1) % testimonials.length);
-  }, [testimonials.length]);
-
-  const prev = useCallback(() => {
-    setCurrent(c => (c - 1 + testimonials.length) % testimonials.length);
-  }, [testimonials.length]);
-
-  useEffect(() => {
-    if (testimonials.length <= 1) return;
-    const timer = setInterval(next, autoRotateMs);
-    return () => clearInterval(timer);
-  }, [next, autoRotateMs, testimonials.length]);
+export default function TestimonialCarousel({ testimonials }: TestimonialCarouselProps) {
+  const [index, setIndex] = useState(0);
 
   if (!testimonials.length) return null;
 
-  const t = testimonials[current];
+  const prev = () => setIndex(i => (i - 1 + testimonials.length) % testimonials.length);
+  const next = () => setIndex(i => (i + 1) % testimonials.length);
+  const current = testimonials[index];
 
   return (
-    <div className="relative max-w-3xl mx-auto text-center px-8 md:px-16">
-      <div className="font-heading text-7xl text-gold/30 leading-none mb-2 select-none">"</div>
-      <blockquote className="font-heading text-xl md:text-2xl italic text-charcoal leading-relaxed mb-6 min-h-[80px]">
-        {t.quote || <MissingInfoText />}
+    <div className="relative max-w-2xl mx-auto text-center">
+      <blockquote className="font-display text-xl md:text-2xl text-foreground leading-relaxed mb-6">
+        "{current.quote}"
       </blockquote>
-      <div className="font-body text-sm tracking-widest uppercase text-charcoal-light">
-        {t.name || <MissingInfoText />}
+      <div className="text-sm text-muted-foreground">
+        <span className="font-semibold text-foreground">{current.name}</span>
+        {current.location && <span> · {current.location}</span>}
+        {current.role && <span> · {current.role}</span>}
       </div>
-      {t.location && (
-        <div className="font-body text-xs text-charcoal-muted mt-1">{t.location}</div>
-      )}
 
       {testimonials.length > 1 && (
-        <>
+        <div className="flex items-center justify-center gap-4 mt-8">
           <button
             onClick={prev}
-            className="absolute left-0 top-1/2 -translate-y-1/2 p-2 text-charcoal-light hover:text-charcoal transition-colors"
+            className="p-2 rounded-full border border-border hover:border-primary text-muted-foreground hover:text-primary transition-colors"
             aria-label="Previous testimonial"
           >
-            <ChevronLeft size={20} />
+            <ChevronLeft size={18} />
           </button>
-          <button
-            onClick={next}
-            className="absolute right-0 top-1/2 -translate-y-1/2 p-2 text-charcoal-light hover:text-charcoal transition-colors"
-            aria-label="Next testimonial"
-          >
-            <ChevronRight size={20} />
-          </button>
-
-          <div className="flex justify-center gap-2 mt-6">
+          <div className="flex gap-1.5">
             {testimonials.map((_, i) => (
               <button
                 key={i}
-                onClick={() => setCurrent(i)}
-                className={`w-2 h-2 rounded-full transition-all ${
-                  i === current ? 'bg-charcoal w-4' : 'bg-charcoal/30'
+                onClick={() => setIndex(i)}
+                className={`w-2 h-2 rounded-full transition-colors ${
+                  i === index ? 'bg-primary' : 'bg-border'
                 }`}
-                aria-label={`Go to testimonial ${i + 1}`}
+                aria-label={`Testimonial ${i + 1}`}
               />
             ))}
           </div>
-        </>
+          <button
+            onClick={next}
+            className="p-2 rounded-full border border-border hover:border-primary text-muted-foreground hover:text-primary transition-colors"
+            aria-label="Next testimonial"
+          >
+            <ChevronRight size={18} />
+          </button>
+        </div>
       )}
     </div>
   );
 }
-
-export default TestimonialCarousel;

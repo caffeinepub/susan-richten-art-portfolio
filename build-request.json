@@ -1,37 +1,39 @@
 {
   "kind": "build_request",
-  "title": "Revert to Version 9",
-  "priority": "high",
+  "title": "Fix footer background so Admin Sign In link text is legible",
+  "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-45",
-      "text": "Revert the entire project to Version 9. All files — frontend and backend — must be restored to their exact state at Version 9. Any changes introduced after Version 9 (including Instagram/social feed cleanup, social media manager, dynamic socialPlatforms CMS extension, social share buttons in Lightbox, and any other modifications made in versions 10 through the current version) must be fully undone. The resulting codebase must be identical to Version 9.",
-      "target": "both",
+      "id": "REQ-56",
+      "text": "Update the Footer component (frontend/src/components/Footer.tsx) so that the bottom section of the footer — where the 'Admin Sign In' link, visitor counters, and copyright text are displayed — has a background color that provides sufficient contrast for all text to be clearly readable. If the current footer background is dark (e.g., charcoal #2C2C2C), ensure all text and links in that area use a light color (e.g., warm beige #F5F0E8 or white #FFFFFF). If the footer background is light, use charcoal #2C2C2C for text. The 'Admin Sign In' link in particular must be fully visible without hovering, scrolling, or any user interaction. Apply consistent contrast-compliant color tokens from the existing design system to all text elements in the footer bottom bar.",
+      "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-5"
+          "msg-4"
         ],
         "quotes": [
-          "Cancel and revert to Version 9"
+          "change background color of bottom of web page where admin is located so words can be seen on the bottom of page"
         ]
       },
       "acceptanceCriteria": [
-        "All frontend and backend files match their Version 9 state exactly.",
-        "No code, components, or features introduced after Version 9 are present.",
-        "The application builds and runs correctly from the Version 9 baseline."
+        "The footer bottom section background color is explicitly set so that all text within it (copyright, visitor counters, Admin Sign In link) is legible without hovering.",
+        "The 'Admin Sign In' link text is fully visible at resting state with sufficient contrast against the footer background.",
+        "Visitor counter labels ('Total Visits', 'Unique Visitors') are readable against the footer background.",
+        "Copyright text is readable against the footer background.",
+        "The chosen colors are sourced from the existing design system palette (warm beige #F5F0E8, charcoal #2C2C2C, or white #FFFFFF).",
+        "The fix is consistent across all viewport sizes (mobile, tablet, desktop)."
       ]
     }
   ],
   "constraints": [
-    "Do not introduce any new changes beyond restoring Version 9 state.",
-    "Do not partially revert — all files must reflect the complete Version 9 snapshot."
+    "Do not modify any files listed under frontend.immutablePaths.",
+    "Only change Footer styling — do not alter layout structure or remove any existing footer content.",
+    "Use design system color tokens already defined in the project (warm beige #F5F0E8, charcoal #2C2C2C, white #FFFFFF)."
   ],
   "nonGoals": [
-    "Instagram/social feed cleanup",
-    "Social media manager admin section",
-    "Dynamic socialPlatforms CMS extension",
-    "Social share buttons in Lightbox",
-    "Any feature or fix introduced after Version 9"
+    "Changing footer layout or content structure.",
+    "Adding new footer sections or links.",
+    "Modifying header or any other component outside the Footer."
   ],
   "imageRequirements": {
     "required": [],
