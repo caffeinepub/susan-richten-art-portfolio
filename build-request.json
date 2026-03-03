@@ -1,0 +1,40 @@
+{
+  "kind": "build_request",
+  "title": "Revert to Version 9",
+  "priority": "high",
+  "requirements": [
+    {
+      "id": "REQ-45",
+      "text": "Revert the entire project to Version 9. All files — frontend and backend — must be restored to their exact state at Version 9. Any changes introduced after Version 9 (including Instagram/social feed cleanup, social media manager, dynamic socialPlatforms CMS extension, social share buttons in Lightbox, and any other modifications made in versions 10 through the current version) must be fully undone. The resulting codebase must be identical to Version 9.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-5"
+        ],
+        "quotes": [
+          "Cancel and revert to Version 9"
+        ]
+      },
+      "acceptanceCriteria": [
+        "All frontend and backend files match their Version 9 state exactly.",
+        "No code, components, or features introduced after Version 9 are present.",
+        "The application builds and runs correctly from the Version 9 baseline."
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not introduce any new changes beyond restoring Version 9 state.",
+    "Do not partially revert — all files must reflect the complete Version 9 snapshot."
+  ],
+  "nonGoals": [
+    "Instagram/social feed cleanup",
+    "Social media manager admin section",
+    "Dynamic socialPlatforms CMS extension",
+    "Social share buttons in Lightbox",
+    "Any feature or fix introduced after Version 9"
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}

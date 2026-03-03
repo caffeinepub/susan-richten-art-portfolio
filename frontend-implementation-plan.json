@@ -1,0 +1,298 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Revert to Version 9",
+  "requirements": [
+    {
+      "id": "REQ-45",
+      "summary": "Revert all frontend files to their exact Version 9 state, removing any features or changes introduced after Version 9",
+      "acceptanceCriteria": [
+        "All frontend and backend files match their Version 9 state exactly.",
+        "No code, components, or features introduced after Version 9 are present.",
+        "The application builds and runs correctly from the Version 9 baseline."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Restore App.tsx to its exact Version 9 state, reverting any route additions, provider changes, or structural modifications made after Version 9. This requires access to Version 9 source control history or backup."
+        },
+        {
+          "path": "frontend/src/components/admin/AboutPageEditor.tsx",
+          "operation": "modify",
+          "description": "Restore AboutPageEditor.tsx to its Version 9 implementation, removing any field additions, UI changes, or functionality enhancements introduced after Version 9."
+        },
+        {
+          "path": "frontend/src/components/admin/AdminLayout.tsx",
+          "operation": "modify",
+          "description": "Restore AdminLayout.tsx to Version 9, reverting any navigation changes, badge additions, or layout modifications."
+        },
+        {
+          "path": "frontend/src/components/admin/ArtworkForm.tsx",
+          "operation": "modify",
+          "description": "Restore ArtworkForm.tsx to Version 9 field configuration and validation logic."
+        },
+        {
+          "path": "frontend/src/components/admin/BlogPostForm.tsx",
+          "operation": "modify",
+          "description": "Restore BlogPostForm.tsx to Version 9 implementation, removing any post-Version-9 field or feature additions."
+        },
+        {
+          "path": "frontend/src/components/admin/CommissionsPageEditor.tsx",
+          "operation": "modify",
+          "description": "Restore CommissionsPageEditor.tsx to Version 9 editor capabilities and field structure."
+        },
+        {
+          "path": "frontend/src/components/admin/HeroEditor.tsx",
+          "operation": "modify",
+          "description": "Restore HeroEditor.tsx to Version 9 form fields and upload handling."
+        },
+        {
+          "path": "frontend/src/components/admin/InquiryRow.tsx",
+          "operation": "modify",
+          "description": "Restore InquiryRow.tsx to Version 9 status handling and UI."
+        },
+        {
+          "path": "frontend/src/components/admin/MediaTile.tsx",
+          "operation": "modify",
+          "description": "Restore MediaTile.tsx to Version 9 implementation, removing any tag management or replacement features added after Version 9."
+        },
+        {
+          "path": "frontend/src/components/admin/NavigationEditor.tsx",
+          "operation": "modify",
+          "description": "Restore NavigationEditor.tsx to Version 9 CRUD operations and save logic."
+        },
+        {
+          "path": "frontend/src/components/admin/PressEditor.tsx",
+          "operation": "modify",
+          "description": "Restore PressEditor.tsx to Version 9 field structure and operations."
+        },
+        {
+          "path": "frontend/src/components/admin/TestimonialsEditor.tsx",
+          "operation": "modify",
+          "description": "Restore TestimonialsEditor.tsx to Version 9 CRUD implementation."
+        },
+        {
+          "path": "frontend/src/components/ArtworkCard.tsx",
+          "operation": "modify",
+          "description": "Restore ArtworkCard.tsx to Version 9 rendering logic and badge configuration."
+        },
+        {
+          "path": "frontend/src/components/BeforeAfterSlider.tsx",
+          "operation": "modify",
+          "description": "Restore BeforeAfterSlider.tsx to Version 9 interaction handling."
+        },
+        {
+          "path": "frontend/src/components/CareerTimeline.tsx",
+          "operation": "modify",
+          "description": "Restore CareerTimeline.tsx to Version 9 visual layout and rendering."
+        },
+        {
+          "path": "frontend/src/components/CommissionInquiryForm.tsx",
+          "operation": "modify",
+          "description": "Restore CommissionInquiryForm.tsx to Version 9 validation and submission logic."
+        },
+        {
+          "path": "frontend/src/components/ContactForm.tsx",
+          "operation": "modify",
+          "description": "Restore ContactForm.tsx to Version 9 form fields and submission handling."
+        },
+        {
+          "path": "frontend/src/components/FAQAccordion.tsx",
+          "operation": "modify",
+          "description": "Restore FAQAccordion.tsx to Version 9 toggle and animation logic."
+        },
+        {
+          "path": "frontend/src/components/Footer.tsx",
+          "operation": "modify",
+          "description": "Restore Footer.tsx to Version 9 layout and content, removing any social platform additions, analytics display changes, or link modifications introduced after Version 9."
+        },
+        {
+          "path": "frontend/src/components/Header.tsx",
+          "operation": "modify",
+          "description": "Restore Header.tsx to Version 9 navigation structure and mobile drawer implementation."
+        },
+        {
+          "path": "frontend/src/components/Lightbox.tsx",
+          "operation": "modify",
+          "description": "Restore Lightbox.tsx to Version 9 implementation, removing any social share buttons, multi-photo navigation changes, or zoom enhancements added after Version 9."
+        },
+        {
+          "path": "frontend/src/components/MissingInfoText.tsx",
+          "operation": "modify",
+          "description": "Restore MissingInfoText.tsx to Version 9 styling and message content."
+        },
+        {
+          "path": "frontend/src/components/NewsletterSignup.tsx",
+          "operation": "modify",
+          "description": "Restore NewsletterSignup.tsx to Version 9 form handling and thank-you message."
+        },
+        {
+          "path": "frontend/src/components/PlaceholderImage.tsx",
+          "operation": "modify",
+          "description": "Restore PlaceholderImage.tsx to Version 9 lazy-loading implementation."
+        },
+        {
+          "path": "frontend/src/components/PressMentionCard.tsx",
+          "operation": "modify",
+          "description": "Restore PressMentionCard.tsx to Version 9 card layout and field display."
+        },
+        {
+          "path": "frontend/src/components/TestimonialCarousel.tsx",
+          "operation": "modify",
+          "description": "Restore TestimonialCarousel.tsx to Version 9 auto-rotation and control logic."
+        },
+        {
+          "path": "frontend/src/components/TestimonialGrid.tsx",
+          "operation": "modify",
+          "description": "Restore TestimonialGrid.tsx to Version 9 grid layout and card rendering."
+        },
+        {
+          "path": "frontend/src/contexts/AuthContext.tsx",
+          "operation": "modify",
+          "description": "Restore AuthContext.tsx to Version 9 authentication logic and state management."
+        },
+        {
+          "path": "frontend/src/contexts/CMSContext.tsx",
+          "operation": "modify",
+          "description": "Restore CMSContext.tsx to Version 9 data types and CRUD operations, removing any dynamic socialPlatforms CMS extension or other data model changes introduced after Version 9."
+        },
+        {
+          "path": "frontend/src/pages/About.tsx",
+          "operation": "modify",
+          "description": "Restore About.tsx to Version 9 page layout and content sourcing."
+        },
+        {
+          "path": "frontend/src/pages/admin/AdminLogin.tsx",
+          "operation": "modify",
+          "description": "Restore AdminLogin.tsx to Version 9 authentication UI and error handling."
+        },
+        {
+          "path": "frontend/src/pages/admin/BlogManager.tsx",
+          "operation": "modify",
+          "description": "Restore BlogManager.tsx to Version 9 blog post management interface."
+        },
+        {
+          "path": "frontend/src/pages/admin/CommissionsManager.tsx",
+          "operation": "modify",
+          "description": "Restore CommissionsManager.tsx to Version 9 inquiry filtering and display logic."
+        },
+        {
+          "path": "frontend/src/pages/admin/Dashboard.tsx",
+          "operation": "modify",
+          "description": "Restore Dashboard.tsx to Version 9 stats display and quick action links, removing any social media manager sections or analytics additions introduced after Version 9."
+        },
+        {
+          "path": "frontend/src/pages/admin/GalleryManager.tsx",
+          "operation": "modify",
+          "description": "Restore GalleryManager.tsx to Version 9 artwork management interface and drag-drop implementation."
+        },
+        {
+          "path": "frontend/src/pages/admin/MediaLibrary.tsx",
+          "operation": "modify",
+          "description": "Restore MediaLibrary.tsx to Version 9 search/filter UI and upload handling."
+        },
+        {
+          "path": "frontend/src/pages/admin/MessagesInbox.tsx",
+          "operation": "modify",
+          "description": "Restore MessagesInbox.tsx to Version 9 message listing and status management."
+        },
+        {
+          "path": "frontend/src/pages/admin/PagesEditor.tsx",
+          "operation": "modify",
+          "description": "Restore PagesEditor.tsx to Version 9 tabbed navigation and sub-editor configuration."
+        },
+        {
+          "path": "frontend/src/pages/admin/Settings.tsx",
+          "operation": "modify",
+          "description": "Restore Settings.tsx to Version 9 site configuration form fields and social media URL inputs, removing any dynamic platform management features added after Version 9."
+        },
+        {
+          "path": "frontend/src/pages/Commissions.tsx",
+          "operation": "modify",
+          "description": "Restore Commissions.tsx to Version 9 page sections and component layout."
+        },
+        {
+          "path": "frontend/src/pages/Contact.tsx",
+          "operation": "modify",
+          "description": "Restore Contact.tsx to Version 9 form display and social media links configuration."
+        },
+        {
+          "path": "frontend/src/pages/Gallery.tsx",
+          "operation": "modify",
+          "description": "Restore Gallery.tsx to Version 9 filtering logic and lightbox integration."
+        },
+        {
+          "path": "frontend/src/pages/Home.tsx",
+          "operation": "modify",
+          "description": "Restore Home.tsx to Version 9 hero section, featured artworks grid, and page sections."
+        },
+        {
+          "path": "frontend/src/pages/Testimonials.tsx",
+          "operation": "modify",
+          "description": "Restore Testimonials.tsx to Version 9 carousel/grid view toggle and press mention display."
+        },
+        {
+          "path": "frontend/src/hooks/useActor.ts",
+          "operation": "modify",
+          "description": "Restore useActor.ts to Version 9 actor creation and caching logic."
+        },
+        {
+          "path": "frontend/src/hooks/useInternetIdentity.ts",
+          "operation": "modify",
+          "description": "Restore useInternetIdentity.ts to Version 9 Internet Identity integration."
+        },
+        {
+          "path": "frontend/src/hooks/useLazyLoad.ts",
+          "operation": "modify",
+          "description": "Restore useLazyLoad.ts to Version 9 IntersectionObserver implementation."
+        },
+        {
+          "path": "frontend/src/hooks/usePageMeta.ts",
+          "operation": "modify",
+          "description": "Restore usePageMeta.ts to Version 9 document title and meta tag update logic."
+        },
+        {
+          "path": "frontend/src/hooks/usePageViewTracker.ts",
+          "operation": "modify",
+          "description": "Restore usePageViewTracker.ts to Version 9 page view increment logic."
+        },
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Restore useQueries.ts to Version 9 React Query hooks for backend data fetching."
+        },
+        {
+          "path": "frontend/src/hooks/useUniqueVisitorTracker.ts",
+          "operation": "modify",
+          "description": "Restore useUniqueVisitorTracker.ts to Version 9 visitor tracking implementation."
+        },
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Restore index.css to Version 9 global styles, CSS custom properties, and utility classes."
+        },
+        {
+          "path": "frontend/index.css",
+          "operation": "modify",
+          "description": "Restore frontend/index.css to Version 9 design token definitions and Tailwind configuration."
+        },
+        {
+          "path": "frontend/src/main.tsx",
+          "operation": "modify",
+          "description": "Restore main.tsx to Version 9 application entry point and provider wrapping."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Restore tailwind.config.js to Version 9 theme extensions, color palettes, and plugin configuration."
+        },
+        {
+          "path": "frontend/index.html",
+          "operation": "modify",
+          "description": "Restore index.html to Version 9 HTML shell structure and meta tags."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-revert-the-entire-project-to-version-9-all-files-frontend-and-backend-must-be-restored-to-their-exact-state-at-version-9-any-changes-introduced-after-version-9-including-instagram-social-feed-cleanup-social-media-manager-dynamic-socialplatforms-cms-extension-social-share-buttons-in-lightbox-and-any-other-modifications-made-in-versions-10-through-the-current-version-must-be-fully-undone-the-resulting-codebase-must-be-identical-to-version-9",
+      "featureTitle": "Revert the entire project to Version 9. All files — frontend and backend — must be restored to their exact state at Version 9. Any changes introduced after Version 9 (including Instagram/social feed cleanup, social media manager, dynamic socialPlatforms CMS extension, social share buttons in Lightbox, and any other modifications made in versions 10 through the current version) must be fully undone. The resulting codebase must be identical to Version 9.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/ArtworkCard.tsx",
+        "frontend/src/components/CareerTimeline.tsx",
+        "frontend/src/components/CommissionInquiryForm.tsx",
+        "frontend/src/components/ContactForm.tsx",
+        "frontend/src/components/Footer.tsx",
+        "frontend/src/components/Header.tsx",
+        "frontend/src/components/Lightbox.tsx",
+        "frontend/src/components/MissingInfoText.tsx",
+        "frontend/src/components/NewsletterSignup.tsx",
+        "frontend/src/components/PlaceholderImage.tsx",
+        "frontend/src/components/PressMentionCard.tsx",
+        "frontend/src/components/TestimonialCarousel.tsx",
+        "frontend/src/components/TestimonialGrid.tsx",
+        "frontend/src/components/admin/AboutPageEditor.tsx",
+        "frontend/src/components/admin/AdminLayout.tsx",
+        "frontend/src/components/admin/ArtworkForm.tsx",
+        "frontend/src/components/admin/BlogPostForm.tsx",
+        "frontend/src/components/admin/CommissionsPageEditor.tsx",
+        "frontend/src/components/admin/HeroEditor.tsx",
+        "frontend/src/components/admin/InquiryRow.tsx",
+        "frontend/src/components/admin/MediaTile.tsx",
+        "frontend/src/components/admin/NavigationEditor.tsx",
+        "frontend/src/components/admin/PressEditor.tsx",
+        "frontend/src/components/admin/TestimonialsEditor.tsx",
+        "frontend/src/contexts/CMSContext.tsx",
+        "frontend/src/hooks/usePageMeta.ts",
+        "frontend/src/pages/About.tsx",
+        "frontend/src/pages/Commissions.tsx",
+        "frontend/src/pages/Contact.tsx",
+        "frontend/src/pages/Gallery.tsx",
+        "frontend/src/pages/Home.tsx",
+        "frontend/src/pages/Testimonials.tsx",
+        "frontend/src/pages/admin/AdminLogin.tsx",
+        "frontend/src/pages/admin/BlogManager.tsx",
+        "frontend/src/pages/admin/CommissionsManager.tsx",
+        "frontend/src/pages/admin/Dashboard.tsx",
+        "frontend/src/pages/admin/GalleryManager.tsx",
+        "frontend/src/pages/admin/MediaLibrary.tsx",
+        "frontend/src/pages/admin/MessagesInbox.tsx",
+        "frontend/src/pages/admin/PagesEditor.tsx",
+        "frontend/src/pages/admin/Settings.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-45"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

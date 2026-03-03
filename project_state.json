@@ -1,0 +1,512 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 23,
+  "summary": "Full-featured art portfolio website for artist Susan Richten (Ocean View, HI) built with React + TypeScript, Tailwind CSS, and a local JSON-based CMS. Features 5 public pages (Home, Gallery, Commissions, About, Contact, Testimonials/Press) plus a password-protected admin panel (/admin, password: SusanAdmin2024). Design is clean/minimal with warm beige, white, charcoal palette, Cormorant Garamond + Lato fonts, and high-end gallery aesthetic.",
+  "architectural_notes": [
+    "React + TypeScript + Tailwind CSS + React Router; local Context API simulates CMS backend with JSON data store",
+    "Design: white/#F5F0E8 beige/#2C2C2C charcoal palette; Cormorant Garamond (headings) + Lato (body) from Google Fonts",
+    "Admin panel at /admin, hardcoded password 'SusanAdmin2024', full CRUD for artworks, pages, commissions, blog, settings",
+    "Lazy loading via IntersectionObserver; mobile-first responsive; SEO meta tags per page",
+    "Placeholder images should be clean styled divs (warm beige bg, no 'Replace' text overlay, no diagonal/texture lines)"
+  ],
+  "known_issues": [
+    "Lightbox/enlarged view still shows 'Replace' text and diagonal lines on placeholder images instead of a clean beige fill",
+    "Admin sidebar navigation text is not visible until hovered — text color blends into the background",
+    "Home page Instagram/social feed section still shows diagonal lines and 'Replace' placeholder text"
+  ],
+  "isFixRequest": true,
+  "existing_features": [
+    {
+      "id": "feature-set-up-a-local-json-based-cms-data-store-using-react-context-api-that-holds-all-site-content-artworks-8-sample-items-testimonials-3-press-mentions-2-faq-items-3-commission-process-steps-4-homepage-settings-about-page-content-navigation-items-site-settings-commission-inquiries-and-blog-posts-all-data-must-be-accessible-and-mutable-via-context-throughout-the-app",
+      "title": "Set up a local JSON-based CMS data store using React Context API that holds all site content: artworks (8 sample items), testimonials (3), press mentions (2), FAQ items (3), commission process steps (4), homepage settings, about page content, navigation items, site settings, commission inquiries, and blog posts. All data must be accessible and mutable via context throughout the app.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-configure-react-router-with-routes-for-home-gallery-gallery-commissions-commissions-about-about-contact-contact-testimonials-testimonials-press-and-admin-admin-panel-add-smooth-page-transitions-between-routes-apply-per-page-meta-tags-title-description-for-seo",
+      "title": "Configure React Router with routes for: / (Home), /gallery (Gallery), /commissions (Commissions), /about (About), /contact (Contact), /testimonials (Testimonials/Press), and /admin (Admin Panel). Add smooth page transitions between routes. Apply per-page meta tags (title, description) for SEO.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-global-design-system-using-tailwind-css-with-the-specified-palette-white-ffffff-warm-beige-f5f0e8-and-charcoal-2c2c2c-import-google-fonts-cormorant-garamond-headings-and-lato-body-via-the-html-head-or-css-import-apply-these-fonts-and-colors-consistently-across-all-pages-create-a-reusable-placeholder-image-component-that-renders-a-styled-div-with-warm-beige-background-subtle-repeating-texture-pattern-css-based-centered-italic-charcoal-text-replace-and-the-image-dimensions-shown-below-it",
+      "title": "Implement a global design system using Tailwind CSS with the specified palette: white (#FFFFFF), warm beige (#F5F0E8), and charcoal (#2C2C2C). Import Google Fonts Cormorant Garamond (headings) and Lato (body) via the HTML head or CSS import. Apply these fonts and colors consistently across all pages. Create a reusable placeholder image component that renders a styled div with warm beige background, subtle repeating texture pattern (CSS-based), centered italic charcoal text 'Replace', and the image dimensions shown below it.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-a-responsive-site-wide-header-with-susan-richten-s-name-as-logo-wordmark-navigation-links-to-all-6-public-pages-and-a-hamburger-menu-for-mobile-build-a-footer-with-social-media-link-placeholders-instagram-facebook-pinterest-showing-artist-needs-to-enter-info-here-copyright-text-and-quick-nav-links",
+      "title": "Build a responsive site-wide Header with Susan Richten's name as logo/wordmark, navigation links to all 6 public pages, and a hamburger menu for mobile. Build a Footer with social media link placeholders (Instagram, Facebook, Pinterest showing 'Artist needs to enter info here'), copyright text, and quick nav links.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-the-home-page-with-the-following-sections-in-order-1-full-screen-hero-with-placeholderimage-background-overlay-showing-artist-name-susan-richten-and-tagline-defaulting-to-artist-needs-to-enter-info-here-2-featured-artworks-grid-pulling-artworks-with-featured-true-from-cms-context-show-placeholderimage-cards-with-title-year-availability-badge-3-brief-artist-intro-paragraph-with-learn-more-cta-linking-to-about-4-newsletter-signup-section-with-email-input-and-subscribe-button-no-real-integration-show-success-message-on-submit-5-testimonial-carousel-auto-rotating-manual-dots-arrows-client-quote-name-6-installation-map-section-with-a-static-styled-placeholder-marked-replace-showing-labeled-pin-locations-from-artwork-data-7-instagram-social-feed-placeholder-grid-of-6-styled-divs-marked-replace",
+      "title": "Build the Home page with the following sections in order: (1) Full-screen hero with PlaceholderImage background, overlay showing artist name 'Susan Richten' and tagline defaulting to 'Artist needs to enter info here'; (2) Featured Artworks grid pulling artworks with featured=true from CMS context (show PlaceholderImage cards with title, year, availability badge); (3) Brief artist intro paragraph with 'Learn More' CTA linking to /about; (4) Newsletter signup section with email input and subscribe button (no real integration — show success message on submit); (5) Testimonial Carousel (auto-rotating, manual dots/arrows, client quote + name); (6) Installation Map section with a static styled placeholder marked 'Replace' showing labeled pin locations from artwork data; (7) Instagram/social feed placeholder grid of 6 styled divs marked 'Replace'.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-the-gallery-page-with-1-filter-tabs-for-murals-mosaics-private-commissions-public-installations-and-all-2-responsive-masonry-css-grid-layout-with-lazy-loading-via-intersectionobserver-3-artwork-cards-showing-placeholderimage-with-replace-overlay-title-year-and-sold-available-badge-4-click-to-open-lightbox-component-showing-full-size-placeholderimage-with-zoom-scroll-pinch-artwork-details-panel-title-year-medium-size-location-description-badge-left-right-navigation-arrows-to-move-between-filtered-artworks-and-close-button",
+      "title": "Build the Gallery page with: (1) Filter tabs for Murals, Mosaics, Private Commissions, Public Installations, and All; (2) Responsive masonry/CSS grid layout with lazy loading via IntersectionObserver; (3) Artwork cards showing PlaceholderImage with 'Replace' overlay, title, year, and Sold/Available badge; (4) Click-to-open Lightbox component showing full-size PlaceholderImage with zoom (scroll/pinch), artwork details panel (Title, Year, Medium, Size, Location, Description, badge), left/right navigation arrows to move between filtered artworks, and close button.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-the-commissions-page-with-1-hero-section-with-commission-intro-text-defaulting-to-artist-needs-to-enter-info-here-2-commission-process-steps-section-4-steps-from-cms-each-with-step-number-title-description-editable-via-admin-3-pricing-ranges-section-showing-artist-needs-to-enter-info-here-4-portfolio-examples-grid-subset-of-gallery-artworks-4-cards-5-before-after-slider-component-with-two-placeholderimage-panes-and-a-draggable-divider-6-commission-inquiry-form-with-fields-name-email-phone-project-type-dropdown-mural-mosaic-installation-other-size-location-budget-range-dropdown-timeline-project-description-file-upload-for-reference-images-on-submit-show-inline-confirmation-you-ll-receive-a-confirmation-within-24-48-hours-and-store-submission-in-cms-context-7-faq-accordion-with-3-sample-questions-answers-expandable-collapsible",
+      "title": "Build the Commissions page with: (1) Hero section with commission intro text (defaulting to 'Artist needs to enter info here'); (2) Commission Process Steps section (4 steps from CMS, each with step number, title, description — editable via admin); (3) Pricing Ranges section showing 'Artist needs to enter info here'; (4) Portfolio examples grid (subset of gallery artworks, 4 cards); (5) Before/After Slider component with two PlaceholderImage panes and a draggable divider; (6) Commission Inquiry Form with fields: Name, Email, Phone, Project Type (dropdown: Mural/Mosaic/Installation/Other), Size, Location, Budget Range (dropdown), Timeline, Project Description, file upload for reference images; on submit show inline confirmation: 'You'll receive a confirmation within 24-48 hours' and store submission in CMS context; (7) FAQ Accordion with 3 sample questions/answers, expandable/collapsible.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-the-about-the-artist-page-with-1-large-artist-portrait-placeholderimage-marked-replace-2-biography-section-textarea-content-from-cms-defaulting-to-artist-needs-to-enter-info-here-3-artist-statement-section-same-pattern-4-career-timeline-with-3-placeholder-milestones-year-event-each-defaulting-to-artist-needs-to-enter-info-here-in-a-vertical-milestone-layout-5-press-media-section-with-add-remove-links-pre-populated-with-2-sample-press-mentions-6-social-media-links-for-instagram-facebook-pinterest-show-artist-needs-to-enter-info-here-when-urls-unset-7-press-kit-download-button-that-shows-a-tooltip-modal-artist-needs-to-enter-info-here-pdf-not-yet-uploaded",
+      "title": "Build the About the Artist page with: (1) Large artist portrait (PlaceholderImage, marked 'Replace'); (2) Biography section (textarea content from CMS, defaulting to 'Artist needs to enter info here'); (3) Artist Statement section (same pattern); (4) Career Timeline with 3 placeholder milestones (year + event, each defaulting to 'Artist needs to enter info here') in a vertical milestone layout; (5) Press & Media section with add/remove links (pre-populated with 2 sample press mentions); (6) Social media links for Instagram, Facebook, Pinterest (show 'Artist needs to enter info here' when URLs unset); (7) Press Kit Download button that shows a tooltip/modal: 'Artist needs to enter info here — PDF not yet uploaded'.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-the-contact-page-with-1-contact-form-with-name-email-subject-message-fields-on-submit-show-you-ll-receive-a-confirmation-within-24-48-hours-and-store-inquiry-in-cms-context-2-location-display-showing-ocean-view-hi-3-social-media-links-4-studio-location-map-placeholder-styled-div-replace-label-5-auto-response-note-displayed-below-form",
+      "title": "Build the Contact page with: (1) Contact form with Name, Email, Subject, Message fields — on submit show 'You'll receive a confirmation within 24-48 hours' and store inquiry in CMS context; (2) Location display showing 'Ocean View, HI'; (3) Social media links; (4) Studio/location map placeholder (styled div, 'Replace' label); (5) Auto-response note displayed below form.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-the-testimonials-press-page-with-1-testimonial-carousel-and-or-grid-showing-client-quote-name-and-location-3-sample-testimonials-pre-populated-all-with-elegant-quote-styling-2-press-mention-cards-showing-publication-name-date-excerpt-and-external-link-2-sample-press-mentions-pre-populated-3-all-missing-content-displays-artist-needs-to-enter-info-here",
+      "title": "Build the Testimonials & Press page with: (1) Testimonial carousel and/or grid showing client quote, name, and location — 3 sample testimonials pre-populated, all with elegant quote styling; (2) Press mention cards showing publication name, date, excerpt, and external link — 2 sample press mentions pre-populated; (3) All missing content displays 'Artist needs to enter info here'.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-a-password-protected-admin-panel-at-admin-show-a-login-screen-with-a-password-field-accept-hardcoded-password-susanadmin2024-on-successful-login-store-auth-state-in-react-context-localstorage-admin-layout-has-a-sidebar-with-links-to-all-admin-sections-dashboard-gallery-manager-media-library-pages-editor-commissions-manager-blog-manager-settings-include-a-logout-button",
+      "title": "Build a password-protected Admin Panel at /admin. Show a login screen with a password field; accept hardcoded password 'SusanAdmin2024'. On successful login store auth state in React context/localStorage. Admin layout has a sidebar with links to all admin sections: Dashboard, Gallery Manager, Media Library, Pages Editor, Commissions Manager, Blog Manager, Settings. Include a logout button.",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-the-admin-dashboard-section-showing-overview-stats-total-artworks-count-number-of-categories-number-of-unread-commission-inquiries-number-of-featured-works-include-quick-action-buttons-add-artwork-view-inquiries-edit-homepage",
+      "title": "Build the Admin Dashboard section showing overview stats: total artworks count, number of categories, number of unread commission inquiries, number of featured works. Include quick-action buttons: 'Add Artwork', 'View Inquiries', 'Edit Homepage'.",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-the-admin-gallery-manager-section-with-1-list-view-of-all-artworks-with-thumbnail-placeholderimage-title-category-availability-featured-and-visibility-toggles-2-add-new-artwork-form-with-all-fields-title-year-medium-size-location-description-category-dropdown-availability-toggle-featured-toggle-visibility-toggle-image-upload-stores-filename-in-context-3-edit-button-per-artwork-opens-the-same-form-pre-filled-4-delete-button-with-confirmation-5-drag-and-drop-reorder-using-drag-handles-update-order-in-cms-context-6-toggle-featured-and-visibility-inline",
+      "title": "Build the Admin Gallery Manager section with: (1) List view of all artworks with thumbnail (PlaceholderImage), title, category, availability, featured and visibility toggles; (2) Add New Artwork form with all fields: title, year, medium, size, location, description, category (dropdown), availability toggle, featured toggle, visibility toggle, image upload (stores filename in context); (3) Edit button per artwork opens the same form pre-filled; (4) Delete button with confirmation; (5) Drag-and-drop reorder using drag handles (update order in CMS context); (6) Toggle featured and visibility inline.",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-the-admin-media-library-section-with-1-grid-view-of-all-uploaded-images-from-cms-context-2-each-image-tile-shows-filename-dimensions-and-a-tag-list-3-image-tagging-add-remove-tags-per-image-4-folder-category-filter-5-search-by-tag-or-filename-6-re-upload-replace-image-without-breaking-references-7-tooltip-or-badge-showing-which-artworks-pages-use-each-image",
+      "title": "Build the Admin Media Library section with: (1) Grid view of all uploaded images from CMS context; (2) Each image tile shows filename, dimensions, and a tag list; (3) Image tagging — add/remove tags per image; (4) Folder/category filter; (5) Search by tag or filename; (6) Re-upload (replace) image without breaking references; (7) Tooltip or badge showing which artworks/pages use each image.",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-the-admin-pages-editor-section-allowing-editing-of-1-homepage-hero-text-artist-name-tagline-and-hero-image-2-header-navigation-items-add-remove-rename-3-about-page-biography-artist-statement-portrait-image-career-timeline-milestones-press-links-4-commissions-page-pricing-text-process-steps-add-edit-delete-faq-items-add-edit-delete-5-testimonials-add-edit-delete-6-press-mentions-add-edit-delete-all-edits-update-the-cms-context-and-reflect-immediately-on-public-pages",
+      "title": "Build the Admin Pages Editor section allowing editing of: (1) Homepage hero text (artist name, tagline) and hero image; (2) Header navigation items (add/remove/rename); (3) About page: biography, artist statement, portrait image, career timeline milestones, press links; (4) Commissions page: pricing text, process steps (add/edit/delete), FAQ items (add/edit/delete); (5) Testimonials (add/edit/delete); (6) Press mentions (add/edit/delete). All edits update the CMS context and reflect immediately on public pages.",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-the-admin-commissions-manager-section-showing-all-commission-inquiry-form-submissions-stored-in-cms-context-display-each-inquiry-with-submitter-name-email-project-type-date-submitted-and-read-responded-status-allow-marking-inquiries-as-read-or-responded-add-filter-tabs-all-unread-responded",
+      "title": "Build the Admin Commissions Manager section showing all commission inquiry form submissions stored in CMS context. Display each inquiry with: submitter name, email, project type, date submitted, and read/responded status. Allow marking inquiries as read or responded. Add filter tabs: All, Unread, Responded.",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-the-admin-blog-manager-section-with-1-list-of-blog-posts-from-cms-context-2-add-edit-post-form-with-title-slug-content-textarea-publish-date-status-draft-published-3-delete-post-with-confirmation-4-toggle-publish-draft-status-inline-pre-populate-with-1-sample-draft-post",
+      "title": "Build the Admin Blog Manager section with: (1) List of blog posts from CMS context; (2) Add/Edit post form with: title, slug, content (textarea), publish date, status (draft/published); (3) Delete post with confirmation; (4) Toggle publish/draft status inline. Pre-populate with 1 sample draft post.",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-the-admin-settings-section-with-editable-fields-for-site-title-site-tagline-seo-meta-title-and-meta-description-per-page-home-gallery-commissions-about-contact-testimonials-google-analytics-id-text-field-no-actual-integration-social-media-urls-instagram-facebook-pinterest-and-a-newsletter-integration-placeholder-field-all-values-stored-in-cms-context-and-applied-to-public-pages",
+      "title": "Build the Admin Settings section with editable fields for: site title, site tagline, SEO meta title and meta description per page (Home, Gallery, Commissions, About, Contact, Testimonials), Google Analytics ID (text field, no actual integration), social media URLs (Instagram, Facebook, Pinterest), and a newsletter integration placeholder field. All values stored in CMS context and applied to public pages.",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-lazy-loading-for-all-placeholderimage-components-and-artwork-card-images-using-intersectionobserver-images-should-not-render-until-they-enter-the-viewport-add-a-subtle-fade-in-animation-when-they-load",
+      "title": "Implement lazy loading for all PlaceholderImage components and artwork card images using IntersectionObserver. Images should not render until they enter the viewport. Add a subtle fade-in animation when they load.",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-full-mobile-first-responsive-design-across-all-public-pages-and-the-admin-panel-the-gallery-grid-collapses-to-1-column-on-mobile-2-on-tablet-3-on-desktop-the-admin-sidebar-collapses-to-a-top-hamburger-menu-on-mobile-all-forms-stack-vertically-on-small-screens-typography-scales-appropriately-with-fluid-type-sizes",
+      "title": "Ensure full mobile-first responsive design across all public pages and the admin panel. The gallery grid collapses to 1 column on mobile, 2 on tablet, 3+ on desktop. The admin sidebar collapses to a top hamburger menu on mobile. All forms stack vertically on small screens. Typography scales appropriately with fluid type sizes.",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-change-the-hardcoded-admin-password-in-authcontext-from-susanadmin2024-to-admin123-update-the-adminlogin-page-so-the-new-password-grants-access-no-other-authentication-logic-should-change",
+      "title": "Change the hardcoded admin password in AuthContext from 'SusanAdmin2024' to 'admin123'. Update the AdminLogin page so the new password grants access. No other authentication logic should change.",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-website-visitor-page-view-counter-that-increments-each-time-any-page-is-loaded-or-navigated-to-within-the-app-store-the-running-total-in-the-motoko-backend-actor-using-a-stable-variable-expose-a-query-to-read-the-count-and-an-update-to-increment-it-on-the-frontend-call-the-increment-endpoint-on-each-route-change-using-the-router-s-navigation-events-and-display-the-total-page-view-count-in-a-visible-location-on-the-site-for-example-a-small-counter-badge-in-the-site-footer-labeled-total-visits",
+      "title": "Add a website visitor (page view) counter that increments each time any page is loaded or navigated to within the app. Store the running total in the Motoko backend actor using a stable variable. Expose a query to read the count and an update to increment it. On the frontend, call the increment endpoint on each route change (using the router's navigation events) and display the total page view count in a visible location on the site — for example, a small counter badge in the site footer labeled 'Total Visits'.",
+      "reqIds": [
+        "REQ-22"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-unique-visitor-counter-that-tracks-the-number-of-distinct-visitors-to-the-site-use-a-fingerprint-based-on-a-randomly-generated-uuid-stored-in-localstorage-as-the-visitor-identifier-on-first-visit-no-uuid-in-localstorage-generate-a-uuid-store-it-in-localstorage-call-a-backend-update-that-registers-the-new-unique-visitor-id-in-a-stable-data-structure-e-g-a-hashmap-of-seen-ids-and-increment-the-unique-visitor-count-on-subsequent-visits-the-uuid-already-exists-so-no-increment-occurs-expose-a-query-to-read-the-unique-visitor-count-display-the-total-unique-visitor-count-in-the-same-footer-area-as-the-page-view-counter-labeled-unique-visitors-n",
+      "title": "Add a unique visitor counter that tracks the number of distinct visitors to the site. Use a fingerprint based on a randomly generated UUID stored in localStorage as the visitor identifier. On first visit (no UUID in localStorage), generate a UUID, store it in localStorage, call a backend update that registers the new unique visitor ID in a stable data structure (e.g., a HashMap of seen IDs), and increment the unique visitor count. On subsequent visits the UUID already exists so no increment occurs. Expose a query to read the unique visitor count. Display the total unique visitor count in the same footer area as the page view counter, labeled 'Unique Visitors: N'.",
+      "reqIds": [
+        "REQ-23"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-clearly-visible-admin-sign-in-link-or-button-on-the-public-facing-site-that-navigates-to-admin-place-it-in-the-site-footer-near-the-copyright-line-or-below-the-visitor-counters-so-susan-can-easily-find-it-to-manage-the-website-style-it-subtly-to-fit-the-warm-beige-charcoal-design-system-e-g-small-muted-text-link-or-minimal-outlined-button-so-it-does-not-distract-from-the-public-gallery-experience",
+      "title": "Add a clearly visible 'Admin Sign In' link or button on the public-facing site that navigates to /admin. Place it in the site footer, near the copyright line or below the visitor counters, so Susan can easily find it to manage the website. Style it subtly to fit the warm beige/charcoal design system (e.g., small muted text link or minimal outlined button) so it does not distract from the public gallery experience.",
+      "reqIds": [
+        "REQ-24"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-placeholderimage-component-frontend-src-components-placeholderimage-tsx-to-remove-the-replace-badge-text-overlay-and-remove-all-diagonal-hatching-or-line-patterns-from-the-placeholder-background-the-placeholder-should-render-as-a-clean-solid-warm-beige-f5f0e8-rectangle-with-no-text-no-badge-no-diagonal-lines-and-no-other-visual-noise-just-a-smooth-minimal-fill-that-reserves-space-without-distracting-from-the-page-layout",
+      "title": "Update the PlaceholderImage component (frontend/src/components/PlaceholderImage.tsx) to remove the 'Replace' badge/text overlay and remove all diagonal hatching or line patterns from the placeholder background. The placeholder should render as a clean, solid warm-beige (#F5F0E8) rectangle with no text, no badge, no diagonal lines, and no other visual noise — just a smooth, minimal fill that reserves space without distracting from the page layout.",
+      "reqIds": [
+        "REQ-25"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-lightbox-component-frontend-src-components-lightbox-tsx-so-that-when-an-artwork-is-opened-in-full-screen-view-it-renders-the-placeholderimage-component-or-equivalent-image-display-without-any-replace-text-overlay-badge-or-diagonal-hatching-lines-the-enlarged-image-view-must-display-a-clean-solid-warm-beige-f5f0e8-fill-identical-to-the-already-fixed-placeholderimage-behavior-with-no-text-no-overlays-and-no-pattern-artifacts-ensure-the-lightbox-image-slot-uses-the-same-clean-rendering-path-as-the-updated-placeholderimage-component",
+      "title": "Update the Lightbox component (frontend/src/components/Lightbox.tsx) so that when an artwork is opened in full-screen view, it renders the PlaceholderImage component (or equivalent image display) without any 'Replace' text overlay, badge, or diagonal/hatching lines. The enlarged image view must display a clean, solid warm-beige (#F5F0E8) fill — identical to the already-fixed PlaceholderImage behavior — with no text, no overlays, and no pattern artifacts. Ensure the lightbox image slot uses the same clean rendering path as the updated PlaceholderImage component.",
+      "reqIds": [
+        "REQ-26"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-extend-the-cmscontext-to-include-a-notifications-data-structure-each-notification-entry-must-store-a-unique-id-source-type-contact-commission-submitter-name-submitter-email-message-preview-first-120-characters-of-message-description-full-form-payload-timestamp-iso-date-string-and-status-unread-read-responded-add-crud-actions-to-cmscontext-addnotification-called-on-form-submit-marknotificationread-marknotificationresponded-and-deletenotification",
+      "title": "Extend the CMSContext to include a 'notifications' data structure. Each notification entry must store: a unique ID, source type ('contact' | 'commission'), submitter name, submitter email, message preview (first 120 characters of message/description), full form payload, timestamp (ISO date string), and status ('unread' | 'read' | 'responded'). Add CRUD actions to CMSContext: addNotification (called on form submit), markNotificationRead, markNotificationResponded, and deleteNotification.",
+      "reqIds": [
+        "REQ-27"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-contactform-frontend-src-components-contactform-tsx-so-that-on-successful-submission-it-calls-addnotification-from-cmscontext-with-source-type-contact-the-submitter-s-name-and-email-the-message-as-the-preview-the-full-form-payload-and-the-current-timestamp-with-status-unread-the-existing-inline-confirmation-message-and-cms-inquiry-storage-behavior-must-remain-unchanged",
+      "title": "Update ContactForm (frontend/src/components/ContactForm.tsx) so that on successful submission it calls addNotification from CMSContext with source type 'contact', the submitter's name and email, the message as the preview, the full form payload, and the current timestamp with status 'unread'. The existing inline confirmation message and CMS inquiry storage behavior must remain unchanged.",
+      "reqIds": [
+        "REQ-28"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-commissioninquiryform-frontend-src-components-commissioninquiryform-tsx-so-that-on-successful-submission-it-calls-addnotification-from-cmscontext-with-source-type-commission-the-submitter-s-name-and-email-the-project-description-as-the-preview-the-full-form-payload-and-the-current-timestamp-with-status-unread-the-existing-inline-confirmation-message-and-cms-inquiry-storage-behavior-must-remain-unchanged",
+      "title": "Update CommissionInquiryForm (frontend/src/components/CommissionInquiryForm.tsx) so that on successful submission it calls addNotification from CMSContext with source type 'commission', the submitter's name and email, the project description as the preview, the full form payload, and the current timestamp with status 'unread'. The existing inline confirmation message and CMS inquiry storage behavior must remain unchanged.",
+      "reqIds": [
+        "REQ-29"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-an-unread-message-badge-to-the-admin-sidebar-navigation-in-adminlayout-frontend-src-components-admin-adminlayout-tsx-the-badge-must-appear-next-to-a-new-messages-nav-link-item-it-should-show-the-count-of-notifications-with-status-unread-from-cmscontext-the-badge-must-be-visually-prominent-e-g-a-small-red-gold-circular-count-badge-when-the-unread-count-is-zero-hide-the-badge-the-messages-link-must-navigate-to-admin-messages",
+      "title": "Add an unread message badge to the admin sidebar navigation in AdminLayout (frontend/src/components/admin/AdminLayout.tsx). The badge must appear next to a new 'Messages' nav link item. It should show the count of notifications with status 'unread' from CMSContext. The badge must be visually prominent (e.g., a small red/gold circular count badge). When the unread count is zero, hide the badge. The 'Messages' link must navigate to /admin/messages.",
+      "reqIds": [
+        "REQ-30"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-the-route-admin-messages-to-the-react-router-configuration-in-app-tsx-rendered-inside-the-admin-layout-protected-by-auth-this-route-should-render-a-new-messagesinbox-page-component",
+      "title": "Add the route /admin/messages to the React Router configuration in App.tsx, rendered inside the admin layout (protected by auth). This route should render a new MessagesInbox page component.",
+      "reqIds": [
+        "REQ-31"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-a-new-messagesinbox-page-at-frontend-src-pages-admin-messagesinbox-tsx-it-must-1-display-all-notifications-from-cmscontext-sorted-by-timestamp-descending-newest-first-2-include-filter-tabs-all-unread-responded-3-each-message-row-card-shows-source-badge-contact-or-commission-submitter-name-submitter-email-message-preview-formatted-timestamp-e-g-jan-5-2025-at-2-34-pm-and-current-status-badge-unread-read-responded-4-clicking-a-row-expands-it-to-show-the-full-message-payload-5-each-row-has-action-buttons-mark-as-read-if-unread-mark-as-responded-and-delete-with-confirmation-6-unread-rows-are-visually-differentiated-e-g-bold-text-left-accent-border-or-subtle-background-tint-7-empty-state-shows-no-messages-yet-when-the-notifications-list-is-empty",
+      "title": "Create a new MessagesInbox page at frontend/src/pages/admin/MessagesInbox.tsx. It must: (1) Display all notifications from CMSContext sorted by timestamp descending (newest first). (2) Include filter tabs: All, Unread, Responded. (3) Each message row/card shows: source badge ('Contact' or 'Commission'), submitter name, submitter email, message preview, formatted timestamp (e.g., 'Jan 5, 2025 at 2:34 PM'), and current status badge ('Unread', 'Read', 'Responded'). (4) Clicking a row expands it to show the full message payload. (5) Each row has action buttons: 'Mark as Read' (if unread), 'Mark as Responded', and 'Delete' (with confirmation). (6) Unread rows are visually differentiated (e.g., bold text, left accent border, or subtle background tint). (7) Empty state shows 'No messages yet' when the notifications list is empty.",
+      "reqIds": [
+        "REQ-32"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-admin-dashboard-page-frontend-src-pages-admin-dashboard-tsx-to-include-an-unread-messages-stat-card-in-the-overview-stats-section-showing-the-count-of-notifications-with-status-unread-from-cmscontext-also-add-a-view-messages-quick-action-button-that-links-to-admin-messages-placed-alongside-the-existing-quick-action-buttons",
+      "title": "Update the Admin Dashboard page (frontend/src/pages/admin/Dashboard.tsx) to include an 'Unread Messages' stat card in the overview stats section, showing the count of notifications with status 'unread' from CMSContext. Also add a 'View Messages' quick-action button that links to /admin/messages, placed alongside the existing quick-action buttons.",
+      "reqIds": [
+        "REQ-33"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-extend-the-artwork-data-type-in-cmscontext-frontend-src-contexts-cmscontext-tsx-to-support-an-optional-array-of-additional-photo-filenames-per-artwork-e-g-additionalimages-string-the-existing-primary-image-field-remains-the-first-default-image-update-the-8-sample-artwork-entries-to-include-2-3-placeholder-additional-image-entries-each-using-empty-string-or-repeated-filename-values-acceptable-for-placeholder-data-so-the-cycling-ui-has-content-to-demonstrate",
+      "title": "Extend the Artwork data type in CMSContext (frontend/src/contexts/CMSContext.tsx) to support an optional array of additional photo filenames per artwork (e.g., `additionalImages?: string[]`). The existing primary `image` field remains the first/default image. Update the 8 sample artwork entries to include 2–3 placeholder additional image entries each (using empty-string or repeated filename values acceptable for placeholder data) so the cycling UI has content to demonstrate.",
+      "reqIds": [
+        "REQ-34"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-artworkform-component-frontend-src-components-admin-artworkform-tsx-to-include-a-multi-image-upload-management-section-for-additionalimages-admins-must-be-able-to-add-additional-image-filenames-via-file-input-storing-filename-in-context-and-remove-existing-ones-from-the-list-the-primary-image-field-remains-separate-and-unchanged",
+      "title": "Update the ArtworkForm component (frontend/src/components/admin/ArtworkForm.tsx) to include a multi-image upload/management section for `additionalImages`. Admins must be able to add additional image filenames (via file input, storing filename in context) and remove existing ones from the list. The primary image field remains separate and unchanged.",
+      "reqIds": [
+        "REQ-35"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-lightbox-component-frontend-src-components-lightbox-tsx-to-support-cycling-through-multiple-photos-of-the-currently-viewed-artwork-when-an-artwork-has-additionalimages-entries-the-lightbox-must-display-a-photo-strip-or-dot-indicator-showing-all-available-photos-primary-image-additionalimages-the-user-must-be-able-to-navigate-between-photos-of-the-same-artwork-using-left-right-arrow-buttons-or-swiping-separate-from-the-existing-artwork-to-artwork-navigation-the-currently-active-photo-index-must-be-highlighted-in-the-strip-dots-the-existing-artwork-navigation-previous-next-artwork-must-remain-functional-and-accessible-when-switching-to-a-different-artwork-the-photo-index-resets-to-the-first-primary-image",
+      "title": "Update the Lightbox component (frontend/src/components/Lightbox.tsx) to support cycling through multiple photos of the currently viewed artwork. When an artwork has `additionalImages` entries, the lightbox must display a photo strip or dot indicator showing all available photos (primary image + additionalImages). The user must be able to navigate between photos of the same artwork using left/right arrow buttons (or swiping) — separate from the existing artwork-to-artwork navigation. The currently active photo index must be highlighted in the strip/dots. The existing artwork navigation (previous/next artwork) must remain functional and accessible. When switching to a different artwork, the photo index resets to the first (primary) image.",
+      "reqIds": [
+        "REQ-36"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-artworkcard-component-frontend-src-components-artworkcard-tsx-to-display-a-subtle-multi-photo-indicator-badge-e-g-a-small-camera-icon-or-1-n-label-on-cards-whose-artwork-has-one-or-more-additionalimages-entries-this-signals-to-the-visitor-that-more-photos-are-available-when-the-lightbox-is-opened-the-badge-must-be-unobtrusive-and-fit-the-warm-beige-charcoal-design-system",
+      "title": "Update the ArtworkCard component (frontend/src/components/ArtworkCard.tsx) to display a subtle multi-photo indicator badge (e.g., a small camera icon or '1 / N' label) on cards whose artwork has one or more `additionalImages` entries. This signals to the visitor that more photos are available when the lightbox is opened. The badge must be unobtrusive and fit the warm beige/charcoal design system.",
+      "reqIds": [
+        "REQ-37"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-adminlayout-component-frontend-src-components-admin-adminlayout-tsx-so-that-all-sidebar-navigation-link-labels-are-visible-at-all-times-without-requiring-a-mouse-hover-the-text-color-must-provide-sufficient-contrast-against-the-sidebar-background-use-a-clearly-legible-color-from-the-design-system-e-g-charcoal-2c2c2c-or-warm-beige-f5f0e8-depending-on-sidebar-background-color-as-the-default-resting-state-hover-and-active-states-may-still-apply-a-distinct-highlight-or-accent-color-but-the-default-non-hovered-text-must-already-be-fully-readable",
+      "title": "Update the AdminLayout component (frontend/src/components/admin/AdminLayout.tsx) so that all sidebar navigation link labels are visible at all times without requiring a mouse hover. The text color must provide sufficient contrast against the sidebar background — use a clearly legible color from the design system (e.g., charcoal #2C2C2C or warm beige #F5F0E8 depending on sidebar background color) as the default resting state. Hover and active states may still apply a distinct highlight or accent color, but the default (non-hovered) text must already be fully readable.",
+      "reqIds": [
+        "REQ-38"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-installation-locations-section-on-the-home-page-frontend-src-pages-home-tsx-to-remove-all-diagonal-lines-hatching-patterns-and-any-replace-or-placeholder-text-from-the-map-placeholder-element-replace-the-static-styled-placeholder-with-an-embedded-google-maps-iframe-or-a-prominent-linked-button-banner-that-opens-google-maps-in-a-new-tab-the-map-display-should-show-a-clean-styled-container-with-no-visual-noise-if-using-an-iframe-embed-use-a-generic-google-maps-embed-url-e-g-https-www-google-com-maps-embed-as-the-src-the-section-heading-installation-locations-and-any-labeled-pin-data-from-cms-artwork-locations-may-still-be-displayed-as-a-list-or-overlay-alongside-or-below-the-map-element",
+      "title": "Update the Installation Locations section on the Home page (frontend/src/pages/Home.tsx) to remove all diagonal lines, hatching patterns, and any 'Replace' or placeholder text from the map placeholder element. Replace the static styled placeholder with an embedded Google Maps iframe or a prominent linked button/banner that opens Google Maps in a new tab. The map display should show a clean, styled container with no visual noise. If using an iframe embed, use a generic Google Maps embed URL (e.g., https://www.google.com/maps/embed) as the src. The section heading 'Installation Locations' and any labeled pin data from CMS artwork locations may still be displayed as a list or overlay alongside or below the map element.",
+      "reqIds": [
+        "REQ-39"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-open-graph-and-twitter-card-meta-tags-to-each-public-page-to-enable-rich-social-media-previews-when-pages-are-shared-in-the-usepagemeta-hook-frontend-src-hooks-usepagemeta-ts-or-directly-in-each-page-component-inject-the-following-meta-tags-dynamically-og-title-og-description-og-type-website-og-url-current-page-url-og-image-a-static-fallback-image-path-e-g-assets-generated-og-default-png-if-available-otherwise-omit-twitter-card-summary-large-image-twitter-title-twitter-description-use-the-cms-seo-settings-title-and-description-per-page-as-the-values-for-og-title-and-og-description-these-tags-must-update-when-the-route-changes",
+      "title": "Add Open Graph and Twitter Card meta tags to each public page to enable rich social media previews when pages are shared. In the usePageMeta hook (frontend/src/hooks/usePageMeta.ts) or directly in each page component, inject the following meta tags dynamically: og:title, og:description, og:type (website), og:url (current page URL), og:image (a static fallback image path, e.g., /assets/generated/og-default.png if available, otherwise omit), twitter:card (summary_large_image), twitter:title, twitter:description. Use the CMS SEO settings (title and description per page) as the values for og:title and og:description. These tags must update when the route changes.",
+      "reqIds": [
+        "REQ-44"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-revert-the-entire-project-to-version-9-all-files-frontend-and-backend-must-be-restored-to-their-exact-state-at-version-9-any-changes-introduced-after-version-9-including-instagram-social-feed-cleanup-social-media-manager-dynamic-socialplatforms-cms-extension-social-share-buttons-in-lightbox-and-any-other-modifications-made-in-versions-10-through-the-current-version-must-be-fully-undone-the-resulting-codebase-must-be-identical-to-version-9",
+      "title": "Revert the entire project to Version 9. All files — frontend and backend — must be restored to their exact state at Version 9. Any changes introduced after Version 9 (including Instagram/social feed cleanup, social media manager, dynamic socialPlatforms CMS extension, social share buttons in Lightbox, and any other modifications made in versions 10 through the current version) must be fully undone. The resulting codebase must be identical to Version 9.",
+      "reqIds": [
+        "REQ-45"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Home page: hero, featured artworks, artist intro, newsletter signup, testimonial carousel, map, social feed placeholder",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Gallery page: category filter tabs, masonry grid, lazy loading, lightbox with zoom/navigation, sold/available badges",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Commissions page: process steps, pricing section, portfolio grid, before/after slider, inquiry form, FAQ accordion",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "About page: portrait, bio, artist statement, career timeline, press/media section, social links, press kit download button",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Contact page: contact form, Ocean View HI location, social links, auto-response note, map placeholder",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Testimonials/Press page: testimonial carousel/grid, press mention cards, placeholder content",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Admin panel at /admin with password protection (SusanAdmin2024): dashboard, gallery manager, media library, pages editor, commissions manager, blog manager, settings",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "Special components: Lightbox, Before/After Slider, Testimonial Carousel, Installation Map with pins, Inquiry Auto-Response, Press Kit Download placeholder",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Pre-populate 8 sample artworks, 3 testimonials, 2 press mentions, 3 FAQ items, 4 commission process steps with placeholder images and artist info",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "Change admin password from 'SusanAdmin2024' to 'admin123'",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-11",
+      "summary": "Add website visitor/view counter displayed on the site (e.g., total page views)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-12",
+      "summary": "Add unique visitor/identity counter tracking unique visitors to the site",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-13",
+      "summary": "Add a visible admin sign-in link/button on the public site (e.g., in the footer or a dedicated location) so Susan can easily navigate to /admin to manage the website",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-14",
+      "summary": "Remove 'Replace' text overlay and diagonal lines from placeholder images; make placeholder images clean and visually presentable",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-15",
+      "summary": "In-app notification system: store Contact and Commission Inquiry form submissions as notifications, show unread badge in admin panel, dedicated Messages inbox with timestamps, mark as read/responded",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-16",
+      "summary": "Lightbox multi-photo gallery: each artwork can have multiple photos; when viewing an artwork in the lightbox, user can cycle through all photos of that piece",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-17",
+      "summary": "Fix admin sidebar navigation text color so category/topic labels are visible without hovering (text blends into background currently)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-18",
+      "summary": "Home page installation map: remove diagonal lines and 'Replace' text; replace placeholder with an embedded Google Maps link/iframe showing artwork installation locations",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-19",
+      "summary": "Home page Instagram/social feed area: remove diagonal lines and 'Replace' text, replace with clean placeholder or live feed embed",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-20",
+      "summary": "Admin social media manager: add/remove social media platform links (Instagram, Facebook, Pinterest, TikTok, etc.) with fields for platform name and URL, reflected across header/footer/about page",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-21",
+      "summary": "Additional social media features for artist: social share buttons on artwork/gallery pages, Instagram feed embed or link-out grid, social media preview meta tags (Open Graph/Twitter Card) for shareable pages",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-22",
+      "summary": "Update the Instagram/social feed section on the Home page (frontend/src/pages/Home.tsx) to remove all diagonal lines, hatching patterns, and any 'Replace' text from the social feed placeholder area. Replace the 6 styled placeholder divs with a clean, visually appealing social feed section that displays a grid of 6 minimal warm-beige (#F5F0E8) tiles — no text, no overlays, no patterns — each containing a centered Instagram icon and an optional 'Follow on Instagram' call-to-action link that opens the artist's Instagram URL (from CMS site settings) in a new tab. If no Instagram URL is set in CMS, show a subtle 'Connect your Instagram in Admin Settings' note only visible to logged-in admins or fall back to a clean empty tile.",
+      "reqIds": [
+        "REQ-40"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-23",
+      "summary": "Extend the CMSContext (frontend/src/contexts/CMSContext.tsx) to support a dynamic list of social media platform entries. Each entry must store: a unique ID, platform name (e.g., 'Instagram', 'Facebook', 'Pinterest', 'TikTok', 'YouTube', 'Twitter/X'), a URL string, and a display order number. Replace the existing hardcoded Instagram/Facebook/Pinterest URL fields in site settings with this dynamic socialPlatforms array. Provide CRUD actions: addSocialPlatform, updateSocialPlatform, removeSocialPlatform, and reorderSocialPlatforms. Pre-populate with the existing Instagram, Facebook, and Pinterest entries (URLs defaulting to empty string). All existing components that read social URLs (Footer, About page, Contact page) must be updated to consume the new socialPlatforms array instead of the old hardcoded fields.",
+      "reqIds": [
+        "REQ-41"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-24",
+      "summary": "Build a new 'Social Media Manager' section in the Admin Settings page (frontend/src/pages/admin/Settings.tsx) or as a dedicated tab/section within the Pages Editor. This section must allow the artist to: (1) View the current list of social media platform entries from CMSContext; (2) Add a new platform by selecting from a predefined list of platforms (Instagram, Facebook, Pinterest, TikTok, YouTube, Twitter/X) or entering a custom platform name, plus entering the full URL; (3) Edit the URL or name of any existing platform entry; (4) Remove any platform entry with a confirmation prompt; (5) Reorder platforms via up/down buttons or drag handles (order affects display in footer/about/contact). All changes must update CMSContext immediately and reflect on public pages.",
+      "reqIds": [
+        "REQ-42"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-25",
+      "summary": "Add social share buttons to each artwork's Lightbox detail panel (frontend/src/components/Lightbox.tsx). When an artwork is open in the lightbox, display compact share buttons for Instagram (copy image/link), Facebook (share page URL), and Pinterest (share page URL with artwork title). Clicking a share button should open the respective platform's share dialog in a new tab using standard web share URLs (e.g., https://www.facebook.com/sharer/sharer.php?u=<encoded-url>, https://pinterest.com/pin/create/button/?url=<encoded-url>&description=<title>). The current page URL plus the artwork title should be used as the share payload. Style the buttons subtly to fit the warm beige/charcoal design system.",
+      "reqIds": [
+        "REQ-43"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "Susan Richten Art Portfolio",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}
