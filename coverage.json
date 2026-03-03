@@ -1,24 +1,213 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-03-03T03:04:54.238Z",
+  "generatedAt": "2026-03-03T03:25:22.277Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 1,
-    "implemented": 1,
+    "total": 14,
+    "implemented": 13,
     "items": [
       {
-        "id": "REQ-56",
-        "summary": "Update the Footer component (frontend/src/components/Footer.tsx) so that the bottom section of the footer — where the 'Admin Sign In' link, visitor counters, and copyright text are displayed — has a background color that provides sufficient contrast for all text to be clearly readable. If the current footer background is dark (e.g., charcoal #2C2C2C), ensure all text and links in that area use a light color (e.g., warm beige #F5F0E8 or white #FFFFFF). If the footer background is light, use charcoal #2C2C2C for text. The 'Admin Sign In' link in particular must be fully visible without hovering, scrolling, or any user interaction. Apply consistent contrast-compliant color tokens from the existing design system to all text elements in the footer bottom bar.",
+        "id": "REQ-57",
+        "summary": "Add skeleton loading screens to all public pages (Home, Gallery, Commissions, About, Contact, Testimonials) and the admin panel. While CMS data is loading (isLoading: true from CMSContext), render shimmer/skeleton placeholder elements in place of artwork cards, testimonial cards, press mention cards, and form sections. Use animated pulse or shimmer CSS animation consistent with the warm beige/charcoal design system.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/Footer.tsx"
+          "frontend/src/components/SkeletonCard.tsx",
+          "frontend/src/components/SkeletonForm.tsx",
+          "frontend/src/pages/Home.tsx",
+          "frontend/src/pages/Gallery.tsx",
+          "frontend/src/pages/Commissions.tsx",
+          "frontend/src/pages/About.tsx",
+          "frontend/src/pages/Contact.tsx",
+          "frontend/src/pages/Testimonials.tsx",
+          "frontend/src/pages/admin/Dashboard.tsx",
+          "frontend/src/pages/admin/GalleryManager.tsx",
+          "frontend/src/pages/admin/CommissionsManager.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/components/Footer.tsx"
+          "frontend/src/components/SkeletonCard.tsx",
+          "frontend/src/components/SkeletonForm.tsx",
+          "frontend/src/pages/Home.tsx",
+          "frontend/src/pages/Gallery.tsx",
+          "frontend/src/pages/Commissions.tsx",
+          "frontend/src/pages/About.tsx",
+          "frontend/src/pages/Contact.tsx",
+          "frontend/src/pages/Testimonials.tsx",
+          "frontend/src/pages/admin/Dashboard.tsx",
+          "frontend/src/pages/admin/GalleryManager.tsx",
+          "frontend/src/pages/admin/CommissionsManager.tsx"
+        ]
+      },
+      {
+        "id": "REQ-58",
+        "summary": "Add a 'Back to Top' button that appears on long pages (Gallery, Commissions, About, and Testimonials). The button must become visible after the user scrolls down more than 400px and smoothly scrolls the page back to the top when clicked. Style it using the warm beige/charcoal design system (e.g., a fixed circular button in the bottom-right corner with a charcoal upward arrow on beige background).",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/BackToTopButton.tsx",
+          "frontend/src/pages/Gallery.tsx",
+          "frontend/src/pages/Commissions.tsx",
+          "frontend/src/pages/About.tsx",
+          "frontend/src/pages/Testimonials.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/BackToTopButton.tsx",
+          "frontend/src/pages/Gallery.tsx",
+          "frontend/src/pages/Commissions.tsx",
+          "frontend/src/pages/About.tsx",
+          "frontend/src/pages/Testimonials.tsx"
+        ]
+      },
+      {
+        "id": "REQ-59",
+        "summary": "Update the Header component (frontend/src/components/Header.tsx) so that the active navigation link is visually distinct from inactive links. Apply a bold font weight and/or an underline or bottom border accent in the gold/charcoal design token to the link matching the current route. The active state must update automatically as the user navigates between pages.",
+        "status": "missing",
+        "plannedFiles": [
+          "frontend/src/components/Header.tsx"
+        ],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-60",
+        "summary": "Add breadcrumb navigation to all public pages (Gallery, Commissions, About, Contact, Testimonials). Render a breadcrumb trail below the page header/hero showing 'Home > [Page Name]'. On the Home page, breadcrumbs are not needed. Use the design system's charcoal/beige palette. Each breadcrumb segment should be a link except the current page (which is plain text).",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/Breadcrumbs.tsx",
+          "frontend/src/pages/Gallery.tsx",
+          "frontend/src/pages/Commissions.tsx",
+          "frontend/src/pages/About.tsx",
+          "frontend/src/pages/Contact.tsx",
+          "frontend/src/pages/Testimonials.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/Breadcrumbs.tsx",
+          "frontend/src/pages/Gallery.tsx",
+          "frontend/src/pages/Commissions.tsx",
+          "frontend/src/pages/About.tsx",
+          "frontend/src/pages/Contact.tsx",
+          "frontend/src/pages/Testimonials.tsx"
+        ]
+      },
+      {
+        "id": "REQ-61",
+        "summary": "Add a search bar to the Gallery page (frontend/src/pages/Gallery.tsx) above the filter tabs. The search input filters visible artworks in real time by title, medium, or location (case-insensitive substring match against CMS artwork data). When a search term is active, combine it with the active category filter so both filters apply simultaneously. Clear the search term when the user deletes all input.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/Gallery.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/Gallery.tsx"
+        ]
+      },
+      {
+        "id": "REQ-62",
+        "summary": "Add a 'Request This Style' button to ArtworkCard (frontend/src/components/ArtworkCard.tsx) that appears only on artwork cards where availability is 'Sold'. Clicking the button navigates the user to the /commissions page with a URL query parameter pre-filling the Project Description field with 'I am interested in a commission inspired by [artwork title]'. Style the button subtly (small, outlined) so it complements the card without overwhelming the design.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/ArtworkCard.tsx",
+          "frontend/src/components/CommissionInquiryForm.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/ArtworkCard.tsx",
+          "frontend/src/components/CommissionInquiryForm.tsx"
+        ]
+      },
+      {
+        "id": "REQ-63",
+        "summary": "Update ArtworkCard (frontend/src/components/ArtworkCard.tsx) to display the artwork's size/dimensions more prominently below the title or as a secondary detail line. The size field from the CMS artwork data should be shown in a legible font size (at least 12px) using Lato font in charcoal, visible without hovering.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/ArtworkCard.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/ArtworkCard.tsx"
+        ]
+      },
+      {
+        "id": "REQ-64",
+        "summary": "Update the CommissionInquiryForm (frontend/src/components/CommissionInquiryForm.tsx) and the ContactForm (frontend/src/components/ContactForm.tsx) to display a prominent estimated response time notice — 'We typically respond within 24–48 hours' — directly above the submit button, styled with the gold or charcoal accent color so it is clearly visible before the user submits.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/CommissionInquiryForm.tsx",
+          "frontend/src/components/ContactForm.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/CommissionInquiryForm.tsx",
+          "frontend/src/components/ContactForm.tsx"
+        ]
+      },
+      {
+        "id": "REQ-65",
+        "summary": "Add a multi-step progress indicator to the CommissionInquiryForm (frontend/src/components/CommissionInquiryForm.tsx). Split the form into at least 2 logical steps: Step 1 — Project Details (Name, Email, Phone, Project Type, Size, Location), Step 2 — Budget & Description (Budget Range, Timeline, Project Description, file upload). Display a step progress bar or numbered step indicators at the top of the form showing the current step and total steps. Include 'Next', 'Back', and 'Submit' buttons to navigate between steps.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/CommissionInquiryForm.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/CommissionInquiryForm.tsx"
+        ]
+      },
+      {
+        "id": "REQ-66",
+        "summary": "Update the Featured Artworks section on the Home page (frontend/src/pages/Home.tsx) so that clicking on a featured artwork card opens the Gallery Lightbox directly on that artwork. Pass the clicked artwork's ID to a shared lightbox state or navigate to /gallery with a query parameter (e.g., ?open=<artworkId>) that auto-opens the lightbox on the matching artwork when the Gallery page loads.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/Home.tsx",
+          "frontend/src/pages/Gallery.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/Home.tsx",
+          "frontend/src/pages/Gallery.tsx"
+        ]
+      },
+      {
+        "id": "REQ-67",
+        "summary": "Replace the static hero background on the Home page (frontend/src/pages/Home.tsx) with an animated slideshow that cycles through the featured artwork PlaceholderImage components. Each featured artwork's image (or placeholder) should auto-advance every 4–5 seconds with a smooth crossfade or slide transition. Keep the artist name and tagline overlay on top of the slideshow. Add prev/next arrow controls and dot indicators for manual navigation.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/HeroSlideshow.tsx",
+          "frontend/src/pages/Home.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/HeroSlideshow.tsx",
+          "frontend/src/pages/Home.tsx"
+        ]
+      },
+      {
+        "id": "REQ-68",
+        "summary": "Add bulk action controls to the Admin Gallery Manager page (frontend/src/pages/admin/GalleryManager.tsx). Add a checkbox to each artwork row and a 'Select All' checkbox in the table header. When one or more artworks are selected, show a bulk actions toolbar with the following options: 'Mark as Featured', 'Remove from Featured', 'Mark as Sold', 'Mark as Available', 'Toggle Visibility', and 'Delete Selected' (with a confirmation dialog). Apply the selected action to all checked artworks via CMSContext update functions.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/admin/GalleryManager.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/admin/GalleryManager.tsx"
+        ]
+      },
+      {
+        "id": "REQ-69",
+        "summary": "Add an 'Export as CSV' button to the Admin Commissions Manager page (frontend/src/pages/admin/CommissionsManager.tsx). When clicked, generate a CSV file containing all displayed commission inquiries (respecting the active filter tab) with columns: Name, Email, Phone, Project Type, Size, Location, Budget Range, Timeline, Description, Date Submitted, Status. Trigger a browser download of the generated CSV file named 'commission-inquiries.csv'.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/admin/CommissionsManager.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/admin/CommissionsManager.tsx"
+        ]
+      },
+      {
+        "id": "REQ-70",
+        "summary": "Add a 'Preview' button to the Admin Pages Editor (frontend/src/pages/admin/PagesEditor.tsx) and the Admin Settings page (frontend/src/pages/admin/Settings.tsx). Clicking 'Preview' opens the corresponding public page in a new browser tab so Susan can review how her edits appear before saving. For the Pages Editor, the preview button for each tab (Hero, About, Commissions, etc.) should open the relevant public page URL (/,  /about, /commissions, etc.) in a new tab.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/admin/PagesEditor.tsx",
+          "frontend/src/pages/admin/Settings.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/admin/PagesEditor.tsx",
+          "frontend/src/pages/admin/Settings.tsx"
         ]
       }
     ]
@@ -26,9 +215,26 @@
   "changedFiles": [
     "build-request.json",
     "feature_evidence.json",
-    "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/components/Footer.tsx",
+    "frontend/src/components/ArtworkCard.tsx",
+    "frontend/src/components/BackToTopButton.tsx",
+    "frontend/src/components/Breadcrumbs.tsx",
+    "frontend/src/components/CommissionInquiryForm.tsx",
+    "frontend/src/components/ContactForm.tsx",
+    "frontend/src/components/HeroSlideshow.tsx",
+    "frontend/src/components/SkeletonCard.tsx",
+    "frontend/src/components/SkeletonForm.tsx",
+    "frontend/src/pages/About.tsx",
+    "frontend/src/pages/Commissions.tsx",
+    "frontend/src/pages/Contact.tsx",
+    "frontend/src/pages/Gallery.tsx",
+    "frontend/src/pages/Home.tsx",
+    "frontend/src/pages/Testimonials.tsx",
+    "frontend/src/pages/admin/CommissionsManager.tsx",
+    "frontend/src/pages/admin/Dashboard.tsx",
+    "frontend/src/pages/admin/GalleryManager.tsx",
+    "frontend/src/pages/admin/PagesEditor.tsx",
+    "frontend/src/pages/admin/Settings.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

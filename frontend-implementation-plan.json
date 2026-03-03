@@ -1,24 +1,362 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Fix footer background so Admin Sign In link text is legible",
+  "title": "Apply all suggested UX and admin improvements to Susan Richten's portfolio",
   "requirements": [
     {
-      "id": "REQ-56",
-      "summary": "Update the Footer component background color in the bottom section to ensure all text (Admin Sign In link, visitor counters, copyright) is legible with sufficient contrast using existing design system colors",
+      "id": "REQ-57",
+      "summary": "Add skeleton loading screens to all public pages and admin panel while CMS data is loading",
       "acceptanceCriteria": [
-        "The footer bottom section background color is explicitly set so that all text within it (copyright, visitor counters, Admin Sign In link) is legible without hovering.",
-        "The 'Admin Sign In' link text is fully visible at resting state with sufficient contrast against the footer background.",
-        "Visitor counter labels ('Total Visits', 'Unique Visitors') are readable against the footer background.",
-        "Copyright text is readable against the footer background.",
-        "The chosen colors are sourced from the existing design system palette (warm beige #F5F0E8, charcoal #2C2C2C, or white #FFFFFF).",
-        "The fix is consistent across all viewport sizes (mobile, tablet, desktop)."
+        "A shimmer/skeleton placeholder appears in place of artwork cards while artworks are loading",
+        "Skeleton screens appear on Home, Gallery, Commissions, About, Contact, and Testimonials pages",
+        "Skeleton animation uses pulse or shimmer effect in warm beige tones",
+        "Once loading completes, skeletons are replaced by real content without layout shift"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/Footer.tsx",
+          "path": "frontend/src/components/SkeletonCard.tsx",
+          "operation": "create",
+          "description": "Create a reusable SkeletonCard component that renders animated shimmer placeholders matching the dimensions of ArtworkCard, TestimonialCard, and PressMentionCard. Use Tailwind animate-pulse with warm beige (#F5F0E8) background tones and charcoal accents. Export variants for artwork (image + metadata), testimonial (quote block), and press mention (publication header + excerpt)."
+        },
+        {
+          "path": "frontend/src/components/SkeletonForm.tsx",
+          "operation": "create",
+          "description": "Create a SkeletonForm component that renders shimmer placeholders for form fields (input rectangles, textarea blocks, submit button). Style with warm beige tones and animate-pulse. This will be used in CommissionInquiryForm and ContactForm while CMSContext is loading."
+        },
+        {
+          "path": "frontend/src/pages/Home.tsx",
           "operation": "modify",
-          "description": "Update the bottom section of the Footer component to apply an explicit background color (e.g., bg-charcoal or bg-warm-beige) and ensure all text elements including the Admin Sign In link, visitor counters, and copyright use contrasting text colors from the design system (text-warm-beige, text-charcoal, or text-white). If the background is dark (charcoal), use light text (warm-beige or white). If the background is light (warm-beige), use dark text (charcoal). Apply these classes consistently to the bottom bar container and all nested text/link elements to meet WCAG contrast requirements across all viewport sizes."
+          "description": "Check CMSContext isLoading state. While loading, render SkeletonCard components in place of featured artwork cards. Ensure the skeleton count matches the expected featured artwork count (3-4 cards). Once isLoading is false, render the actual PlaceholderImage artwork cards without layout shift."
+        },
+        {
+          "path": "frontend/src/pages/Gallery.tsx",
+          "operation": "modify",
+          "description": "Check CMSContext isLoading state. While loading, render a grid of SkeletonCard (artwork variant) components matching the gallery grid layout (3 columns on desktop, 1-2 on mobile). Once isLoading is false, render the actual ArtworkCard components. Ensure no layout shift occurs."
+        },
+        {
+          "path": "frontend/src/pages/Commissions.tsx",
+          "operation": "modify",
+          "description": "Check CMSContext isLoading state. While loading, render SkeletonCard components in the sample portfolio grid and SkeletonForm in place of CommissionInquiryForm. Once isLoading is false, render actual components. Ensure process steps and FAQ sections also show skeleton placeholders while loading."
+        },
+        {
+          "path": "frontend/src/pages/About.tsx",
+          "operation": "modify",
+          "description": "Check CMSContext isLoading state. While loading, render SkeletonCard components for press mentions and skeleton placeholders for career timeline items. Once isLoading is false, render actual PressMentionCard and CareerTimeline components."
+        },
+        {
+          "path": "frontend/src/pages/Contact.tsx",
+          "operation": "modify",
+          "description": "Check CMSContext isLoading state. While loading, render SkeletonForm in place of ContactForm. Once isLoading is false, render the actual ContactForm component."
+        },
+        {
+          "path": "frontend/src/pages/Testimonials.tsx",
+          "operation": "modify",
+          "description": "Check CMSContext isLoading state. While loading, render SkeletonCard (testimonial variant) components in the carousel and grid views, and skeleton placeholders for press mentions. Once isLoading is false, render actual testimonial and press mention components."
+        },
+        {
+          "path": "frontend/src/pages/admin/Dashboard.tsx",
+          "operation": "modify",
+          "description": "Check CMSContext isLoading state. While loading the admin dashboard, render shimmer skeleton placeholders for stat cards and the recent inquiries list. Once isLoading is false, render actual dashboard content."
+        },
+        {
+          "path": "frontend/src/pages/admin/GalleryManager.tsx",
+          "operation": "modify",
+          "description": "Check CMSContext isLoading state. While loading, render skeleton placeholders for table rows with shimmer animation. Once isLoading is false, render the actual artwork table with thumbnails and actions."
+        },
+        {
+          "path": "frontend/src/pages/admin/CommissionsManager.tsx",
+          "operation": "modify",
+          "description": "Check CMSContext isLoading state. While loading, render skeleton placeholders for inquiry table rows. Once isLoading is false, render actual InquiryRow components."
+        }
+      ]
+    },
+    {
+      "id": "REQ-58",
+      "summary": "Add a 'Back to Top' button on long pages that appears after scrolling 400px",
+      "acceptanceCriteria": [
+        "A 'Back to Top' button is present on Gallery, Commissions, About, and Testimonials pages",
+        "The button is hidden until the user scrolls more than 400px down",
+        "Clicking the button smoothly scrolls the page to the top",
+        "Button is fixed in the bottom-right corner and styled to match the design system"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/BackToTopButton.tsx",
+          "operation": "create",
+          "description": "Create a BackToTopButton component that tracks scroll position using a scroll event listener. Show the button (fixed bottom-right corner) when window.scrollY > 400. Style as a circular button with charcoal (#2C2C2C) upward arrow icon on warm beige (#F5F0E8) background. On click, use window.scrollTo({ top: 0, behavior: 'smooth' }) to smoothly scroll to top. Add hover and focus states with gold accent."
+        },
+        {
+          "path": "frontend/src/pages/Gallery.tsx",
+          "operation": "modify",
+          "description": "Import and render the BackToTopButton component at the end of the Gallery page component tree (after the main content)."
+        },
+        {
+          "path": "frontend/src/pages/Commissions.tsx",
+          "operation": "modify",
+          "description": "Import and render the BackToTopButton component at the end of the Commissions page component tree."
+        },
+        {
+          "path": "frontend/src/pages/About.tsx",
+          "operation": "modify",
+          "description": "Import and render the BackToTopButton component at the end of the About page component tree."
+        },
+        {
+          "path": "frontend/src/pages/Testimonials.tsx",
+          "operation": "modify",
+          "description": "Import and render the BackToTopButton component at the end of the Testimonials page component tree."
+        }
+      ]
+    },
+    {
+      "id": "REQ-59",
+      "summary": "Update Header to visually distinguish the active navigation link from inactive links",
+      "acceptanceCriteria": [
+        "The nav link for the current page is visually distinct (bold and/or underlined) from other nav links",
+        "The active state updates when the route changes",
+        "Styling is consistent with the warm beige/charcoal/gold design system"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/Header.tsx",
+          "operation": "modify",
+          "description": "Import useLocation from @tanstack/react-router to get the current pathname. For each navigation link in both desktop and mobile menus, compare the link's path to the current pathname. If they match, apply active styling: font-bold (Lato bold), and a bottom border or underline in gold (#D4AF37). Ensure the active state updates automatically when the route changes."
+        }
+      ]
+    },
+    {
+      "id": "REQ-60",
+      "summary": "Add breadcrumb navigation to all public pages except Home",
+      "acceptanceCriteria": [
+        "Breadcrumbs appear on Gallery, Commissions, About, Contact, and Testimonials pages",
+        "Breadcrumb shows 'Home > [Current Page]' with 'Home' as a clickable link",
+        "Current page name is plain text (not a link)",
+        "Breadcrumb styling matches the warm beige/charcoal design system"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/Breadcrumbs.tsx",
+          "operation": "create",
+          "description": "Create a Breadcrumbs component that accepts a 'currentPageName' prop. Render 'Home' as a Link to '/' in charcoal text, followed by a separator (e.g., '>' or '/'), followed by the currentPageName in plain charcoal text (not clickable). Style using Lato font with charcoal (#2C2C2C) text and gold (#D4AF37) hover state on the Home link."
+        },
+        {
+          "path": "frontend/src/pages/Gallery.tsx",
+          "operation": "modify",
+          "description": "Import and render the Breadcrumbs component below the Header and above the main gallery content, passing currentPageName='Gallery'."
+        },
+        {
+          "path": "frontend/src/pages/Commissions.tsx",
+          "operation": "modify",
+          "description": "Import and render the Breadcrumbs component below the hero section, passing currentPageName='Commissions'."
+        },
+        {
+          "path": "frontend/src/pages/About.tsx",
+          "operation": "modify",
+          "description": "Import and render the Breadcrumbs component below the Header and above the main about content, passing currentPageName='About'."
+        },
+        {
+          "path": "frontend/src/pages/Contact.tsx",
+          "operation": "modify",
+          "description": "Import and render the Breadcrumbs component below the Header and above the main contact form, passing currentPageName='Contact'."
+        },
+        {
+          "path": "frontend/src/pages/Testimonials.tsx",
+          "operation": "modify",
+          "description": "Import and render the Breadcrumbs component below the Header and above the testimonials content, passing currentPageName='Testimonials'."
+        }
+      ]
+    },
+    {
+      "id": "REQ-61",
+      "summary": "Add a search bar to the Gallery page that filters artworks by title, medium, or location in real time",
+      "acceptanceCriteria": [
+        "A search input appears above the gallery filter tabs",
+        "Typing in the search bar filters artworks by title, medium, or location in real time",
+        "Search and category filter work together (both constraints apply)",
+        "Clearing the search input restores the full category-filtered view"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/Gallery.tsx",
+          "operation": "modify",
+          "description": "Add a search input field above the category filter tabs. Store the search term in local component state (useState). Filter the displayed artworks by checking if the search term (case-insensitive) appears in artwork.title, artwork.medium, or artwork.location. Combine the search filter with the active category filter so both apply simultaneously. Clear the search term when the input is empty. Style the search input with charcoal text on beige background, gold focus ring, using Lato font."
+        }
+      ]
+    },
+    {
+      "id": "REQ-62",
+      "summary": "Add a 'Request This Style' button to sold artwork cards that navigates to Commissions with pre-filled inquiry",
+      "acceptanceCriteria": [
+        "'Request This Style' button appears only on sold artwork cards",
+        "Clicking the button navigates to /commissions",
+        "The commission inquiry form's Project Description is pre-filled with a reference to the sold artwork title",
+        "Button styling is subtle and fits the warm beige/charcoal design system"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/ArtworkCard.tsx",
+          "operation": "modify",
+          "description": "Check if artwork.available is false (indicating sold). If sold, render a small 'Request This Style' button below the artwork metadata. Style the button as outlined (border: 1px solid charcoal, text: charcoal, background: transparent, hover: beige fill). Import useNavigate from @tanstack/react-router. On click, navigate to /commissions with a search parameter ?artwork=<artwork.title>. Do not render the button if artwork.available is true."
+        },
+        {
+          "path": "frontend/src/components/CommissionInquiryForm.tsx",
+          "operation": "modify",
+          "description": "Import useSearch from @tanstack/react-router to read the 'artwork' query parameter. On mount, if the 'artwork' parameter is present, pre-fill the Project Description field with 'I am interested in a commission inspired by [artwork parameter value]'. Ensure the pre-filled text can still be edited by the user."
+        }
+      ]
+    },
+    {
+      "id": "REQ-63",
+      "summary": "Display artwork size/dimensions more prominently on each artwork card",
+      "acceptanceCriteria": [
+        "Artwork size/dimensions are displayed on each gallery card below the title",
+        "The dimensions text is visible without hovering",
+        "The text uses Lato font and charcoal color from the design system"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/ArtworkCard.tsx",
+          "operation": "modify",
+          "description": "Add a new text line displaying artwork.size below the title and above or alongside the medium/year line. Style the size text using Lato font, charcoal (#2C2C2C) color, and a minimum font size of 12px (e.g., text-sm or text-base). Ensure the text is visible in the card's default state without requiring hover. Adjust card layout spacing if needed to accommodate the new line."
+        }
+      ]
+    },
+    {
+      "id": "REQ-64",
+      "summary": "Display a prominent estimated response time notice above the submit button on inquiry forms",
+      "acceptanceCriteria": [
+        "A '24–48 hours response time' notice is visible above the submit button on both the commission and contact forms",
+        "The notice is styled to stand out (gold or charcoal accent, not grey/muted)",
+        "The notice appears before submission, not only after"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/CommissionInquiryForm.tsx",
+          "operation": "modify",
+          "description": "Add a prominent text notice directly above the submit button: 'We typically respond within 24–48 hours'. Style the notice with Lato font, gold (#D4AF37) or charcoal (#2C2C2C) text color, and a slightly larger font size (text-base or text-lg) to ensure visibility. Optionally add an icon (e.g., clock) for emphasis."
+        },
+        {
+          "path": "frontend/src/components/ContactForm.tsx",
+          "operation": "modify",
+          "description": "Add a prominent text notice directly above the submit button: 'We typically respond within 24–48 hours'. Style the notice with Lato font, gold (#D4AF37) or charcoal (#2C2C2C) text color, and a slightly larger font size (text-base or text-lg) to ensure visibility. Optionally add an icon (e.g., clock) for emphasis."
+        }
+      ]
+    },
+    {
+      "id": "REQ-65",
+      "summary": "Add a multi-step progress indicator to the CommissionInquiryForm",
+      "acceptanceCriteria": [
+        "The commission inquiry form is split into at least 2 steps",
+        "A step progress bar or numbered step indicator is shown at the top",
+        "Step 1 contains contact and project type fields; Step 2 contains budget, description, and file upload",
+        "'Next' advances to step 2 with basic validation; 'Back' returns to step 1; 'Submit' on step 2 submits the form",
+        "Existing submission behavior and CMSContext integration remain unchanged"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/CommissionInquiryForm.tsx",
+          "operation": "modify",
+          "description": "Refactor the form into a multi-step wizard. Add local state to track the current step (1 or 2). Display a step progress indicator at the top showing 'Step 1 of 2' and 'Step 2 of 2' with visual progress (numbered circles or a progress bar in gold/charcoal). Step 1 fields: Name, Email, Phone, Project Type, Size, Location. Step 2 fields: Budget Range, Timeline, Project Description, file upload. Show a 'Next' button on Step 1 that validates required fields before advancing. Show 'Back' and 'Submit' buttons on Step 2. The 'Submit' button triggers the existing CMSContext submission logic. Style buttons using the warm beige/charcoal/gold palette."
+        }
+      ]
+    },
+    {
+      "id": "REQ-66",
+      "summary": "Make featured artworks on the Home page open the Gallery Lightbox directly on that artwork",
+      "acceptanceCriteria": [
+        "Clicking a featured artwork card on the Home page opens the lightbox on that artwork",
+        "The lightbox shows the correct artwork details and images",
+        "Navigation away from the lightbox returns the user to a sensible state (Home or Gallery)"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/Home.tsx",
+          "operation": "modify",
+          "description": "Make each featured artwork card clickable. On click, navigate to /gallery with a query parameter ?open=<artwork.id>. Use useNavigate from @tanstack/react-router. The query parameter will trigger the lightbox to open automatically on the Gallery page."
+        },
+        {
+          "path": "frontend/src/pages/Gallery.tsx",
+          "operation": "modify",
+          "description": "Import useSearch from @tanstack/react-router to read the 'open' query parameter. On mount or when the 'open' parameter changes, if it matches an artwork.id in the filtered artwork list, set the lightbox open state to true and set the selected artwork index to the matching artwork. Ensure the lightbox opens automatically when the parameter is present. When the lightbox closes, clear the 'open' query parameter from the URL."
+        }
+      ]
+    },
+    {
+      "id": "REQ-67",
+      "summary": "Replace the static hero background on Home with an animated slideshow cycling through featured artworks",
+      "acceptanceCriteria": [
+        "The hero section displays an animated slideshow cycling through featured artwork images",
+        "Slides auto-advance every 4–5 seconds with a crossfade or slide transition",
+        "Artist name and tagline overlay remain visible on all slides",
+        "Prev/next arrows and dot indicators allow manual navigation",
+        "Slideshow is responsive and works on mobile"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/HeroSlideshow.tsx",
+          "operation": "create",
+          "description": "Create a HeroSlideshow component that accepts an array of featured artworks. Render a full-screen hero section with a slideshow cycling through the artwork images (using PlaceholderImage components). Auto-advance slides every 4–5 seconds using setInterval. Add crossfade or slide CSS transitions (e.g., opacity transition or transform slide). Overlay the artist name and tagline from CMSContext on top of all slides (centered, using Cormorant Garamond for the name, Lato for the tagline). Add prev/next arrow buttons (fixed left/right) and dot indicators (centered bottom) for manual navigation. Style arrows and dots in charcoal/beige with gold hover state. Ensure responsive layout (adjust font sizes, arrow/dot sizes on mobile)."
+        },
+        {
+          "path": "frontend/src/pages/Home.tsx",
+          "operation": "modify",
+          "description": "Replace the existing static hero section with the HeroSlideshow component. Pass the featured artworks array from CMSContext to the slideshow. Remove or refactor the old hero background image and overlay text to integrate with the new slideshow component."
+        }
+      ]
+    },
+    {
+      "id": "REQ-68",
+      "summary": "Add bulk action controls to the Admin Gallery Manager page",
+      "acceptanceCriteria": [
+        "Each artwork row in the Gallery Manager has a checkbox",
+        "A 'Select All' checkbox in the header selects/deselects all rows",
+        "When at least one row is selected, a bulk actions toolbar appears",
+        "Bulk actions include: Mark as Featured, Remove from Featured, Mark as Sold, Mark as Available, Toggle Visibility, Delete Selected",
+        "Delete Selected shows a confirmation dialog before proceeding",
+        "All bulk actions update CMSContext immediately"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/admin/GalleryManager.tsx",
+          "operation": "modify",
+          "description": "Add a checkbox column to the artwork table. Add local state to track selected artwork IDs (Set or array). Add a 'Select All' checkbox in the table header that toggles selection of all visible artworks. When at least one artwork is selected, render a bulk actions toolbar above or below the table with buttons: 'Mark as Featured', 'Remove from Featured', 'Mark as Sold', 'Mark as Available', 'Toggle Visibility', 'Delete Selected'. For each bulk action button, iterate over the selected artwork IDs and apply the action by updating the artwork in CMSContext (use updateArtwork or deleteArtwork). For 'Delete Selected', show a confirmation dialog (e.g., window.confirm or a modal) before proceeding. After any bulk action completes, clear the selection state. Style the bulk actions toolbar with charcoal background and gold action buttons."
+        }
+      ]
+    },
+    {
+      "id": "REQ-69",
+      "summary": "Add an 'Export as CSV' button to the Admin Commissions Manager page",
+      "acceptanceCriteria": [
+        "An 'Export as CSV' button is visible on the Commissions Manager page",
+        "Clicking the button triggers a download of 'commission-inquiries.csv'",
+        "The CSV includes all inquiry fields as columns",
+        "The exported data respects the active filter tab (All, Unread, or Responded)"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/admin/CommissionsManager.tsx",
+          "operation": "modify",
+          "description": "Add an 'Export as CSV' button above or beside the filter tabs. On click, generate a CSV string from the currently filtered commission inquiries (respecting the active tab filter). CSV columns: Name, Email, Phone, Project Type, Size, Location, Budget Range, Timeline, Description, Date Submitted, Status. Use a CSV generation library (e.g., papaparse) or manually format the CSV string. Create a Blob with type 'text/csv', generate a download URL using URL.createObjectURL, and trigger a download by creating a temporary <a> element with download='commission-inquiries.csv' and clicking it programmatically. Style the button with charcoal background and gold text/hover state."
+        }
+      ]
+    },
+    {
+      "id": "REQ-70",
+      "summary": "Add a 'Preview' button to the Admin Pages Editor and Settings page",
+      "acceptanceCriteria": [
+        "A 'Preview' button is present on the Pages Editor and Settings admin pages",
+        "Clicking 'Preview' opens the relevant public-facing page in a new browser tab",
+        "Each tab in the Pages Editor has its own preview button pointing to the corresponding public URL"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/admin/PagesEditor.tsx",
+          "operation": "modify",
+          "description": "For each tab in the Pages Editor (Hero, Navigation, About, Commissions, Testimonials, Press), add a 'Preview' button next to or below the tab's save button. Map each tab to its corresponding public URL: Hero -> '/', Navigation -> '/' (or any page), About -> '/about', Commissions -> '/commissions', Testimonials -> '/testimonials', Press -> '/testimonials'. On click, use window.open(url, '_blank') to open the public page in a new browser tab. Style the button with charcoal background and gold text."
+        },
+        {
+          "path": "frontend/src/pages/admin/Settings.tsx",
+          "operation": "modify",
+          "description": "Add a 'Preview' button in the Settings page header or near the SEO settings section. On click, use window.open('/', '_blank') to open the Home page in a new browser tab so Susan can preview how site-wide settings (title, tagline, social links) appear. Style the button with charcoal background and gold text."
         }
       ]
     }

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Clock } from 'lucide-react';
 import { useCMS } from '../contexts/CMSContext';
 
 export default function ContactForm() {
@@ -34,50 +35,61 @@ export default function ContactForm() {
   if (submitted) {
     return (
       <div className="text-center py-8">
-        <p className="text-foreground font-medium text-lg">Message sent!</p>
-        <p className="text-sm text-muted-foreground mt-2">Thank you for reaching out. I'll be in touch soon.</p>
+        <p className="text-charcoal font-medium text-lg">Message sent!</p>
+        <p className="text-sm text-charcoal-muted mt-2">Thank you for reaching out. I'll be in touch soon.</p>
       </div>
     );
   }
 
+  const inputClass = 'w-full px-4 py-2.5 border border-beige-dark bg-white text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-gold/40 transition-colors';
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-foreground mb-1">Name</label>
+        <label className="block text-xs font-body tracking-widest uppercase text-charcoal-muted mb-1">Name</label>
         <input
           type="text"
           value={form.name}
           onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
-          className="w-full px-4 py-2.5 border border-border rounded-sm bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+          className={inputClass}
           placeholder="Your name"
         />
-        {errors.name && <p className="text-xs text-destructive mt-1">{errors.name}</p>}
+        {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
       </div>
       <div>
-        <label className="block text-sm font-medium text-foreground mb-1">Email</label>
+        <label className="block text-xs font-body tracking-widest uppercase text-charcoal-muted mb-1">Email</label>
         <input
           type="email"
           value={form.email}
           onChange={e => setForm(p => ({ ...p, email: e.target.value }))}
-          className="w-full px-4 py-2.5 border border-border rounded-sm bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+          className={inputClass}
           placeholder="your@email.com"
         />
-        {errors.email && <p className="text-xs text-destructive mt-1">{errors.email}</p>}
+        {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email}</p>}
       </div>
       <div>
-        <label className="block text-sm font-medium text-foreground mb-1">Message</label>
+        <label className="block text-xs font-body tracking-widest uppercase text-charcoal-muted mb-1">Message</label>
         <textarea
           value={form.message}
           onChange={e => setForm(p => ({ ...p, message: e.target.value }))}
           rows={5}
-          className="w-full px-4 py-2.5 border border-border rounded-sm bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none"
+          className={`${inputClass} resize-none`}
           placeholder="How can I help you?"
         />
-        {errors.message && <p className="text-xs text-destructive mt-1">{errors.message}</p>}
+        {errors.message && <p className="text-xs text-red-500 mt-1">{errors.message}</p>}
       </div>
+
+      {/* Response time notice */}
+      <div className="flex items-center gap-2 py-3 px-4 bg-gold/10 border border-gold/30">
+        <Clock size={16} className="text-gold shrink-0" />
+        <p className="font-body text-sm text-charcoal">
+          We typically respond within <strong>24–48 hours</strong>
+        </p>
+      </div>
+
       <button
         type="submit"
-        className="w-full py-3 bg-primary text-primary-foreground font-medium rounded-sm hover:bg-primary/90 transition-colors"
+        className="w-full py-3 bg-charcoal text-beige font-body text-sm tracking-widest uppercase hover:bg-charcoal-light transition-colors"
       >
         Send Message
       </button>

@@ -3,10 +3,11 @@ import { useCMS } from '../../contexts/CMSContext';
 import { Image, MessageSquare, Star, Tag, ArrowRight, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const { artworks, commissionInquiries } = useCMS();
+  const { artworks, commissionInquiries, isLoading } = useCMS();
 
   const totalArtworks = artworks.length;
   const categories = [...new Set(artworks.map(a => a.category))].length;
@@ -41,20 +42,29 @@ export default function Dashboard() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        {stats.map(stat => {
-          const Icon = stat.icon;
-          return (
-            <Card key={stat.label}>
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-muted-foreground">{stat.label}</span>
-                  <Icon className={`w-5 h-5 ${stat.color}`} />
-                </div>
-                <div className="text-3xl font-bold text-foreground">{stat.value}</div>
-              </CardContent>
-            </Card>
-          );
-        })}
+        {isLoading
+          ? Array.from({ length: 4 }).map((_, i) => (
+              <Card key={i}>
+                <CardContent className="p-6">
+                  <Skeleton className="h-4 w-24 mb-3" />
+                  <Skeleton className="h-8 w-12" />
+                </CardContent>
+              </Card>
+            ))
+          : stats.map(stat => {
+              const Icon = stat.icon;
+              return (
+                <Card key={stat.label}>
+                  <CardContent className="p-6">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm text-muted-foreground">{stat.label}</span>
+                      <Icon className={`w-5 h-5 ${stat.color}`} />
+                    </div>
+                    <div className="text-3xl font-bold text-foreground">{stat.value}</div>
+                  </CardContent>
+                </Card>
+              );
+            })}
       </div>
 
       {/* Quick Actions */}
@@ -89,7 +99,19 @@ export default function Dashboard() {
             <CardTitle className="text-lg">Recent Inquiries</CardTitle>
           </CardHeader>
           <CardContent>
-            {recentInquiries.length === 0 ? (
+            {isLoading ? (
+              <div className="space-y-3">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="flex items-center justify-between py-2 border-b border-border last:border-0">
+                    <div className="space-y-1">
+                      <Skeleton className="h-4 w-28" />
+                      <Skeleton className="h-3 w-20" />
+                    </div>
+                    <Skeleton className="h-6 w-16 rounded-full" />
+                  </div>
+                ))}
+              </div>
+            ) : recentInquiries.length === 0 ? (
               <p className="text-muted-foreground text-sm">No inquiries yet.</p>
             ) : (
               <div className="space-y-3">

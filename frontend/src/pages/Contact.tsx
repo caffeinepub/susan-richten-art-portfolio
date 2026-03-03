@@ -5,10 +5,12 @@ import { useCMS } from '../contexts/CMSContext';
 import { usePageMeta } from '../hooks/usePageMeta';
 import ContactForm from '../components/ContactForm';
 import MissingInfoText from '../components/MissingInfoText';
+import Breadcrumbs from '../components/Breadcrumbs';
+import SkeletonForm from '../components/SkeletonForm';
 
 export function Contact() {
   usePageMeta('contact');
-  const { siteSettings } = useCMS();
+  const { siteSettings, isLoading } = useCMS();
 
   const igUrl = siteSettings.socialPlatforms.find(p => p.icon === 'instagram' || p.name.toLowerCase() === 'instagram')?.url || '';
   const fbUrl = siteSettings.socialPlatforms.find(p => p.icon === 'facebook' || p.name.toLowerCase() === 'facebook')?.url || '';
@@ -16,6 +18,9 @@ export function Contact() {
 
   return (
     <div className="page-transition pt-20">
+      {/* Breadcrumbs */}
+      <Breadcrumbs currentPageName="Contact" />
+
       {/* Header */}
       <section className="py-16 px-4 bg-white text-center">
         <h1 className="font-heading text-5xl md:text-6xl text-charcoal mb-4">Get in Touch</h1>
@@ -30,7 +35,7 @@ export function Contact() {
           {/* Form */}
           <div className="lg:col-span-2">
             <h2 className="font-heading text-3xl text-charcoal mb-8">Send a Message</h2>
-            <ContactForm />
+            {isLoading ? <SkeletonForm /> : <ContactForm />}
           </div>
 
           {/* Sidebar */}
@@ -66,30 +71,15 @@ export function Contact() {
             <div>
               <h3 className="font-heading text-2xl text-charcoal mb-4">Follow Along</h3>
               <div className="flex flex-col gap-3">
-                <a
-                  href={igUrl || '#'}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 font-body text-sm text-charcoal-light hover:text-charcoal transition-colors"
-                >
+                <a href={igUrl || '#'} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 font-body text-sm text-charcoal-light hover:text-charcoal transition-colors">
                   <SiInstagram size={16} />
                   {igUrl ? 'Instagram' : <MissingInfoText className="text-xs" />}
                 </a>
-                <a
-                  href={fbUrl || '#'}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 font-body text-sm text-charcoal-light hover:text-charcoal transition-colors"
-                >
+                <a href={fbUrl || '#'} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 font-body text-sm text-charcoal-light hover:text-charcoal transition-colors">
                   <SiFacebook size={16} />
                   {fbUrl ? 'Facebook' : <MissingInfoText className="text-xs" />}
                 </a>
-                <a
-                  href={ptUrl || '#'}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 font-body text-sm text-charcoal-light hover:text-charcoal transition-colors"
-                >
+                <a href={ptUrl || '#'} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 font-body text-sm text-charcoal-light hover:text-charcoal transition-colors">
                   <SiPinterest size={16} />
                   {ptUrl ? 'Pinterest' : <MissingInfoText className="text-xs" />}
                 </a>

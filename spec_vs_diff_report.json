@@ -1,14 +1,54 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-03-03T03:04:54.231Z",
-  "summary": "The diff modifies frontend/src/components/Footer.tsx to apply charcoal background (bg-charcoal) with beige text (text-beige) throughout the footer, including the bottom bar, Admin Sign In link, visitor counters, and copyright text. This directly addresses REQ-56's requirement for contrast-compliant colors using design system tokens. The implementation uses the existing design system color tokens (charcoal #2C2C2C as background, warm beige #F5F0E8 as text) consistently across the footer component.",
-  "missing_requirements": [],
-  "hallucinated_features": [],
+  "generatedAt": "2026-03-03T03:25:22.265Z",
+  "summary": "The diff implements most of the requested requirements (REQ-57 through REQ-70). However, several specific acceptance criteria have gaps. REQ-59 (active nav link styling in Header.tsx) is not evidenced in the diff. REQ-69 CSV columns are missing several required fields (Phone, Size, Location, Timeline). The Settings preview only opens '/' rather than a page relevant to the current settings section. Most other requirements appear substantially implemented.",
+  "missing_requirements": [
+    {
+      "id": "REQ-59",
+      "requirement": "Update the Header component (frontend/src/components/Header.tsx) so that the active navigation link is visually distinct from inactive links with bold font weight and/or underline/bottom border accent in gold/charcoal.",
+      "reason": "The diff does not include any modification to frontend/src/components/Header.tsx. No evidence of active link styling changes in the Header component.",
+      "evidence": []
+    },
+    {
+      "id": "REQ-69",
+      "requirement": "CSV export must include columns: Name, Email, Phone, Project Type, Size, Location, Budget Range, Timeline, Description, Date Submitted, Status.",
+      "reason": "The exportToCSV function in CommissionsManager.tsx uses headers ['Name', 'Email', 'Project Type', 'Budget', 'Description', 'Status', 'Date Submitted'], missing Phone, Size, Location, and Timeline columns.",
+      "evidence": [
+        "frontend/src/pages/admin/CommissionsManager.tsx"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "CommissionsManager filter tabs include 'in-progress', 'completed', and 'declined' statuses instead of the spec-referenced 'Unread' and 'Responded' tab labels mentioned in REQ-69 AC.",
+      "reason": "REQ-69 specifies the CSV export respects the active filter tab with options 'All, Unread, or Responded', but the implementation uses 'all', 'new', 'in-progress', 'completed', 'declined'.",
+      "evidence": [
+        "frontend/src/pages/admin/CommissionsManager.tsx"
+      ]
+    }
+  ],
   "confidence": 0.82,
   "changed_files": [
-    "frontend-file-summaries.txt",
-    "frontend/src/components/Footer.tsx",
+    "frontend/src/components/ArtworkCard.tsx",
+    "frontend/src/components/BackToTopButton.tsx",
+    "frontend/src/components/Breadcrumbs.tsx",
+    "frontend/src/components/CommissionInquiryForm.tsx",
+    "frontend/src/components/ContactForm.tsx",
+    "frontend/src/components/HeroSlideshow.tsx",
+    "frontend/src/components/SkeletonCard.tsx",
+    "frontend/src/components/SkeletonForm.tsx",
+    "frontend/src/pages/About.tsx",
+    "frontend/src/pages/Commissions.tsx",
+    "frontend/src/pages/Contact.tsx",
+    "frontend/src/pages/Gallery.tsx",
+    "frontend/src/pages/Home.tsx",
+    "frontend/src/pages/Testimonials.tsx",
+    "frontend/src/pages/admin/CommissionsManager.tsx",
+    "frontend/src/pages/admin/Dashboard.tsx",
+    "frontend/src/pages/admin/GalleryManager.tsx",
+    "frontend/src/pages/admin/PagesEditor.tsx",
+    "frontend/src/pages/admin/Settings.tsx",
     "project_state.json"
   ]
 }

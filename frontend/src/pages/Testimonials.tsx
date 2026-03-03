@@ -4,14 +4,20 @@ import { usePageMeta } from '../hooks/usePageMeta';
 import TestimonialCarousel from '../components/TestimonialCarousel';
 import TestimonialGrid from '../components/TestimonialGrid';
 import PressMentionCard from '../components/PressMentionCard';
+import BackToTopButton from '../components/BackToTopButton';
+import Breadcrumbs from '../components/Breadcrumbs';
+import SkeletonCard from '../components/SkeletonCard';
 
 export function Testimonials() {
   usePageMeta('testimonials');
-  const { testimonials, pressMentions } = useCMS();
+  const { testimonials, pressMentions, isLoading } = useCMS();
   const [viewMode, setViewMode] = useState<'carousel' | 'grid'>('carousel');
 
   return (
     <div className="page-transition pt-20">
+      {/* Breadcrumbs */}
+      <Breadcrumbs currentPageName="Testimonials" />
+
       {/* Header */}
       <section className="py-16 px-4 bg-white text-center">
         <h1 className="font-heading text-5xl md:text-6xl text-charcoal mb-4">Testimonials & Press</h1>
@@ -50,7 +56,11 @@ export function Testimonials() {
       {/* Testimonials */}
       <section className="section-padding bg-beige">
         <div className="max-w-5xl mx-auto">
-          {viewMode === 'carousel' ? (
+          {isLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <SkeletonCard variant="testimonial" count={4} />
+            </div>
+          ) : viewMode === 'carousel' ? (
             <TestimonialCarousel testimonials={testimonials} />
           ) : (
             <TestimonialGrid testimonials={testimonials} />
@@ -59,28 +69,36 @@ export function Testimonials() {
       </section>
 
       {/* Press Mentions */}
-      {pressMentions.length > 0 && (
+      {(isLoading || pressMentions.length > 0) && (
         <section className="section-padding bg-white">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-10">
               <h2 className="font-heading text-4xl md:text-5xl text-charcoal mb-3">Press & Media</h2>
               <div className="w-12 h-px bg-gold mx-auto" />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {pressMentions.map(mention => (
-                <PressMentionCard
-                  key={mention.id}
-                  publication={mention.publication}
-                  date={mention.date}
-                  headline={mention.headline}
-                  url={mention.url}
-                  excerpt={mention.excerpt}
-                />
-              ))}
-            </div>
+            {isLoading ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <SkeletonCard variant="press" count={4} />
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {pressMentions.map(mention => (
+                  <PressMentionCard
+                    key={mention.id}
+                    publication={mention.publication}
+                    date={mention.date}
+                    headline={mention.headline}
+                    url={mention.url}
+                    excerpt={mention.excerpt}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         </section>
       )}
+
+      <BackToTopButton />
     </div>
   );
 }
