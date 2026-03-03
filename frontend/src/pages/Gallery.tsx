@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearch, useNavigate } from '@tanstack/react-router';
 import { Search, X } from 'lucide-react';
-import { useCMS, Artwork } from '../contexts/CMSContext';
+import { useCMS } from '../contexts/CMSContext';
 import { usePageMeta } from '../hooks/usePageMeta';
 import ArtworkCard from '../components/ArtworkCard';
 import Lightbox from '../components/Lightbox';
@@ -40,7 +40,8 @@ export function Gallery() {
   useEffect(() => {
     const openId = search?.open;
     if (openId && filtered.length > 0) {
-      const idx = filtered.findIndex(a => a.id === openId);
+      const numericId = Number(openId);
+      const idx = filtered.findIndex(a => a.id === numericId);
       if (idx !== -1) {
         setLightboxIndex(idx);
       }
@@ -49,7 +50,6 @@ export function Gallery() {
 
   const handleLightboxClose = () => {
     setLightboxIndex(null);
-    // Clear the open param from URL
     navigate({ to: '/gallery', search: {} });
   };
 

@@ -140,6 +140,20 @@ export interface SiteSettings {
     commissionHeroText: string;
     heroTagline: string;
 }
+export interface AllCMSData {
+    faqItems: Array<FAQItem>;
+    siteSettings?: SiteSettings;
+    notifications: Array<Notification>;
+    commissionProcessSteps: Array<CommissionProcessStep>;
+    artworks: Array<Artwork>;
+    contactInquiries: Array<ContactInquiry>;
+    pressMentions: Array<PressMention>;
+    blogPosts: Array<BlogPost>;
+    commissionInquiries: Array<CommissionInquiry>;
+    testimonials: Array<Testimonial>;
+    careerMilestones: Array<CareerMilestone>;
+    navigationItems: Array<NavigationItem>;
+}
 export interface Artwork {
     id: bigint;
     title: string;
@@ -206,6 +220,7 @@ export interface ContactInquiry {
 }
 export interface backendInterface {
     addUniqueVisitor(visitorId: string): Promise<boolean>;
+    getAllCMSData(): Promise<AllCMSData>;
     getArtworks(): Promise<Array<Artwork>>;
     getBlogPosts(): Promise<Array<BlogPost>>;
     getCareerMilestones(): Promise<Array<CareerMilestone>>;
@@ -234,7 +249,7 @@ export interface backendInterface {
     setSiteSettings(settings: SiteSettings): Promise<void>;
     setTestimonials(testimonialsArray: Array<Testimonial>): Promise<void>;
 }
-import type { SiteSettings as _SiteSettings } from "./declarations/backend.did.d.ts";
+import type { AllCMSData as _AllCMSData, Artwork as _Artwork, BlogPost as _BlogPost, CareerMilestone as _CareerMilestone, CommissionInquiry as _CommissionInquiry, CommissionProcessStep as _CommissionProcessStep, ContactInquiry as _ContactInquiry, FAQItem as _FAQItem, NavigationItem as _NavigationItem, Notification as _Notification, PressMention as _PressMention, SiteSettings as _SiteSettings, Testimonial as _Testimonial } from "./declarations/backend.did.d.ts";
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
     async addUniqueVisitor(arg0: string): Promise<boolean> {
@@ -249,6 +264,20 @@ export class Backend implements backendInterface {
         } else {
             const result = await this.actor.addUniqueVisitor(arg0);
             return result;
+        }
+    }
+    async getAllCMSData(): Promise<AllCMSData> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getAllCMSData();
+                return from_candid_AllCMSData_n1(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getAllCMSData();
+            return from_candid_AllCMSData_n1(this._uploadFile, this._downloadFile, result);
         }
     }
     async getArtworks(): Promise<Array<Artwork>> {
@@ -409,14 +438,14 @@ export class Backend implements backendInterface {
         if (this.processError) {
             try {
                 const result = await this.actor.getSiteSettings();
-                return from_candid_opt_n1(this._uploadFile, this._downloadFile, result);
+                return from_candid_opt_n3(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.getSiteSettings();
-            return from_candid_opt_n1(this._uploadFile, this._downloadFile, result);
+            return from_candid_opt_n3(this._uploadFile, this._downloadFile, result);
         }
     }
     async getTestimonials(): Promise<Array<Testimonial>> {
@@ -630,8 +659,53 @@ export class Backend implements backendInterface {
         }
     }
 }
-function from_candid_opt_n1(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_SiteSettings]): SiteSettings | null {
+function from_candid_AllCMSData_n1(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _AllCMSData): AllCMSData {
+    return from_candid_record_n2(_uploadFile, _downloadFile, value);
+}
+function from_candid_opt_n3(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_SiteSettings]): SiteSettings | null {
     return value.length === 0 ? null : value[0];
+}
+function from_candid_record_n2(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    faqItems: Array<_FAQItem>;
+    siteSettings: [] | [_SiteSettings];
+    notifications: Array<_Notification>;
+    commissionProcessSteps: Array<_CommissionProcessStep>;
+    artworks: Array<_Artwork>;
+    contactInquiries: Array<_ContactInquiry>;
+    pressMentions: Array<_PressMention>;
+    blogPosts: Array<_BlogPost>;
+    commissionInquiries: Array<_CommissionInquiry>;
+    testimonials: Array<_Testimonial>;
+    careerMilestones: Array<_CareerMilestone>;
+    navigationItems: Array<_NavigationItem>;
+}): {
+    faqItems: Array<FAQItem>;
+    siteSettings?: SiteSettings;
+    notifications: Array<Notification>;
+    commissionProcessSteps: Array<CommissionProcessStep>;
+    artworks: Array<Artwork>;
+    contactInquiries: Array<ContactInquiry>;
+    pressMentions: Array<PressMention>;
+    blogPosts: Array<BlogPost>;
+    commissionInquiries: Array<CommissionInquiry>;
+    testimonials: Array<Testimonial>;
+    careerMilestones: Array<CareerMilestone>;
+    navigationItems: Array<NavigationItem>;
+} {
+    return {
+        faqItems: value.faqItems,
+        siteSettings: record_opt_to_undefined(from_candid_opt_n3(_uploadFile, _downloadFile, value.siteSettings)),
+        notifications: value.notifications,
+        commissionProcessSteps: value.commissionProcessSteps,
+        artworks: value.artworks,
+        contactInquiries: value.contactInquiries,
+        pressMentions: value.pressMentions,
+        blogPosts: value.blogPosts,
+        commissionInquiries: value.commissionInquiries,
+        testimonials: value.testimonials,
+        careerMilestones: value.careerMilestones,
+        navigationItems: value.navigationItems
+    };
 }
 export interface CreateActorOptions {
     agent?: Agent;

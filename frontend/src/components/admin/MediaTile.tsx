@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { MediaItem, useCMS } from '../../contexts/CMSContext';
 import { Tag, X, RefreshCw } from 'lucide-react';
 
@@ -6,80 +6,115 @@ interface MediaTileProps {
   item: MediaItem;
 }
 
+function readFileAsDataURL(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
 export default function MediaTile({ item }: MediaTileProps) {
   const { updateMediaItem, deleteMediaItem } = useCMS();
   const [newTag, setNewTag] = useState('');
   const [showTagInput, setShowTagInput] = useState(false);
+  const reuploadRef = useRef<HTMLInputElement>(null);
 
   function addTag() {
     const tag = newTag.trim();
     if (!tag || item.tags.includes(tag)) return;
-    updateMediaItem(item.id, { tags: [...item.tags, tag] });
+    updateMediaItem({ ...item, tags: [...item.tags, tag] });
     setNewTag('');
     setShowTagInput(false);
   }
 
   function removeTag(tag: string) {
-    updateMediaItem(item.id, { tags: item.tags.filter(t => t !== tag) });
+    updateMediaItem({ ...item, tags: item.tags.filter(t => t !== tag) });
+  }
+
+  async function handleReupload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const dataUrl = await readFileAsDataURL(file);
+    updateMediaItem({ ...item, url: dataUrl, filename: file.name });
+    if (reuploadRef.current) reuploadRef.current.value = '';
   }
 
   return (
-    <div className="bg-warm-white border border-sand/40 rounded-sm overflow-hidden group">
-      <div className="relative aspect-square bg-sand/20">
-        <img src={item.url} alt={item.filename} className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-charcoal/0 group-hover:bg-charcoal/40 transition-colors flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
+    <div className="bg-white shadow-xs overflow-hidden group">
+      {/* Thumbnail */}
+      <div className="relative aspect-square bg-beige overflow-hidden">
+        <img
+          src={item.url}
+          alt={item.filename}
+          className="w-full h-full object-cover"
+        />
+        {/* Overlay actions */}
+        <div className="absolute inset-0 bg-charcoal/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+          <button
+            onClick={() => reuploadRef.current?.click()}
+            className="p-2 bg-white/20 hover:bg-white/30 text-white rounded-sm transition-colors"
+            title="Replace image"
+          >
+            <RefreshCw size={14} />
+          </button>
           <button
             onClick={() => deleteMediaItem(item.id)}
-            className="p-1.5 bg-red-500 text-white rounded-sm hover:bg-red-600 transition-colors"
+            className="p-2 bg-red-500/80 hover:bg-red-500 text-white rounded-sm transition-colors"
             title="Delete"
           >
             <X size={14} />
           </button>
-          <button
-            className="p-1.5 bg-warm-white text-charcoal rounded-sm hover:bg-sand transition-colors"
-            title="Re-upload"
-          >
-            <RefreshCw size={14} />
-          </button>
         </div>
+        <input
+          ref={reuploadRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handleReupload}
+        />
       </div>
 
+      {/* Info */}
       <div className="p-2">
-        <p className="text-xs text-charcoal font-medium truncate">{item.filename}</p>
-        {item.width > 0 && (
-          <p className="text-xs text-charcoal-muted">{item.width} × {item.height}</p>
-        )}
-        {item.usedIn.length > 0 && (
-          <p className="text-xs text-charcoal-muted mt-0.5">Used in: {item.usedIn.join(', ')}</p>
-        )}
+        <p className="font-body text-xs text-charcoal truncate" title={item.filename}>
+          {item.filename}
+        </p>
 
         {/* Tags */}
         <div className="flex flex-wrap gap-1 mt-1.5">
           {item.tags.map(tag => (
-            <span key={tag} className="flex items-center gap-0.5 px-1.5 py-0.5 bg-sand/40 text-charcoal-muted text-xs rounded-sm">
+            <span
+              key={tag}
+              className="inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-beige text-charcoal-muted text-[10px] rounded-sm"
+            >
               {tag}
-              <button onClick={() => removeTag(tag)} className="hover:text-red-500 transition-colors">
-                <X size={10} />
+              <button
+                onClick={() => removeTag(tag)}
+                className="hover:text-red-500 transition-colors"
+              >
+                <X size={8} />
               </button>
             </span>
           ))}
           {showTagInput ? (
             <input
+              autoFocus
               type="text"
               value={newTag}
               onChange={e => setNewTag(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && addTag()}
-              onBlur={() => { addTag(); setShowTagInput(false); }}
-              autoFocus
-              className="w-16 text-xs px-1 border border-gold/40 rounded-sm focus:outline-none"
+              onKeyDown={e => { if (e.key === 'Enter') addTag(); if (e.key === 'Escape') setShowTagInput(false); }}
+              onBlur={addTag}
               placeholder="tag"
+              className="w-16 text-[10px] border border-beige-dark px-1 py-0.5 focus:outline-none"
             />
           ) : (
             <button
               onClick={() => setShowTagInput(true)}
-              className="flex items-center gap-0.5 px-1.5 py-0.5 text-xs text-charcoal-muted hover:text-gold transition-colors"
+              className="inline-flex items-center gap-0.5 px-1.5 py-0.5 text-charcoal-muted hover:text-charcoal text-[10px] border border-dashed border-beige-dark rounded-sm transition-colors"
             >
-              <Tag size={10} /> add
+              <Tag size={8} /> tag
             </button>
           )}
         </div>

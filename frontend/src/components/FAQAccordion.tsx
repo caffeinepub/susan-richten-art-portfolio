@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 
 interface FAQItem {
-  id: string;
+  id: number | string;
   question: string;
   answer: string;
 }
@@ -12,7 +12,7 @@ interface FAQAccordionProps {
 }
 
 export default function FAQAccordion({ items }: FAQAccordionProps) {
-  const [openId, setOpenId] = useState<string | null>(null);
+  const [openId, setOpenId] = useState<number | string | null>(null);
 
   return (
     <div className="space-y-2">

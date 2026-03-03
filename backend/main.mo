@@ -3,7 +3,9 @@ import Text "mo:core/Text";
 import Time "mo:core/Time";
 import List "mo:core/List";
 import Nat "mo:core/Nat";
+import Migration "migration";
 
+(with migration = Migration.run)
 actor {
   public type Artwork = {
     id : Nat;
@@ -150,6 +152,21 @@ actor {
   var siteSettingsValue : ?SiteSettings = null;
   var navigationItemsList = List.empty<NavigationItem>();
 
+  public type AllCMSData = {
+    artworks : [Artwork];
+    testimonials : [Testimonial];
+    pressMentions : [PressMention];
+    commissionInquiries : [CommissionInquiry];
+    contactInquiries : [ContactInquiry];
+    notifications : [Notification];
+    blogPosts : [BlogPost];
+    faqItems : [FAQItem];
+    commissionProcessSteps : [CommissionProcessStep];
+    careerMilestones : [CareerMilestone];
+    siteSettings : ?SiteSettings;
+    navigationItems : [NavigationItem];
+  };
+
   // Redundant function kept for legacy purposes, should not be called in new code
   public query ({ caller }) func getPageViewCount() : async Nat {
     totalPageViews;
@@ -291,5 +308,23 @@ actor {
 
   public query ({ caller }) func getNavigationItems() : async [NavigationItem] {
     navigationItemsList.toArray();
+  };
+
+  // Get All CMS Data
+  public query ({ caller }) func getAllCMSData() : async AllCMSData {
+    {
+      artworks = artworksList.toArray();
+      testimonials = testimonialsList.toArray();
+      pressMentions = pressMentionsList.toArray();
+      commissionInquiries = commissionInquiriesList.toArray();
+      contactInquiries = contactInquiriesList.toArray();
+      notifications = notificationsList.toArray();
+      blogPosts = blogPostsList.toArray();
+      faqItems = faqItemsList.toArray();
+      commissionProcessSteps = commissionProcessStepsList.toArray();
+      careerMilestones = careerMilestonesList.toArray();
+      siteSettings = siteSettingsValue;
+      navigationItems = navigationItemsList.toArray();
+    };
   };
 };

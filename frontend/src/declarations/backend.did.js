@@ -8,87 +8,10 @@
 
 import { IDL } from '@icp-sdk/core/candid';
 
-export const Artwork = IDL.Record({
-  'id' : IDL.Nat,
-  'title' : IDL.Text,
-  'featured' : IDL.Bool,
-  'order' : IDL.Nat,
-  'size' : IDL.Text,
-  'year' : IDL.Nat,
-  'description' : IDL.Text,
-  'additionalImages' : IDL.Vec(IDL.Text),
-  'available' : IDL.Bool,
-  'visible' : IDL.Bool,
-  'category' : IDL.Text,
-  'image' : IDL.Text,
-  'location' : IDL.Text,
-  'medium' : IDL.Text,
-});
-export const Time = IDL.Int;
-export const BlogPost = IDL.Record({
-  'id' : IDL.Nat,
-  'status' : IDL.Text,
-  'title' : IDL.Text,
-  'content' : IDL.Text,
-  'publishDate' : Time,
-  'slug' : IDL.Text,
-});
-export const CareerMilestone = IDL.Record({
-  'id' : IDL.Nat,
-  'year' : IDL.Text,
-  'event' : IDL.Text,
-});
-export const CommissionInquiry = IDL.Record({
-  'id' : IDL.Nat,
-  'status' : IDL.Text,
-  'name' : IDL.Text,
-  'description' : IDL.Text,
-  'email' : IDL.Text,
-  'timestamp' : Time,
-  'budget' : IDL.Text,
-});
-export const CommissionProcessStep = IDL.Record({
-  'id' : IDL.Nat,
-  'title' : IDL.Text,
-  'description' : IDL.Text,
-  'stepNumber' : IDL.Nat,
-});
-export const ContactInquiry = IDL.Record({
-  'id' : IDL.Nat,
-  'status' : IDL.Text,
-  'name' : IDL.Text,
-  'email' : IDL.Text,
-  'message' : IDL.Text,
-  'timestamp' : Time,
-});
 export const FAQItem = IDL.Record({
   'id' : IDL.Nat,
   'question' : IDL.Text,
   'answer' : IDL.Text,
-});
-export const NavigationItem = IDL.Record({
-  'id' : IDL.Nat,
-  'order' : IDL.Nat,
-  'name' : IDL.Text,
-  'path' : IDL.Text,
-});
-export const Notification = IDL.Record({
-  'id' : IDL.Nat,
-  'status' : IDL.Text,
-  'fullPayload' : IDL.Text,
-  'submitterName' : IDL.Text,
-  'messagePreview' : IDL.Text,
-  'sourceType' : IDL.Text,
-  'timestamp' : Time,
-  'submitterEmail' : IDL.Text,
-});
-export const PressMention = IDL.Record({
-  'id' : IDL.Nat,
-  'url' : IDL.Text,
-  'date' : IDL.Text,
-  'headline' : IDL.Text,
-  'excerpt' : IDL.Text,
-  'publication' : IDL.Text,
 });
 export const SocialPlatform = IDL.Record({
   'url' : IDL.Text,
@@ -116,6 +39,72 @@ export const SiteSettings = IDL.Record({
   'commissionHeroText' : IDL.Text,
   'heroTagline' : IDL.Text,
 });
+export const Time = IDL.Int;
+export const Notification = IDL.Record({
+  'id' : IDL.Nat,
+  'status' : IDL.Text,
+  'fullPayload' : IDL.Text,
+  'submitterName' : IDL.Text,
+  'messagePreview' : IDL.Text,
+  'sourceType' : IDL.Text,
+  'timestamp' : Time,
+  'submitterEmail' : IDL.Text,
+});
+export const CommissionProcessStep = IDL.Record({
+  'id' : IDL.Nat,
+  'title' : IDL.Text,
+  'description' : IDL.Text,
+  'stepNumber' : IDL.Nat,
+});
+export const Artwork = IDL.Record({
+  'id' : IDL.Nat,
+  'title' : IDL.Text,
+  'featured' : IDL.Bool,
+  'order' : IDL.Nat,
+  'size' : IDL.Text,
+  'year' : IDL.Nat,
+  'description' : IDL.Text,
+  'additionalImages' : IDL.Vec(IDL.Text),
+  'available' : IDL.Bool,
+  'visible' : IDL.Bool,
+  'category' : IDL.Text,
+  'image' : IDL.Text,
+  'location' : IDL.Text,
+  'medium' : IDL.Text,
+});
+export const ContactInquiry = IDL.Record({
+  'id' : IDL.Nat,
+  'status' : IDL.Text,
+  'name' : IDL.Text,
+  'email' : IDL.Text,
+  'message' : IDL.Text,
+  'timestamp' : Time,
+});
+export const PressMention = IDL.Record({
+  'id' : IDL.Nat,
+  'url' : IDL.Text,
+  'date' : IDL.Text,
+  'headline' : IDL.Text,
+  'excerpt' : IDL.Text,
+  'publication' : IDL.Text,
+});
+export const BlogPost = IDL.Record({
+  'id' : IDL.Nat,
+  'status' : IDL.Text,
+  'title' : IDL.Text,
+  'content' : IDL.Text,
+  'publishDate' : Time,
+  'slug' : IDL.Text,
+});
+export const CommissionInquiry = IDL.Record({
+  'id' : IDL.Nat,
+  'status' : IDL.Text,
+  'name' : IDL.Text,
+  'description' : IDL.Text,
+  'email' : IDL.Text,
+  'timestamp' : Time,
+  'budget' : IDL.Text,
+});
 export const Testimonial = IDL.Record({
   'id' : IDL.Nat,
   'name' : IDL.Text,
@@ -123,9 +112,35 @@ export const Testimonial = IDL.Record({
   'quote' : IDL.Text,
   'location' : IDL.Text,
 });
+export const CareerMilestone = IDL.Record({
+  'id' : IDL.Nat,
+  'year' : IDL.Text,
+  'event' : IDL.Text,
+});
+export const NavigationItem = IDL.Record({
+  'id' : IDL.Nat,
+  'order' : IDL.Nat,
+  'name' : IDL.Text,
+  'path' : IDL.Text,
+});
+export const AllCMSData = IDL.Record({
+  'faqItems' : IDL.Vec(FAQItem),
+  'siteSettings' : IDL.Opt(SiteSettings),
+  'notifications' : IDL.Vec(Notification),
+  'commissionProcessSteps' : IDL.Vec(CommissionProcessStep),
+  'artworks' : IDL.Vec(Artwork),
+  'contactInquiries' : IDL.Vec(ContactInquiry),
+  'pressMentions' : IDL.Vec(PressMention),
+  'blogPosts' : IDL.Vec(BlogPost),
+  'commissionInquiries' : IDL.Vec(CommissionInquiry),
+  'testimonials' : IDL.Vec(Testimonial),
+  'careerMilestones' : IDL.Vec(CareerMilestone),
+  'navigationItems' : IDL.Vec(NavigationItem),
+});
 
 export const idlService = IDL.Service({
   'addUniqueVisitor' : IDL.Func([IDL.Text], [IDL.Bool], []),
+  'getAllCMSData' : IDL.Func([], [AllCMSData], ['query']),
   'getArtworks' : IDL.Func([], [IDL.Vec(Artwork)], ['query']),
   'getBlogPosts' : IDL.Func([], [IDL.Vec(BlogPost)], ['query']),
   'getCareerMilestones' : IDL.Func([], [IDL.Vec(CareerMilestone)], ['query']),
@@ -170,87 +185,10 @@ export const idlService = IDL.Service({
 export const idlInitArgs = [];
 
 export const idlFactory = ({ IDL }) => {
-  const Artwork = IDL.Record({
-    'id' : IDL.Nat,
-    'title' : IDL.Text,
-    'featured' : IDL.Bool,
-    'order' : IDL.Nat,
-    'size' : IDL.Text,
-    'year' : IDL.Nat,
-    'description' : IDL.Text,
-    'additionalImages' : IDL.Vec(IDL.Text),
-    'available' : IDL.Bool,
-    'visible' : IDL.Bool,
-    'category' : IDL.Text,
-    'image' : IDL.Text,
-    'location' : IDL.Text,
-    'medium' : IDL.Text,
-  });
-  const Time = IDL.Int;
-  const BlogPost = IDL.Record({
-    'id' : IDL.Nat,
-    'status' : IDL.Text,
-    'title' : IDL.Text,
-    'content' : IDL.Text,
-    'publishDate' : Time,
-    'slug' : IDL.Text,
-  });
-  const CareerMilestone = IDL.Record({
-    'id' : IDL.Nat,
-    'year' : IDL.Text,
-    'event' : IDL.Text,
-  });
-  const CommissionInquiry = IDL.Record({
-    'id' : IDL.Nat,
-    'status' : IDL.Text,
-    'name' : IDL.Text,
-    'description' : IDL.Text,
-    'email' : IDL.Text,
-    'timestamp' : Time,
-    'budget' : IDL.Text,
-  });
-  const CommissionProcessStep = IDL.Record({
-    'id' : IDL.Nat,
-    'title' : IDL.Text,
-    'description' : IDL.Text,
-    'stepNumber' : IDL.Nat,
-  });
-  const ContactInquiry = IDL.Record({
-    'id' : IDL.Nat,
-    'status' : IDL.Text,
-    'name' : IDL.Text,
-    'email' : IDL.Text,
-    'message' : IDL.Text,
-    'timestamp' : Time,
-  });
   const FAQItem = IDL.Record({
     'id' : IDL.Nat,
     'question' : IDL.Text,
     'answer' : IDL.Text,
-  });
-  const NavigationItem = IDL.Record({
-    'id' : IDL.Nat,
-    'order' : IDL.Nat,
-    'name' : IDL.Text,
-    'path' : IDL.Text,
-  });
-  const Notification = IDL.Record({
-    'id' : IDL.Nat,
-    'status' : IDL.Text,
-    'fullPayload' : IDL.Text,
-    'submitterName' : IDL.Text,
-    'messagePreview' : IDL.Text,
-    'sourceType' : IDL.Text,
-    'timestamp' : Time,
-    'submitterEmail' : IDL.Text,
-  });
-  const PressMention = IDL.Record({
-    'id' : IDL.Nat,
-    'url' : IDL.Text,
-    'date' : IDL.Text,
-    'headline' : IDL.Text,
-    'excerpt' : IDL.Text,
-    'publication' : IDL.Text,
   });
   const SocialPlatform = IDL.Record({
     'url' : IDL.Text,
@@ -278,6 +216,72 @@ export const idlFactory = ({ IDL }) => {
     'commissionHeroText' : IDL.Text,
     'heroTagline' : IDL.Text,
   });
+  const Time = IDL.Int;
+  const Notification = IDL.Record({
+    'id' : IDL.Nat,
+    'status' : IDL.Text,
+    'fullPayload' : IDL.Text,
+    'submitterName' : IDL.Text,
+    'messagePreview' : IDL.Text,
+    'sourceType' : IDL.Text,
+    'timestamp' : Time,
+    'submitterEmail' : IDL.Text,
+  });
+  const CommissionProcessStep = IDL.Record({
+    'id' : IDL.Nat,
+    'title' : IDL.Text,
+    'description' : IDL.Text,
+    'stepNumber' : IDL.Nat,
+  });
+  const Artwork = IDL.Record({
+    'id' : IDL.Nat,
+    'title' : IDL.Text,
+    'featured' : IDL.Bool,
+    'order' : IDL.Nat,
+    'size' : IDL.Text,
+    'year' : IDL.Nat,
+    'description' : IDL.Text,
+    'additionalImages' : IDL.Vec(IDL.Text),
+    'available' : IDL.Bool,
+    'visible' : IDL.Bool,
+    'category' : IDL.Text,
+    'image' : IDL.Text,
+    'location' : IDL.Text,
+    'medium' : IDL.Text,
+  });
+  const ContactInquiry = IDL.Record({
+    'id' : IDL.Nat,
+    'status' : IDL.Text,
+    'name' : IDL.Text,
+    'email' : IDL.Text,
+    'message' : IDL.Text,
+    'timestamp' : Time,
+  });
+  const PressMention = IDL.Record({
+    'id' : IDL.Nat,
+    'url' : IDL.Text,
+    'date' : IDL.Text,
+    'headline' : IDL.Text,
+    'excerpt' : IDL.Text,
+    'publication' : IDL.Text,
+  });
+  const BlogPost = IDL.Record({
+    'id' : IDL.Nat,
+    'status' : IDL.Text,
+    'title' : IDL.Text,
+    'content' : IDL.Text,
+    'publishDate' : Time,
+    'slug' : IDL.Text,
+  });
+  const CommissionInquiry = IDL.Record({
+    'id' : IDL.Nat,
+    'status' : IDL.Text,
+    'name' : IDL.Text,
+    'description' : IDL.Text,
+    'email' : IDL.Text,
+    'timestamp' : Time,
+    'budget' : IDL.Text,
+  });
   const Testimonial = IDL.Record({
     'id' : IDL.Nat,
     'name' : IDL.Text,
@@ -285,9 +289,35 @@ export const idlFactory = ({ IDL }) => {
     'quote' : IDL.Text,
     'location' : IDL.Text,
   });
+  const CareerMilestone = IDL.Record({
+    'id' : IDL.Nat,
+    'year' : IDL.Text,
+    'event' : IDL.Text,
+  });
+  const NavigationItem = IDL.Record({
+    'id' : IDL.Nat,
+    'order' : IDL.Nat,
+    'name' : IDL.Text,
+    'path' : IDL.Text,
+  });
+  const AllCMSData = IDL.Record({
+    'faqItems' : IDL.Vec(FAQItem),
+    'siteSettings' : IDL.Opt(SiteSettings),
+    'notifications' : IDL.Vec(Notification),
+    'commissionProcessSteps' : IDL.Vec(CommissionProcessStep),
+    'artworks' : IDL.Vec(Artwork),
+    'contactInquiries' : IDL.Vec(ContactInquiry),
+    'pressMentions' : IDL.Vec(PressMention),
+    'blogPosts' : IDL.Vec(BlogPost),
+    'commissionInquiries' : IDL.Vec(CommissionInquiry),
+    'testimonials' : IDL.Vec(Testimonial),
+    'careerMilestones' : IDL.Vec(CareerMilestone),
+    'navigationItems' : IDL.Vec(NavigationItem),
+  });
   
   return IDL.Service({
     'addUniqueVisitor' : IDL.Func([IDL.Text], [IDL.Bool], []),
+    'getAllCMSData' : IDL.Func([], [AllCMSData], ['query']),
     'getArtworks' : IDL.Func([], [IDL.Vec(Artwork)], ['query']),
     'getBlogPosts' : IDL.Func([], [IDL.Vec(BlogPost)], ['query']),
     'getCareerMilestones' : IDL.Func([], [IDL.Vec(CareerMilestone)], ['query']),

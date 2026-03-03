@@ -10,6 +10,20 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
+export interface AllCMSData {
+  'faqItems' : Array<FAQItem>,
+  'siteSettings' : [] | [SiteSettings],
+  'notifications' : Array<Notification>,
+  'commissionProcessSteps' : Array<CommissionProcessStep>,
+  'artworks' : Array<Artwork>,
+  'contactInquiries' : Array<ContactInquiry>,
+  'pressMentions' : Array<PressMention>,
+  'blogPosts' : Array<BlogPost>,
+  'commissionInquiries' : Array<CommissionInquiry>,
+  'testimonials' : Array<Testimonial>,
+  'careerMilestones' : Array<CareerMilestone>,
+  'navigationItems' : Array<NavigationItem>,
+}
 export interface Artwork {
   'id' : bigint,
   'title' : string,
@@ -127,6 +141,7 @@ export interface Testimonial {
 export type Time = bigint;
 export interface _SERVICE {
   'addUniqueVisitor' : ActorMethod<[string], boolean>,
+  'getAllCMSData' : ActorMethod<[], AllCMSData>,
   'getArtworks' : ActorMethod<[], Array<Artwork>>,
   'getBlogPosts' : ActorMethod<[], Array<BlogPost>>,
   'getCareerMilestones' : ActorMethod<[], Array<CareerMilestone>>,

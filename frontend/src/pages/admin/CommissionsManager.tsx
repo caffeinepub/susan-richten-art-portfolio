@@ -34,7 +34,7 @@ function exportToCSV(inquiries: CommissionInquiry[]) {
 }
 
 export default function CommissionsManager() {
-  const { commissionInquiries, updateCommissionInquiry, isLoading } = useCMS();
+  const { commissionInquiries, updateCommissionInquiryStatus, isLoading } = useCMS();
   const [filter, setFilter] = useState<Filter>('all');
 
   const filtered = commissionInquiries.filter(i => {
@@ -142,7 +142,7 @@ export default function CommissionsManager() {
                 <InquiryRow
                   key={inquiry.id}
                   inquiry={inquiry}
-                  onStatusChange={(id, status) => updateCommissionInquiry(id, { status })}
+                  onStatusChange={updateCommissionInquiryStatus}
                 />
               ))}
             </tbody>

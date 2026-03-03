@@ -8,7 +8,7 @@ export function BlogManager() {
   const [editingPost, setEditingPost] = useState<BlogPost | undefined>(undefined);
   const [showForm, setShowForm] = useState(false);
 
-  const handleDelete = (id: string) => {
+  const handleDelete = (id: number) => {
     if (window.confirm('Delete this post? This cannot be undone.')) {
       deleteBlogPost(id);
     }
@@ -16,7 +16,7 @@ export function BlogManager() {
 
   function handleSave(data: Omit<BlogPost, 'id'>) {
     if (editingPost) {
-      updateBlogPost(editingPost.id, data);
+      updateBlogPost({ ...editingPost, ...data });
     } else {
       addBlogPost(data);
     }
@@ -63,11 +63,13 @@ export function BlogManager() {
                     <p className="font-body text-xs text-charcoal-muted">{post.slug}</p>
                   </td>
                   <td className="px-6 py-3 hidden md:table-cell">
-                    <span className="font-body text-xs text-charcoal-muted">{post.publishDate}</span>
+                    <span className="font-body text-xs text-charcoal-muted">
+                      {post.publishDate ? new Date(post.publishDate).toLocaleDateString() : '—'}
+                    </span>
                   </td>
                   <td className="px-6 py-3">
                     <button
-                      onClick={() => updateBlogPost(post.id, { status: post.status === 'published' ? 'draft' : 'published' })}
+                      onClick={() => updateBlogPost({ ...post, status: post.status === 'published' ? 'draft' : 'published' })}
                       className={`font-body text-xs px-2 py-1 rounded transition-colors ${
                         post.status === 'published'
                           ? 'bg-sage/20 text-sage hover:bg-sage/30'

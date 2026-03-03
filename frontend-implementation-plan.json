@@ -1,120 +1,95 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Replace all 'Marina Vasquez' name references with 'Susan Richten'",
+  "title": "Fix admin changes not persisting across sessions",
   "requirements": [
     {
-      "id": "REQ-71",
-      "summary": "Replace every occurrence of 'Marina Vasquez' with 'Susan Richten' across all frontend files including CMS default data, component labels, HTML title, and any hardcoded strings",
+      "id": "REQ-75",
+      "summary": "Audit and fix the full persistence pipeline so that every admin change made through the admin panel is durably saved to the Motoko backend and survives page reloads and return visits",
       "acceptanceCriteria": [
-        "A full-text search of the frontend source tree for 'Marina Vasquez' returns zero matches.",
-        "All locations that previously displayed 'Marina Vasquez' now display 'Susan Richten'.",
-        "No other content, logic, or styling is changed as a result of this replacement.",
-        "The Header logo/wordmark displays 'Susan Richten'.",
-        "The Footer brand name displays 'Susan Richten'.",
-        "The HTML <title> in frontend/index.html does not contain 'Marina Vasquez'.",
-        "CMS default/sample data (artworks, testimonials, blog posts, site settings) contains no 'Marina Vasquez' references."
+        "After an admin edits any piece of CMS content (artwork, settings, testimonial, etc.) and saves, then navigates away from the site and returns, the edited content is still present — not reset to defaults.",
+        "Every CMSContext mutation calls the matching useCMSBackend save function asynchronously after updating local state.",
+        "CMSContext on mount calls loadAllCMSData and populates all state slices from the backend response when backend data is non-empty; it only falls back to in-memory defaults when the backend returns empty arrays/null.",
+        "No silent failures occur in backend write calls — errors are caught and logged so that broken saves surface rather than being swallowed.",
+        "useCMSBackend type conversion helpers correctly map all frontend CMS types to Motoko record types and back without data loss or type mismatch errors that would abort writes.",
+        "Reloading the browser window after making admin edits shows the edited content on the public pages, not the sample/default data.",
+        "Local React state updates immediately (optimistic) before the backend write completes so the UI remains responsive."
       ],
       "file_operations": [
         {
           "path": "frontend/src/contexts/CMSContext.tsx",
           "operation": "modify",
-          "description": "Replace all occurrences of 'Marina Vasquez' with 'Susan Richten' in the default site settings object, including heroArtistName, siteTitle, siteTagline, and any other string fields that contain the artist name. Update sample/default data for testimonials, artworks, blog posts, and other CMS entities if they reference 'Marina Vasquez'."
+          "description": "Audit all CMSContext mutation actions (addArtwork, updateArtwork, deleteArtwork, updateSiteSettings, updateNavigationItems, updateFAQItems, updateProcessSteps, updateCareerMilestones, addTestimonial, updateTestimonial, deleteTestimonial, addPressMention, updatePressMention, deletePressMention, addBlogPost, updateBlogPost, deleteBlogPost, addNotification, markNotificationRead, markNotificationResponded, deleteNotification) to ensure each calls its corresponding backend save function from useCMSBackend after updating local React state. Verify that loadAllCMSData correctly hydrates all state slices from the backend response when backend data is non-empty, only falling back to in-memory defaults when the backend returns empty arrays or null. Ensure optimistic local state updates happen immediately before async backend calls. Add error handling to surface any failed backend writes instead of silently swallowing them. Verify that the CMSContext provider invokes loadAllCMSData on mount to initialize all state from the backend."
+        },
+        {
+          "path": "frontend/src/hooks/useCMSBackend.ts",
+          "operation": "modify",
+          "description": "Audit and fix the full backend persistence wiring in useCMSBackend. Verify that every save function (saveArtworks, saveSiteSettings, saveTestimonials, saveNavigationItems, saveFAQItems, saveProcessSteps, saveCareerMilestones, savePressMentions, saveBlogPosts, saveNotifications, saveCommissionInquiries, saveContactInquiries) correctly calls the corresponding backend actor method (setArtworks, setSiteSettings, setTestimonials, setNavigationItems, setFAQItems, setCommissionProcessSteps, setCareerMilestones, setPressMentions, setBlogPosts, setNotifications, setCommissionInquiries, setContactInquiries) with proper await/async handling. Fix any broken type conversion in the helper functions that map frontend CMS types to backend record types and back (ensure bigint conversions for IDs, order, year, timestamp, and stepNumber; ensure string conversions for dates and status fields; ensure nested object conversions for socialPlatforms and seoSettings arrays). Add comprehensive error handling with console.error logging to catch and surface any silent failures in backend write operations. Verify that loadAllCMSData correctly calls getAllCMSData from the backend actor and returns a fully populated AllCMSData object that matches the backend interface definition, including all optional fields and nested arrays."
         },
         {
           "path": "frontend/src/components/admin/HeroEditor.tsx",
           "operation": "modify",
-          "description": "Replace any default values, placeholder text, or comments containing 'Marina Vasquez' with 'Susan Richten'. Check form field defaults and any instructional text."
+          "description": "Verify that the HeroEditor save action correctly calls the updateSiteSettings mutation from CMSContext with the updated hero fields (artistName, tagline, introText) and that CMSContext then persists those changes to the backend via useCMSBackend. Ensure the save button provides user feedback (loading state, success message) and surfaces any backend save errors in the UI."
         },
         {
-          "path": "frontend/src/components/Header.tsx",
+          "path": "frontend/src/components/admin/ArtworkForm.tsx",
           "operation": "modify",
-          "description": "Replace 'Marina Vasquez' with 'Susan Richten' in the logo/wordmark display. Ensure the header brand text now shows 'Susan Richten'."
+          "description": "Verify that the ArtworkForm onSubmit handler correctly calls either addArtwork or updateArtwork from CMSContext (depending on edit mode) and that CMSContext then persists the changes to the backend via useCMSBackend. Ensure that all artwork fields (title, category, year, medium, size, location, description, image, additionalImages, featured, available, visible, order) are correctly converted to backend types (bigint for id/year/order, boolean for flags, string arrays for additionalImages). Add error handling to surface any type conversion or backend save failures in the form UI."
         },
         {
-          "path": "frontend/src/components/Footer.tsx",
+          "path": "frontend/src/components/admin/NavigationEditor.tsx",
           "operation": "modify",
-          "description": "Replace 'Marina Vasquez' with 'Susan Richten' in the footer brand name display. Ensure any hardcoded artist name references in the footer now show 'Susan Richten'."
-        },
-        {
-          "path": "frontend/index.html",
-          "operation": "modify",
-          "description": "Replace 'Marina Vasquez' with 'Susan Richten' in the HTML <title> tag and any other meta tags that may contain the artist name."
-        },
-        {
-          "path": "frontend/src/components/admin/AboutPageEditor.tsx",
-          "operation": "modify",
-          "description": "Replace any hardcoded 'Marina Vasquez' references in default values, placeholder text, or comments with 'Susan Richten'."
-        },
-        {
-          "path": "frontend/src/components/admin/CommissionsPageEditor.tsx",
-          "operation": "modify",
-          "description": "Replace any hardcoded 'Marina Vasquez' references in default values, placeholder text, or sample data with 'Susan Richten'."
+          "description": "Verify that the NavigationEditor save action correctly calls updateNavigationItems from CMSContext with the full updated navigation items array and that CMSContext then persists those changes to the backend via useCMSBackend. Ensure that navigation item IDs and order fields are correctly converted to bigint. Add error handling to surface any backend save failures in the editor UI."
         },
         {
           "path": "frontend/src/components/admin/TestimonialsEditor.tsx",
           "operation": "modify",
-          "description": "Replace any hardcoded 'Marina Vasquez' references in sample testimonial data or placeholder text with 'Susan Richten'."
+          "description": "Verify that the TestimonialsEditor save action correctly calls addTestimonial, updateTestimonial, or deleteTestimonial from CMSContext (depending on the operation) and that CMSContext then persists those changes to the backend via useCMSBackend. Ensure that testimonial IDs are correctly converted to bigint. Add error handling to surface any backend save failures in the editor UI."
         },
         {
           "path": "frontend/src/components/admin/PressEditor.tsx",
           "operation": "modify",
-          "description": "Replace any hardcoded 'Marina Vasquez' references in sample press mention data or placeholder text with 'Susan Richten'."
+          "description": "Verify that the PressEditor save action correctly calls addPressMention, updatePressMention, or deletePressMention from CMSContext (depending on the operation) and that CMSContext then persists those changes to the backend via useCMSBackend. Ensure that press mention IDs are correctly converted to bigint and date fields remain strings. Add error handling to surface any backend save failures in the editor UI."
         },
         {
-          "path": "frontend/src/components/HeroSlideshow.tsx",
+          "path": "frontend/src/components/admin/CommissionsPageEditor.tsx",
           "operation": "modify",
-          "description": "Replace any hardcoded 'Marina Vasquez' references in the hero slideshow component, including overlaid artist name display or any default text with 'Susan Richten'."
+          "description": "Verify that the CommissionsPageEditor save actions correctly call updateSiteSettings, updateProcessSteps, and updateFAQItems from CMSContext when editing commission hero/pricing text, process steps, or FAQ items, and that CMSContext then persists those changes to the backend via useCMSBackend. Ensure that process step IDs and stepNumber fields are correctly converted to bigint. Add error handling to surface any backend save failures in the editor UI."
         },
         {
-          "path": "frontend/src/pages/About.tsx",
+          "path": "frontend/src/components/admin/AboutPageEditor.tsx",
           "operation": "modify",
-          "description": "Replace any hardcoded 'Marina Vasquez' references in the About page component, including any static text, labels, or fallback content with 'Susan Richten'."
+          "description": "Verify that the AboutPageEditor save actions correctly call updateSiteSettings, updateCareerMilestones, and updatePressMentions from CMSContext when editing artist bio, artist statement, career milestones, or press mentions, and that CMSContext then persists those changes to the backend via useCMSBackend. Ensure that career milestone IDs are correctly converted to bigint. Add error handling to surface any backend save failures in the editor UI."
         },
         {
-          "path": "frontend/src/pages/Home.tsx",
+          "path": "frontend/src/pages/admin/BlogManager.tsx",
           "operation": "modify",
-          "description": "Replace any hardcoded 'Marina Vasquez' references in the Home page component with 'Susan Richten'."
+          "description": "Verify that the BlogManager save actions correctly call addBlogPost, updateBlogPost, or deleteBlogPost from CMSContext when creating, editing, or deleting blog posts, and that CMSContext then persists those changes to the backend via useCMSBackend. Ensure that blog post IDs and publishDate (Time/bigint timestamp) are correctly converted to bigint. Add error handling to surface any backend save failures in the manager UI."
         },
         {
-          "path": "frontend/src/pages/Commissions.tsx",
+          "path": "frontend/src/pages/admin/GalleryManager.tsx",
           "operation": "modify",
-          "description": "Replace any hardcoded 'Marina Vasquez' references in the Commissions page with 'Susan Richten'."
+          "description": "Verify that the GalleryManager bulk actions (feature, mark as sold, mark as available) correctly call updateArtwork or deleteArtwork from CMSContext and that CMSContext then persists those changes to the backend via useCMSBackend. Ensure that all artwork IDs, year, and order fields are correctly converted to bigint. Add error handling to surface any backend save failures in the manager UI with user-friendly error messages."
         },
         {
-          "path": "frontend/src/pages/Contact.tsx",
+          "path": "frontend/src/pages/admin/MessagesInbox.tsx",
           "operation": "modify",
-          "description": "Replace any hardcoded 'Marina Vasquez' references in the Contact page with 'Susan Richten'."
+          "description": "Verify that the MessagesInbox status update actions (markNotificationRead, markNotificationResponded, deleteNotification) correctly call the corresponding CMSContext mutations and that CMSContext then persists those changes to the backend via useCMSBackend. Ensure that notification IDs and timestamp (Time/bigint) are correctly converted to bigint. Add error handling to surface any backend save failures in the inbox UI."
         },
         {
-          "path": "frontend/src/pages/Gallery.tsx",
+          "path": "frontend/src/pages/admin/Settings.tsx",
           "operation": "modify",
-          "description": "Replace any hardcoded 'Marina Vasquez' references in the Gallery page with 'Susan Richten'."
+          "description": "Verify that the Settings page save actions correctly call updateSiteSettings from CMSContext when editing SEO settings or social platform URLs, and that CMSContext then persists those changes to the backend via useCMSBackend. Ensure that nested arrays (seoSettings, socialPlatforms) are correctly converted to backend array types. Add error handling to surface any backend save failures in the settings UI with user-friendly error messages."
         },
         {
-          "path": "frontend/src/pages/Testimonials.tsx",
+          "path": "frontend/src/components/admin/BlogPostForm.tsx",
           "operation": "modify",
-          "description": "Replace any hardcoded 'Marina Vasquez' references in the Testimonials page with 'Susan Richten'."
+          "description": "Verify that the BlogPostForm onSubmit handler correctly calls either addBlogPost or updateBlogPost from CMSContext (depending on edit mode) and that CMSContext then persists the changes to the backend via useCMSBackend. Ensure that blog post ID and publishDate (Time/bigint timestamp) are correctly converted to bigint, and that slug and status fields remain strings. Add error handling to surface any type conversion or backend save failures in the form UI."
         },
         {
-          "path": "frontend/src/components/ArtworkCard.tsx",
+          "path": "frontend/src/components/admin/InquiryRow.tsx",
           "operation": "modify",
-          "description": "Replace any hardcoded 'Marina Vasquez' references in the ArtworkCard component, including any sample data or labels, with 'Susan Richten'."
-        },
-        {
-          "path": "frontend/src/components/TestimonialCarousel.tsx",
-          "operation": "modify",
-          "description": "Replace any hardcoded 'Marina Vasquez' references in sample testimonial data or default content with 'Susan Richten'."
-        },
-        {
-          "path": "frontend/src/components/TestimonialGrid.tsx",
-          "operation": "modify",
-          "description": "Replace any hardcoded 'Marina Vasquez' references in sample testimonial data or default content with 'Susan Richten'."
-        },
-        {
-          "path": "frontend/src/components/CommissionInquiryForm.tsx",
-          "operation": "modify",
-          "description": "Replace any hardcoded 'Marina Vasquez' references in placeholder text, sample data, or form labels with 'Susan Richten'."
+          "description": "Verify that the InquiryRow status badge click handler correctly calls the appropriate CMSContext mutation to update the commission inquiry status and that CMSContext then persists the change to the backend via useCMSBackend. Ensure that inquiry IDs and timestamp (Time/bigint) are correctly converted to bigint. Add error handling to surface any backend save failures with a toast notification or inline error message."
         }
       ]
     }

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useCMS } from '../../contexts/CMSContext';
+import type { ProcessStep, FAQItem } from '../../contexts/CMSContext';
 
 export default function CommissionsPageEditor() {
   const {
@@ -27,32 +28,36 @@ export default function CommissionsPageEditor() {
   const addStep = () => {
     if (!newStep.title) return;
     const nextStepNumber = processSteps.length + 1;
-    updateProcessSteps([
+    const nextId = processSteps.length > 0 ? Math.max(...processSteps.map(s => s.id)) + 1 : 1;
+    const updated: ProcessStep[] = [
       ...processSteps,
       {
-        id: Date.now().toString(),
+        id: nextId,
         stepNumber: nextStepNumber,
         title: newStep.title,
         description: newStep.description,
       },
-    ]);
+    ];
+    updateProcessSteps(updated);
     setNewStep({ title: '', description: '' });
   };
 
-  const deleteStep = (id: string) => {
+  const deleteStep = (id: number) => {
     updateProcessSteps(processSteps.filter(s => s.id !== id));
   };
 
   const addFAQ = () => {
     if (!newFAQ.question) return;
-    updateFAQItems([
+    const nextId = faqItems.length > 0 ? Math.max(...faqItems.map(f => f.id)) + 1 : 1;
+    const updated: FAQItem[] = [
       ...faqItems,
-      { id: Date.now().toString(), question: newFAQ.question, answer: newFAQ.answer },
-    ]);
+      { id: nextId, question: newFAQ.question, answer: newFAQ.answer },
+    ];
+    updateFAQItems(updated);
     setNewFAQ({ question: '', answer: '' });
   };
 
-  const deleteFAQ = (id: string) => {
+  const deleteFAQ = (id: number) => {
     updateFAQItems(faqItems.filter(f => f.id !== id));
   };
 

@@ -1,40 +1,43 @@
 {
   "kind": "build_request",
-  "title": "Replace all 'Marina Vasquez' name references with 'Susan Richten'",
-  "projectName": "Susan Richten Portfolio",
-  "priority": "normal",
+  "title": "Fix admin changes not persisting across sessions",
+  "priority": "high",
   "requirements": [
     {
-      "id": "REQ-71",
-      "text": "Search the entire frontend codebase for any string literal, default value, placeholder text, sample data, or comment that contains the name 'Marina Vasquez' and replace every occurrence with 'Susan Richten'. This includes but is not limited to: CMSContext default/sample data (frontend/src/contexts/CMSContext.tsx), HeroEditor defaults (frontend/src/components/admin/HeroEditor.tsx), Header logo/wordmark (frontend/src/components/Header.tsx), Footer brand name (frontend/src/components/Footer.tsx), HTML page title (frontend/index.html), testimonial sample data, press mention sample data, blog post sample data, artwork sample data, any admin page labels, and any other component or file where 'Marina Vasquez' appears as a hardcoded string.",
-      "target": "frontend",
+      "id": "REQ-75",
+      "text": "Audit and fix the full persistence pipeline so that every admin change made through the admin panel is durably saved to the Motoko backend canister via the useCMSBackend hook and survives page reloads and return visits. Specifically: (1) Verify that every CMSContext mutation action (addArtwork, updateArtwork, deleteArtwork, updateSiteSettings, updateNavigationItems, updateFAQItems, updateProcessSteps, updateCareerMilestones, addTestimonial, updateTestimonial, deleteTestimonial, addPressMention, updatePressMention, deletePressMention, addBlogPost, updateBlogPost, deleteBlogPost, addNotification, markNotificationRead, markNotificationResponded, deleteNotification, and all others) correctly calls its corresponding backend save function from useCMSBackend after updating local React state. (2) Verify that CMSContext correctly loads data from the backend on mount (via loadAllCMSData) and hydrates all state slices from the backend response instead of falling back to in-memory defaults when backend data is non-empty. (3) Verify that the Motoko backend actor in backend/main.mo declares all CMS data stable variables correctly so they survive canister upgrades and redeployments. (4) Fix any broken wiring, missing await/async calls, type conversion errors, or silent failures in useCMSBackend.ts that would cause backend writes to silently fail. After this fix, an admin who edits artwork details, site settings, testimonials, process steps, or any other CMS content must see those changes still in place after navigating away and returning to the site.",
+      "target": "both",
       "source": {
         "messageIds": [
-          "msg-user-latest"
+          "msg-recent-user-1",
+          "msg-recent-user-2"
         ],
         "quotes": [
-          "Replace all names of \"Marina Vasquez\" and replace them with \"Susan Richten\""
+          "when client is in admin and makes changes then leaves the site and comes back in the changes are no longer there. please fix so admin changes are permanent until changed by admin again.",
+          "admin saves are not staying changed on webpage please fix."
         ]
       },
       "acceptanceCriteria": [
-        "A full-text search of the frontend source tree for 'Marina Vasquez' returns zero matches.",
-        "All locations that previously displayed 'Marina Vasquez' now display 'Susan Richten'.",
-        "No other content, logic, or styling is changed as a result of this replacement.",
-        "The Header logo/wordmark displays 'Susan Richten'.",
-        "The Footer brand name displays 'Susan Richten'.",
-        "The HTML <title> in frontend/index.html does not contain 'Marina Vasquez'.",
-        "CMS default/sample data (artworks, testimonials, blog posts, site settings) contains no 'Marina Vasquez' references."
+        "After an admin edits any piece of CMS content (artwork, settings, testimonial, etc.) and saves, then navigates away from the site and returns, the edited content is still present — not reset to defaults.",
+        "Every CMSContext mutation calls the matching useCMSBackend save function asynchronously after updating local state.",
+        "CMSContext on mount calls loadAllCMSData and populates all state slices from the backend response when backend data is non-empty; it only falls back to in-memory defaults when the backend returns empty arrays/null.",
+        "The Motoko backend actor declares all CMS data storage variables as stable so values persist across canister upgrades.",
+        "No silent failures occur in backend write calls — errors are caught and logged so that broken saves surface rather than being swallowed.",
+        "useCMSBackend type conversion helpers correctly map all frontend CMS types to Motoko record types and back without data loss or type mismatch errors that would abort writes.",
+        "Reloading the browser window after making admin edits shows the edited content on the public pages, not the sample/default data."
       ]
     }
   ],
   "constraints": [
-    "Only replace the name string 'Marina Vasquez' with 'Susan Richten'. Do not alter any other content, logic, styling, or data structures.",
-    "Do not modify any immutable frontend paths: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui."
+    "Do not change the admin password or authentication logic.",
+    "Do not alter the public-facing page layouts or visual design.",
+    "Preserve all existing stable variables in backend/main.mo (totalViews, unique visitor set/count) — do not remove or reset them.",
+    "Local React state must still update immediately (optimistic) before the backend write completes so the UI remains responsive."
   ],
   "nonGoals": [
-    "Changing any other artist metadata, biography content, or CMS sample data beyond the name string.",
-    "Modifying backend Motoko code unless 'Marina Vasquez' appears there.",
-    "Altering page layout, styling, or component logic."
+    "Adding new CMS data fields or new admin sections.",
+    "Changing the visual design of the admin panel.",
+    "Adding new public pages or features."
   ],
   "imageRequirements": {
     "required": [],

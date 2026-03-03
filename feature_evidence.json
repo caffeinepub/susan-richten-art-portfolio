@@ -2,19 +2,20 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-search-the-entire-frontend-codebase-for-any-string-literal-default-value-placeholder-text-sample-data-or-comment-that-contains-the-name-marina-vasquez-and-replace-every-occurrence-with-susan-richten-this-includes-but-is-not-limited-to-cmscontext-default-sample-data-frontend-src-contexts-cmscontext-tsx-heroeditor-defaults-frontend-src-components-admin-heroeditor-tsx-header-logo-wordmark-frontend-src-components-header-tsx-footer-brand-name-frontend-src-components-footer-tsx-html-page-title-frontend-index-html-testimonial-sample-data-press-mention-sample-data-blog-post-sample-data-artwork-sample-data-any-admin-page-labels-and-any-other-component-or-file-where-marina-vasquez-appears-as-a-hardcoded-string",
-      "featureTitle": "Search the entire frontend codebase for any string literal, default value, placeholder text, sample data, or comment that contains the name 'Marina Vasquez' and replace every occurrence with 'Susan Richten'. This includes but is not limited to: CMSContext default/sample data (frontend/src/contexts/CMSContext.tsx), HeroEditor defaults (frontend/src/components/admin/HeroEditor.tsx), Header logo/wordmark (frontend/src/components/Header.tsx), Footer brand name (frontend/src/components/Footer.tsx), HTML page title (frontend/index.html), testimonial sample data, press mention sample data, blog post sample data, artwork sample data, any admin page labels, and any other component or file where 'Marina Vasquez' appears as a hardcoded string.",
+      "featureId": "feature-audit-and-fix-the-full-persistence-pipeline-so-that-every-admin-change-made-through-the-admin-panel-is-durably-saved-to-the-motoko-backend-canister-via-the-usecmsbackend-hook-and-survives-page-reloads-and-return-visits-specifically-1-verify-that-every-cmscontext-mutation-action-addartwork-updateartwork-deleteartwork-updatesitesettings-updatenavigationitems-updatefaqitems-updateprocesssteps-updatecareermilestones-addtestimonial-updatetestimonial-deletetestimonial-addpressmention-updatepressmention-deletepressmention-addblogpost-updateblogpost-deleteblogpost-addnotification-marknotificationread-marknotificationresponded-deletenotification-and-all-others-correctly-calls-its-corresponding-backend-save-function-from-usecmsbackend-after-updating-local-react-state-2-verify-that-cmscontext-correctly-loads-data-from-the-backend-on-mount-via-loadallcmsdata-and-hydrates-all-state-slices-from-the-backend-response-instead-of-falling-back-to-in-memory-defaults-when-backend-data-is-non-empty-3-verify-that-the-motoko-backend-actor-in-backend-main-mo-declares-all-cms-data-stable-variables-correctly-so-they-survive-canister-upgrades-and-redeployments-4-fix-any-broken-wiring-missing-await-async-calls-type-conversion-errors-or-silent-failures-in-usecmsbackend-ts-that-would-cause-backend-writes-to-silently-fail-after-this-fix-an-admin-who-edits-artwork-details-site-settings-testimonials-process-steps-or-any-other-cms-content-must-see-those-changes-still-in-place-after-navigating-away-and-returning-to-the-site",
+      "featureTitle": "Audit and fix the full persistence pipeline so that every admin change made through the admin panel is durably saved to the Motoko backend canister via the useCMSBackend hook and survives page reloads and return visits. Specifically: (1) Verify that every CMSContext mutation action (addArtwork, updateArtwork, deleteArtwork, updateSiteSettings, updateNavigationItems, updateFAQItems, updateProcessSteps, updateCareerMilestones, addTestimonial, updateTestimonial, deleteTestimonial, addPressMention, updatePressMention, deletePressMention, addBlogPost, updateBlogPost, deleteBlogPost, addNotification, markNotificationRead, markNotificationResponded, deleteNotification, and all others) correctly calls its corresponding backend save function from useCMSBackend after updating local React state. (2) Verify that CMSContext correctly loads data from the backend on mount (via loadAllCMSData) and hydrates all state slices from the backend response instead of falling back to in-memory defaults when backend data is non-empty. (3) Verify that the Motoko backend actor in backend/main.mo declares all CMS data stable variables correctly so they survive canister upgrades and redeployments. (4) Fix any broken wiring, missing await/async calls, type conversion errors, or silent failures in useCMSBackend.ts that would cause backend writes to silently fail. After this fix, an admin who edits artwork details, site settings, testimonials, process steps, or any other CMS content must see those changes still in place after navigating away and returning to the site.",
       "files": [
-        "frontend/index.html",
-        "frontend/src/components/Footer.tsx",
-        "frontend/src/components/Header.tsx",
         "frontend/src/components/admin/AboutPageEditor.tsx",
         "frontend/src/components/admin/CommissionsPageEditor.tsx",
-        "frontend/src/components/admin/HeroEditor.tsx",
+        "frontend/src/components/admin/InquiryRow.tsx",
+        "frontend/src/components/admin/NavigationEditor.tsx",
+        "frontend/src/components/admin/PressEditor.tsx",
+        "frontend/src/components/admin/TestimonialsEditor.tsx",
         "frontend/src/contexts/CMSContext.tsx",
-        "frontend/src/pages/About.tsx",
-        "frontend/src/pages/Commissions.tsx",
-        "frontend/src/pages/Home.tsx"
+        "frontend/src/hooks/useCMSBackend.ts",
+        "frontend/src/pages/admin/BlogManager.tsx",
+        "frontend/src/pages/admin/GalleryManager.tsx",
+        "frontend/src/pages/admin/MessagesInbox.tsx"
       ],
       "components": [
         "core-infrastructure@1.0.2",
@@ -24,7 +25,7 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-71"
+        "REQ-75"
       ],
       "confidence": "high"
     }

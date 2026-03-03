@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useCMS } from '../../contexts/CMSContext';
+import type { CareerMilestone, PressMention } from '../../contexts/CMSContext';
 
 export default function AboutPageEditor() {
   const {
@@ -26,34 +27,38 @@ export default function AboutPageEditor() {
 
   const addMilestone = () => {
     if (!newMilestone.year || !newMilestone.event) return;
-    updateCareerMilestones([
+    const nextId = careerMilestones.length > 0 ? Math.max(...careerMilestones.map(m => m.id)) + 1 : 1;
+    const updated: CareerMilestone[] = [
       ...careerMilestones,
-      { id: Date.now().toString(), year: newMilestone.year, event: newMilestone.event },
-    ]);
+      { id: nextId, year: newMilestone.year, event: newMilestone.event },
+    ];
+    updateCareerMilestones(updated);
     setNewMilestone({ year: '', event: '' });
   };
 
-  const deleteMilestone = (id: string) => {
+  const deleteMilestone = (id: number) => {
     updateCareerMilestones(careerMilestones.filter(m => m.id !== id));
   };
 
   const addPressLink = () => {
     if (!newPressLink.publication) return;
-    setPressMentions([
+    const nextId = pressMentions.length > 0 ? Math.max(...pressMentions.map(p => p.id)) + 1 : 1;
+    const updated: PressMention[] = [
       ...pressMentions,
       {
-        id: Date.now().toString(),
+        id: nextId,
         publication: newPressLink.publication,
         date: newPressLink.date,
         headline: newPressLink.headline,
         url: newPressLink.url,
         excerpt: newPressLink.excerpt,
       },
-    ]);
+    ];
+    setPressMentions(updated);
     setNewPressLink({ publication: '', date: '', headline: '', url: '', excerpt: '' });
   };
 
-  const deletePressLink = (id: string) => {
+  const deletePressLink = (id: number) => {
     setPressMentions(pressMentions.filter(m => m.id !== id));
   };
 

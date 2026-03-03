@@ -1,5 +1,5 @@
 interface Milestone {
-  id: string;
+  id: number | string;
   year: string;
   event: string;
 }

@@ -58,6 +58,20 @@ export interface SiteSettings {
     commissionHeroText: string;
     heroTagline: string;
 }
+export interface AllCMSData {
+    faqItems: Array<FAQItem>;
+    siteSettings?: SiteSettings;
+    notifications: Array<Notification>;
+    commissionProcessSteps: Array<CommissionProcessStep>;
+    artworks: Array<Artwork>;
+    contactInquiries: Array<ContactInquiry>;
+    pressMentions: Array<PressMention>;
+    blogPosts: Array<BlogPost>;
+    commissionInquiries: Array<CommissionInquiry>;
+    testimonials: Array<Testimonial>;
+    careerMilestones: Array<CareerMilestone>;
+    navigationItems: Array<NavigationItem>;
+}
 export interface Artwork {
     id: bigint;
     title: string;
@@ -124,6 +138,7 @@ export interface ContactInquiry {
 }
 export interface backendInterface {
     addUniqueVisitor(visitorId: string): Promise<boolean>;
+    getAllCMSData(): Promise<AllCMSData>;
     getArtworks(): Promise<Array<Artwork>>;
     getBlogPosts(): Promise<Array<BlogPost>>;
     getCareerMilestones(): Promise<Array<CareerMilestone>>;

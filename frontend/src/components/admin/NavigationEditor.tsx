@@ -1,90 +1,86 @@
 import { useState } from 'react';
-import { useCMS, NavigationItem } from '../../contexts/CMSContext';
+import { useCMS } from '../../contexts/CMSContext';
+import type { NavigationItem } from '../../contexts/CMSContext';
 
-export default function NavigationEditor() {
+export function NavigationEditor() {
   const { navigationItems, updateNavigationItems } = useCMS();
   const [items, setItems] = useState<NavigationItem[]>([...navigationItems]);
   const [saved, setSaved] = useState(false);
 
-  function addItem() {
-    const newItem: NavigationItem = {
-      id: Date.now().toString(),
-      name: 'New Page',
-      path: '/new-page',
-      order: items.length + 1,
-    };
-    setItems(prev => [...prev, newItem]);
-  }
+  const addItem = () => {
+    const nextId = items.length > 0 ? Math.max(...items.map(i => i.id)) + 1 : 1;
+    setItems(prev => [
+      ...prev,
+      { id: nextId, name: 'New Page', path: '/new-page', order: prev.length + 1 },
+    ]);
+  };
 
-  function removeItem(id: string) {
+  const removeItem = (id: number) => {
     setItems(prev => prev.filter(i => i.id !== id));
-  }
+  };
 
-  function updateItem(id: string, field: keyof NavigationItem, value: string | number) {
+  const updateItem = (id: number, field: keyof NavigationItem, value: string | number) => {
     setItems(prev => prev.map(i => i.id === id ? { ...i, [field]: value } : i));
-  }
+  };
 
-  function handleSave() {
+  const handleSave = () => {
     updateNavigationItems(items);
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
-  }
-
-  const inputClass = 'w-full px-3 py-2 border border-sand/60 rounded-sm bg-warm-white text-charcoal text-sm focus:outline-none focus:border-gold';
+  };
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h3 className="font-serif text-lg text-charcoal">Navigation Items</h3>
-        <button
-          onClick={addItem}
-          className="text-xs text-gold hover:text-gold/80 border border-gold/40 hover:border-gold px-3 py-1 rounded-sm transition-colors"
-        >
-          + Add Item
-        </button>
+      <div>
+        <h2 className="text-lg font-semibold text-charcoal mb-1">Navigation</h2>
+        <p className="text-sm text-charcoal/60">Edit the site navigation links.</p>
       </div>
 
-      <div className="space-y-2">
-        {items.map(item => (
-          <div key={item.id} className="flex gap-2 items-center p-3 border border-sand/40 rounded-sm">
+      <ul className="space-y-2">
+        {[...items].sort((a, b) => a.order - b.order).map(item => (
+          <li key={item.id} className="flex items-center gap-2 bg-stone/10 rounded px-3 py-2">
             <div className="flex-1 grid grid-cols-2 gap-2">
-              <div>
-                <label className="text-xs text-charcoal-muted mb-1 block">Label</label>
-                <input
-                  type="text"
-                  value={item.name}
-                  onChange={e => updateItem(item.id, 'name', e.target.value)}
-                  className={inputClass}
-                  placeholder="Page name"
-                />
-              </div>
-              <div>
-                <label className="text-xs text-charcoal-muted mb-1 block">Path</label>
-                <input
-                  type="text"
-                  value={item.path}
-                  onChange={e => updateItem(item.id, 'path', e.target.value)}
-                  className={inputClass}
-                  placeholder="/path"
-                />
-              </div>
+              <input
+                type="text"
+                value={item.name}
+                onChange={e => updateItem(item.id, 'name', e.target.value)}
+                placeholder="Label"
+                className="border border-stone/30 rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-gold"
+              />
+              <input
+                type="text"
+                value={item.path}
+                onChange={e => updateItem(item.id, 'path', e.target.value)}
+                placeholder="/path"
+                className="border border-stone/30 rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-gold"
+              />
             </div>
             <button
               onClick={() => removeItem(item.id)}
-              className="text-red-400 hover:text-red-600 transition-colors shrink-0 text-xs px-2 py-1"
+              className="text-red-400 hover:text-red-600 text-xs shrink-0"
             >
-              ✕
+              Remove
             </button>
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
 
-      <button
-        onClick={handleSave}
-        className="px-6 py-2.5 bg-gold text-warm-white text-sm font-medium rounded-sm hover:bg-gold/90 transition-colors"
-      >
-        {saved ? 'Saved!' : 'Save Navigation'}
-      </button>
+      <div className="flex gap-2">
+        <button
+          onClick={addItem}
+          className="bg-charcoal text-white px-3 py-1.5 rounded text-sm hover:bg-charcoal/80 transition-colors"
+        >
+          Add Item
+        </button>
+        <button
+          onClick={handleSave}
+          className="bg-gold text-white px-4 py-1.5 rounded text-sm font-medium hover:bg-gold/90 transition-colors"
+        >
+          {saved ? 'Saved!' : 'Save Navigation'}
+        </button>
+      </div>
     </div>
   );
 }
+
+export default NavigationEditor;

@@ -1,14 +1,13 @@
 import { useState } from "react";
-import { useCMS, Testimonial } from "../../contexts/CMSContext";
+import { useCMS } from "../../contexts/CMSContext";
+import type { Testimonial } from "../../contexts/CMSContext";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Plus, Trash2, CheckCircle } from "lucide-react";
 
 export function TestimonialsEditor() {
   const { testimonials, setTestimonials } = useCMS();
-  const [items, setItems] = useState<Testimonial[]>([...testimonials]);
+  const [items, setItems] = useState<Testimonial[]>(testimonials.map(t => ({ ...t })));
   const [saved, setSaved] = useState(false);
 
   const handleSave = () => {
@@ -18,8 +17,9 @@ export function TestimonialsEditor() {
   };
 
   const addItem = () => {
+    const nextId = items.length > 0 ? Math.max(...items.map(i => i.id)) + 1 : Date.now();
     const newItem: Testimonial = {
-      id: `tm-${Date.now()}`,
+      id: nextId,
       quote: "",
       name: "",
       location: "",
@@ -28,13 +28,13 @@ export function TestimonialsEditor() {
     setItems((prev) => [...prev, newItem]);
   };
 
-  const updateItem = (id: string, field: keyof Testimonial, value: string) => {
+  const updateItem = (id: number, field: keyof Testimonial, value: string) => {
     setItems((prev) =>
       prev.map((t) => (t.id === id ? { ...t, [field]: value } : t))
     );
   };
 
-  const removeItem = (id: string) => {
+  const removeItem = (id: number) => {
     setItems((prev) => prev.filter((t) => t.id !== id));
   };
 

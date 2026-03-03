@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 39,
+  "projectStateVersion": 43,
   "summary": "Full-featured art portfolio website for artist Susan Richten (Ocean View, HI) built with React + TypeScript, Tailwind CSS, and a local JSON-based CMS. Features 5 public pages (Home, Gallery, Commissions, About, Contact, Testimonials/Press) plus a password-protected admin panel (/admin, password: SusanAdmin2024). Design is clean/minimal with warm beige, white, charcoal palette, Cormorant Garamond + Lato fonts, and high-end gallery aesthetic.",
   "architectural_notes": [
     "React + TypeScript + Tailwind CSS + React Router; local Context API simulates CMS backend with JSON data store",
@@ -14,9 +14,10 @@
     "Lightbox/enlarged view still shows 'Replace' text and diagonal lines on placeholder images instead of a clean beige fill",
     "Admin sidebar navigation text is not visible until hovered — text color blends into the background",
     "Home page Instagram/social feed section still shows diagonal lines and 'Replace' placeholder text",
-    "Admin password protection at /admin appears to be missing or broken — login screen not shown when navigating to /admin"
+    "Admin password protection at /admin appears to be missing or broken — login screen not shown when navigating to /admin",
+    "Admin changes do not persist across page refreshes or site revisits — CMS state resets to defaults on reload instead of retaining admin edits"
   ],
-  "isFixRequest": false,
+  "isFixRequest": true,
   "existing_features": [
     {
       "id": "feature-set-up-a-local-json-based-cms-data-store-using-react-context-api-that-holds-all-site-content-artworks-8-sample-items-testimonials-3-press-mentions-2-faq-items-3-commission-process-steps-4-homepage-settings-about-page-content-navigation-items-site-settings-commission-inquiries-and-blog-posts-all-data-must-be-accessible-and-mutable-via-context-throughout-the-app",
@@ -529,6 +530,38 @@
         "REQ-71"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-update-the-artworkform-component-frontend-src-components-admin-artworkform-tsx-to-replace-the-url-based-text-input-for-the-primary-artwork-image-field-with-an-actual-file-upload-input-input-type-file-accept-image-when-the-admin-selects-a-file-read-it-using-filereader-and-convert-it-to-a-base64-data-url-or-object-url-to-store-as-the-artwork-s-image-value-in-cmscontext-display-a-thumbnail-preview-of-the-selected-or-existing-image-below-the-upload-input-remove-the-url-text-field-entirely-for-the-primary-image-the-upload-input-is-the-only-way-to-set-the-primary-image",
+      "title": "Update the ArtworkForm component (frontend/src/components/admin/ArtworkForm.tsx) to replace the URL-based text input for the primary artwork image field with an actual file upload input (<input type=\"file\" accept=\"image/*\">). When the admin selects a file, read it using FileReader and convert it to a base64 data URL (or object URL) to store as the artwork's image value in CMSContext. Display a thumbnail preview of the selected or existing image below the upload input. Remove the URL text field entirely for the primary image; the upload input is the only way to set the primary image.",
+      "reqIds": [
+        "REQ-72"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-multi-image-additionalimages-section-in-artworkform-frontend-src-components-admin-artworkform-tsx-to-replace-any-url-based-input-for-additional-images-with-file-upload-inputs-input-type-file-accept-image-each-added-additional-image-should-be-read-via-filereader-and-stored-as-a-base64-data-url-show-a-small-thumbnail-preview-for-each-additional-image-in-the-list-the-remove-button-per-additional-image-must-remain-functional",
+      "title": "Update the multi-image (additionalImages) section in ArtworkForm (frontend/src/components/admin/ArtworkForm.tsx) to replace any URL-based input for additional images with file upload inputs (<input type=\"file\" accept=\"image/*\">). Each added additional image should be read via FileReader and stored as a base64 data URL. Show a small thumbnail preview for each additional image in the list. The remove button per additional image must remain functional.",
+      "reqIds": [
+        "REQ-73"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-admin-media-library-page-frontend-src-pages-admin-medialibrary-tsx-so-that-the-image-upload-mechanism-uses-a-file-input-input-type-file-accept-image-rather-than-a-url-entry-when-the-admin-uploads-a-file-read-it-with-filereader-convert-to-a-base64-data-url-and-add-it-to-the-media-library-in-cmscontext-with-the-original-filename-preserved-as-the-display-name-the-existing-grid-view-tagging-search-and-re-upload-replace-flows-must-continue-to-work-with-file-based-uploads",
+      "title": "Update the Admin Media Library page (frontend/src/pages/admin/MediaLibrary.tsx) so that the image upload mechanism uses a file input (<input type=\"file\" accept=\"image/*\">) rather than a URL entry. When the admin uploads a file, read it with FileReader, convert to a base64 data URL, and add it to the media library in CMSContext with the original filename preserved as the display name. The existing grid view, tagging, search, and re-upload (replace) flows must continue to work with file-based uploads.",
+      "reqIds": [
+        "REQ-74"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-audit-and-fix-the-full-persistence-pipeline-so-that-every-admin-change-made-through-the-admin-panel-is-durably-saved-to-the-motoko-backend-canister-via-the-usecmsbackend-hook-and-survives-page-reloads-and-return-visits-specifically-1-verify-that-every-cmscontext-mutation-action-addartwork-updateartwork-deleteartwork-updatesitesettings-updatenavigationitems-updatefaqitems-updateprocesssteps-updatecareermilestones-addtestimonial-updatetestimonial-deletetestimonial-addpressmention-updatepressmention-deletepressmention-addblogpost-updateblogpost-deleteblogpost-addnotification-marknotificationread-marknotificationresponded-deletenotification-and-all-others-correctly-calls-its-corresponding-backend-save-function-from-usecmsbackend-after-updating-local-react-state-2-verify-that-cmscontext-correctly-loads-data-from-the-backend-on-mount-via-loadallcmsdata-and-hydrates-all-state-slices-from-the-backend-response-instead-of-falling-back-to-in-memory-defaults-when-backend-data-is-non-empty-3-verify-that-the-motoko-backend-actor-in-backend-main-mo-declares-all-cms-data-stable-variables-correctly-so-they-survive-canister-upgrades-and-redeployments-4-fix-any-broken-wiring-missing-await-async-calls-type-conversion-errors-or-silent-failures-in-usecmsbackend-ts-that-would-cause-backend-writes-to-silently-fail-after-this-fix-an-admin-who-edits-artwork-details-site-settings-testimonials-process-steps-or-any-other-cms-content-must-see-those-changes-still-in-place-after-navigating-away-and-returning-to-the-site",
+      "title": "Audit and fix the full persistence pipeline so that every admin change made through the admin panel is durably saved to the Motoko backend canister via the useCMSBackend hook and survives page reloads and return visits. Specifically: (1) Verify that every CMSContext mutation action (addArtwork, updateArtwork, deleteArtwork, updateSiteSettings, updateNavigationItems, updateFAQItems, updateProcessSteps, updateCareerMilestones, addTestimonial, updateTestimonial, deleteTestimonial, addPressMention, updatePressMention, deletePressMention, addBlogPost, updateBlogPost, deleteBlogPost, addNotification, markNotificationRead, markNotificationResponded, deleteNotification, and all others) correctly calls its corresponding backend save function from useCMSBackend after updating local React state. (2) Verify that CMSContext correctly loads data from the backend on mount (via loadAllCMSData) and hydrates all state slices from the backend response instead of falling back to in-memory defaults when backend data is non-empty. (3) Verify that the Motoko backend actor in backend/main.mo declares all CMS data stable variables correctly so they survive canister upgrades and redeployments. (4) Fix any broken wiring, missing await/async calls, type conversion errors, or silent failures in useCMSBackend.ts that would cause backend writes to silently fail. After this fix, an admin who edits artwork details, site settings, testimonials, process steps, or any other CMS content must see those changes still in place after navigating away and returning to the site.",
+      "reqIds": [
+        "REQ-75"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -808,6 +841,18 @@
       "reqIds": [
         "REQ-59"
       ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-50",
+      "summary": "In the admin panel, replace URL-based image input fields with actual file upload inputs so admins can upload image files directly (not just enter URLs) for artwork images and other media",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-51",
+      "summary": "Fix admin changes not persisting: when admin makes changes and leaves/returns to the site, changes are lost. Admin saves must be permanent (persisted to localStorage or backend) until changed again by the admin.",
+      "reqIds": [],
       "status": "pending"
     }
   ],

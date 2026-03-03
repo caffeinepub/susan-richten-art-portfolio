@@ -1,14 +1,27 @@
 import { useState } from "react";
-import { useCMS, PressMention } from "../../contexts/CMSContext";
+import { useCMS } from "../../contexts/CMSContext";
+import type { PressMention } from "../../contexts/CMSContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Plus, Trash2, CheckCircle } from "lucide-react";
 
+// Local editing type uses string id for new (unsaved) items
+interface EditingPressMention {
+  id: number;
+  publication: string;
+  date: string;
+  headline: string;
+  excerpt: string;
+  url: string;
+}
+
 export function PressEditor() {
   const { pressMentions, setPressMentions } = useCMS();
-  const [items, setItems] = useState<PressMention[]>([...pressMentions]);
+  const [items, setItems] = useState<EditingPressMention[]>(
+    pressMentions.map(p => ({ ...p }))
+  );
   const [saved, setSaved] = useState(false);
 
   const handleSave = () => {
@@ -18,8 +31,9 @@ export function PressEditor() {
   };
 
   const addItem = () => {
-    const newItem: PressMention = {
-      id: `pm-${Date.now()}`,
+    const nextId = items.length > 0 ? Math.max(...items.map(i => i.id)) + 1 : Date.now();
+    const newItem: EditingPressMention = {
+      id: nextId,
       publication: "",
       date: "",
       headline: "",
@@ -29,13 +43,13 @@ export function PressEditor() {
     setItems((prev) => [...prev, newItem]);
   };
 
-  const updateItem = (id: string, field: keyof PressMention, value: string) => {
+  const updateItem = (id: number, field: keyof EditingPressMention, value: string) => {
     setItems((prev) =>
       prev.map((p) => (p.id === id ? { ...p, [field]: value } : p))
     );
   };
 
-  const removeItem = (id: string) => {
+  const removeItem = (id: number) => {
     setItems((prev) => prev.filter((p) => p.id !== id));
   };
 

@@ -2,24 +2,24 @@ import { CommissionInquiry } from '../../contexts/CMSContext';
 
 interface InquiryRowProps {
   inquiry: CommissionInquiry;
-  onStatusChange: (id: string, status: CommissionInquiry['status']) => void;
+  onStatusChange: (id: number, status: string) => void;
 }
 
-const statusColors: Record<CommissionInquiry['status'], string> = {
+const statusColors: Record<string, string> = {
   'new': 'bg-amber-100 text-amber-800',
   'in-progress': 'bg-blue-100 text-blue-800',
   'completed': 'bg-green-100 text-green-800',
   'declined': 'bg-red-100 text-red-800',
 };
 
-const nextStatus: Record<CommissionInquiry['status'], CommissionInquiry['status']> = {
+const nextStatus: Record<string, string> = {
   'new': 'in-progress',
   'in-progress': 'completed',
   'completed': 'declined',
   'declined': 'new',
 };
 
-const statusLabels: Record<CommissionInquiry['status'], string> = {
+const statusLabels: Record<string, string> = {
   'new': 'New',
   'in-progress': 'In Progress',
   'completed': 'Completed',
@@ -28,6 +28,9 @@ const statusLabels: Record<CommissionInquiry['status'], string> = {
 
 export default function InquiryRow({ inquiry, onStatusChange }: InquiryRowProps) {
   const date = new Date(inquiry.timestamp).toLocaleDateString();
+  const colorClass = statusColors[inquiry.status] ?? 'bg-gray-100 text-gray-700';
+  const label = statusLabels[inquiry.status] ?? inquiry.status;
+  const next = nextStatus[inquiry.status] ?? 'new';
 
   return (
     <tr className={`border-b border-sand/30 ${inquiry.status === 'new' ? 'bg-amber-50/50' : ''}`}>
@@ -46,10 +49,10 @@ export default function InquiryRow({ inquiry, onStatusChange }: InquiryRowProps)
       </td>
       <td className="py-3 px-4">
         <button
-          onClick={() => onStatusChange(inquiry.id, nextStatus[inquiry.status])}
-          className={`px-2 py-1 rounded-sm text-xs font-medium transition-colors ${statusColors[inquiry.status]}`}
+          onClick={() => onStatusChange(inquiry.id, next)}
+          className={`px-2 py-1 rounded-sm text-xs font-medium transition-colors ${colorClass}`}
         >
-          {statusLabels[inquiry.status]}
+          {label}
         </button>
       </td>
       <td className="py-3 px-4 text-sm text-charcoal-muted max-w-xs hidden xl:table-cell">

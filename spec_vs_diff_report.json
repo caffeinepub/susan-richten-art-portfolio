@@ -1,23 +1,73 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-03-03T04:14:41.230Z",
-  "summary": "The diff shows comprehensive replacement of 'Marina Vasquez' with 'Susan Richten' across the frontend codebase. All key files identified in REQ-71 have been updated: CMSContext.tsx default data, HeroEditor.tsx defaults/placeholders, Header.tsx fallback text, Footer.tsx fallback text, index.html title/meta, About.tsx fallbacks, and project_state.json. The frontend-file-summaries.txt also confirms the replacements. No other content, logic, or styling appears to have been changed.",
-  "missing_requirements": [],
-  "hallucinated_features": [],
-  "confidence": 0.92,
+  "generatedAt": "2026-03-03T05:30:35.237Z",
+  "summary": "The diff implements significant portions of REQ-75, including a migration module for stable variable persistence, a comprehensive useCMSBackend.ts with type conversion helpers, and a CMSContext that wires mutations to backend save functions. However, several specific sub-requirements have evidence gaps or partial implementation issues worth flagging.",
+  "missing_requirements": [
+    {
+      "id": "REQ-75",
+      "requirement": "The Motoko backend actor declares all CMS data storage variables as stable so values persist across canister upgrades.",
+      "reason": "The backend/main.mo diff shows variables declared with 'var' (e.g., 'var artworksList = List.empty<Artwork>()') rather than 'stable var'. The migration module approach using '(with migration = Migration.run)' is a Motoko upgrade migration pattern, but the actual stable variable declarations in main.mo appear to use plain 'var' without the 'stable' keyword, which means they would not survive canister upgrades in standard Motoko semantics.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-75",
+      "requirement": "CMSContext on mount calls loadAllCMSData and populates all state slices from the backend response when backend data is non-empty; it only falls back to in-memory defaults when the backend returns empty arrays/null.",
+      "reason": "The CMSContext.tsx file is truncated and the hydration logic after loadAllCMSData is not fully visible in the diff. It is unclear from the truncated content whether all state slices (careerMilestones, processSteps, faqItems, navigationItems, siteSettings, etc.) are correctly hydrated from non-empty backend responses vs. falling back to defaults.",
+      "evidence": [
+        "frontend/src/contexts/CMSContext.tsx"
+      ]
+    },
+    {
+      "id": "REQ-75",
+      "requirement": "No silent failures occur in backend write calls — errors are caught and logged so that broken saves surface rather than being swallowed.",
+      "reason": "The useCMSBackend.ts file is truncated and the error handling patterns for backend write calls are not fully visible. It cannot be confirmed from the available diff that all backend write functions wrap calls in try/catch with console.error or equivalent logging.",
+      "evidence": [
+        "frontend/src/hooks/useCMSBackend.ts"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "A backend/migration.mo module was added with a full OldActor/NewActor migration schema and a run() identity function.",
+      "reason": "The build request does not mention adding a migration module or migration infrastructure. While this may support the stability requirement, it is extra infrastructure not explicitly requested.",
+      "evidence": [
+        "backend/migration.mo"
+      ]
+    },
+    {
+      "description": "MediaItem type and media library functionality (addMediaItem, updateMediaItem, deleteMediaItem, mediaLibrary state) appear to be in-memory only and explicitly not persisted to backend.",
+      "reason": "REQ-75 requires all admin changes to persist. The diff comments in CMSContext.tsx explicitly note MediaItem is 'in-memory only, not persisted to backend', which means the media library is carved out from the persistence requirement without a stated exception in the build request.",
+      "evidence": [
+        "frontend/src/contexts/CMSContext.tsx",
+        "frontend/src/pages/admin/MediaLibrary.tsx"
+      ]
+    }
+  ],
+  "confidence": 0.62,
   "changed_files": [
+    "backend/main.mo",
+    "backend/migration.mo",
     "frontend-file-summaries.txt",
-    "frontend/index.html",
-    "frontend/src/components/Footer.tsx",
-    "frontend/src/components/Header.tsx",
+    "frontend/src/components/CareerTimeline.tsx",
+    "frontend/src/components/FAQAccordion.tsx",
     "frontend/src/components/admin/AboutPageEditor.tsx",
     "frontend/src/components/admin/CommissionsPageEditor.tsx",
-    "frontend/src/components/admin/HeroEditor.tsx",
+    "frontend/src/components/admin/InquiryRow.tsx",
+    "frontend/src/components/admin/MediaTile.tsx",
+    "frontend/src/components/admin/NavigationEditor.tsx",
+    "frontend/src/components/admin/PressEditor.tsx",
+    "frontend/src/components/admin/TestimonialsEditor.tsx",
     "frontend/src/contexts/CMSContext.tsx",
-    "frontend/src/pages/About.tsx",
-    "frontend/src/pages/Commissions.tsx",
-    "frontend/src/pages/Home.tsx",
+    "frontend/src/hooks/useCMSBackend.ts",
+    "frontend/src/pages/Gallery.tsx",
+    "frontend/src/pages/admin/BlogManager.tsx",
+    "frontend/src/pages/admin/CommissionsManager.tsx",
+    "frontend/src/pages/admin/GalleryManager.tsx",
+    "frontend/src/pages/admin/MediaLibrary.tsx",
+    "frontend/src/pages/admin/MessagesInbox.tsx",
     "project_state.json"
   ]
 }

@@ -1,19 +1,5 @@
 import { useActor } from './useActor';
 import type {
-  Artwork as BackendArtwork,
-  Testimonial as BackendTestimonial,
-  PressMention as BackendPressMention,
-  CommissionInquiry as BackendCommissionInquiry,
-  ContactInquiry as BackendContactInquiry,
-  Notification as BackendNotification,
-  BlogPost as BackendBlogPost,
-  FAQItem as BackendFAQItem,
-  CommissionProcessStep as BackendProcessStep,
-  CareerMilestone as BackendCareerMilestone,
-  SiteSettings as BackendSiteSettings,
-  NavigationItem as BackendNavigationItem,
-} from '../backend';
-import type {
   Artwork,
   Testimonial,
   PressMention,
@@ -22,16 +8,168 @@ import type {
   Notification,
   BlogPost,
   FAQItem,
-  ProcessStep,
+  CommissionProcessStep,
   CareerMilestone,
   SiteSettings,
   NavigationItem,
-} from '../contexts/CMSContext';
+  AllCMSData,
+  SocialPlatform,
+  SEOSettings,
+} from '../backend';
 
-// Type conversion helpers: Frontend -> Backend
-function toBackendArtwork(a: Artwork): BackendArtwork {
+// ─── Frontend CMS types (mirrors CMSContext) ────────────────────────────────
+
+export interface FrontendArtwork {
+  id: number;
+  title: string;
+  year: number;
+  medium: string;
+  size: string;
+  location: string;
+  description: string;
+  category: string;
+  image: string;
+  additionalImages: string[];
+  available: boolean;
+  featured: boolean;
+  visible: boolean;
+  order: number;
+}
+
+export interface FrontendTestimonial {
+  id: number;
+  quote: string;
+  name: string;
+  location: string;
+  role: string;
+}
+
+export interface FrontendPressMention {
+  id: number;
+  publication: string;
+  date: string;
+  headline: string;
+  url: string;
+  excerpt: string;
+}
+
+export interface FrontendCommissionInquiry {
+  id: number;
+  name: string;
+  email: string;
+  description: string;
+  projectDescription?: string;
+  projectType?: string;
+  budgetRange?: string;
+  budget: string;
+  status: string;
+  timestamp: number;
+}
+
+export interface FrontendContactInquiry {
+  id: number;
+  name: string;
+  email: string;
+  message: string;
+  status: string;
+  timestamp: number;
+}
+
+export interface FrontendNotification {
+  id: number;
+  sourceType: string;
+  submitterName: string;
+  submitterEmail: string;
+  messagePreview: string;
+  fullPayload: string;
+  timestamp: number;
+  status: string;
+}
+
+export interface FrontendBlogPost {
+  id: number;
+  title: string;
+  slug: string;
+  content: string;
+  publishDate: number;
+  status: string;
+}
+
+export interface FrontendFAQItem {
+  id: number;
+  question: string;
+  answer: string;
+}
+
+export interface FrontendProcessStep {
+  id: number;
+  stepNumber: number;
+  title: string;
+  description: string;
+}
+
+export interface FrontendCareerMilestone {
+  id: number;
+  year: string;
+  event: string;
+}
+
+export interface FrontendSocialPlatform {
+  name: string;
+  url: string;
+  icon: string;
+}
+
+export interface FrontendSEOSettings {
+  page: string;
+  title: string;
+  description: string;
+  keywords: string;
+}
+
+export interface FrontendSiteSettings {
+  siteTitle: string;
+  siteTagline: string;
+  socialPlatforms: FrontendSocialPlatform[];
+  seoSettings: FrontendSEOSettings[];
+  googleAnalyticsId: string;
+  newsletterPlaceholder: string;
+  aboutBio: string;
+  artistStatement: string;
+  heroArtistName: string;
+  heroTagline: string;
+  heroIntroText: string;
+  commissionHeroText: string;
+  commissionPricingText: string;
+}
+
+export interface FrontendNavigationItem {
+  id: number;
+  name: string;
+  path: string;
+  order: number;
+}
+
+export interface FrontendAllCMSData {
+  artworks: FrontendArtwork[];
+  testimonials: FrontendTestimonial[];
+  pressMentions: FrontendPressMention[];
+  commissionInquiries: FrontendCommissionInquiry[];
+  contactInquiries: FrontendContactInquiry[];
+  notifications: FrontendNotification[];
+  blogPosts: FrontendBlogPost[];
+  faqItems: FrontendFAQItem[];
+  processSteps: FrontendProcessStep[];
+  careerMilestones: FrontendCareerMilestone[];
+  siteSettings: FrontendSiteSettings | null;
+  navigationItems: FrontendNavigationItem[];
+}
+
+// ─── Type conversion helpers ─────────────────────────────────────────────────
+
+function toBackendArtwork(a: FrontendArtwork): Artwork {
   return {
-    id: BigInt(a.id.replace(/\D/g, '') || '0'),
+    id: BigInt(a.id),
     title: a.title,
     year: BigInt(a.year),
     medium: a.medium,
@@ -40,7 +178,7 @@ function toBackendArtwork(a: Artwork): BackendArtwork {
     description: a.description,
     category: a.category,
     image: a.image,
-    additionalImages: a.additionalImages,
+    additionalImages: a.additionalImages ?? [],
     available: a.available,
     featured: a.featured,
     visible: a.visible,
@@ -48,9 +186,9 @@ function toBackendArtwork(a: Artwork): BackendArtwork {
   };
 }
 
-function fromBackendArtwork(a: BackendArtwork): Artwork {
+function fromBackendArtwork(a: Artwork): FrontendArtwork {
   return {
-    id: a.id.toString(),
+    id: Number(a.id),
     title: a.title,
     year: Number(a.year),
     medium: a.medium,
@@ -59,7 +197,7 @@ function fromBackendArtwork(a: BackendArtwork): Artwork {
     description: a.description,
     category: a.category,
     image: a.image,
-    additionalImages: Array.from(a.additionalImages),
+    additionalImages: Array.from(a.additionalImages ?? []),
     available: a.available,
     featured: a.featured,
     visible: a.visible,
@@ -67,9 +205,9 @@ function fromBackendArtwork(a: BackendArtwork): Artwork {
   };
 }
 
-function toBackendTestimonial(t: Testimonial): BackendTestimonial {
+function toBackendTestimonial(t: FrontendTestimonial): Testimonial {
   return {
-    id: BigInt(t.id.replace(/\D/g, '') || '0'),
+    id: BigInt(t.id),
     quote: t.quote,
     name: t.name,
     location: t.location,
@@ -77,9 +215,9 @@ function toBackendTestimonial(t: Testimonial): BackendTestimonial {
   };
 }
 
-function fromBackendTestimonial(t: BackendTestimonial): Testimonial {
+function fromBackendTestimonial(t: Testimonial): FrontendTestimonial {
   return {
-    id: t.id.toString(),
+    id: Number(t.id),
     quote: t.quote,
     name: t.name,
     location: t.location,
@@ -87,9 +225,9 @@ function fromBackendTestimonial(t: BackendTestimonial): Testimonial {
   };
 }
 
-function toBackendPressMention(p: PressMention): BackendPressMention {
+function toBackendPressMention(p: FrontendPressMention): PressMention {
   return {
-    id: BigInt(p.id.replace(/\D/g, '') || '0'),
+    id: BigInt(p.id),
     publication: p.publication,
     date: p.date,
     headline: p.headline,
@@ -98,9 +236,9 @@ function toBackendPressMention(p: PressMention): BackendPressMention {
   };
 }
 
-function fromBackendPressMention(p: BackendPressMention): PressMention {
+function fromBackendPressMention(p: PressMention): FrontendPressMention {
   return {
-    id: p.id.toString(),
+    id: Number(p.id),
     publication: p.publication,
     date: p.date,
     headline: p.headline,
@@ -109,156 +247,165 @@ function fromBackendPressMention(p: BackendPressMention): PressMention {
   };
 }
 
-function toBackendCommissionInquiry(c: CommissionInquiry): BackendCommissionInquiry {
+function toBackendCommissionInquiry(c: FrontendCommissionInquiry): CommissionInquiry {
   return {
-    id: BigInt(c.id.replace(/\D/g, '') || '0'),
+    id: BigInt(c.id),
     name: c.name,
     email: c.email,
     description: c.description,
     budget: c.budget,
     status: c.status,
-    timestamp: BigInt(c.timestamp) * BigInt(1_000_000),
+    timestamp: BigInt(c.timestamp),
   };
 }
 
-function fromBackendCommissionInquiry(c: BackendCommissionInquiry): CommissionInquiry {
+function fromBackendCommissionInquiry(c: CommissionInquiry): FrontendCommissionInquiry {
   return {
-    id: c.id.toString(),
+    id: Number(c.id),
     name: c.name,
     email: c.email,
     description: c.description,
     budget: c.budget,
-    status: c.status as CommissionInquiry['status'],
-    timestamp: Number(c.timestamp / BigInt(1_000_000)),
+    status: c.status,
+    timestamp: Number(c.timestamp),
   };
 }
 
-function toBackendContactInquiry(c: ContactInquiry): BackendContactInquiry {
+function toBackendContactInquiry(c: FrontendContactInquiry): ContactInquiry {
   return {
-    id: BigInt(c.id.replace(/\D/g, '') || '0'),
+    id: BigInt(c.id),
     name: c.name,
     email: c.email,
     message: c.message,
     status: c.status,
-    timestamp: BigInt(c.timestamp) * BigInt(1_000_000),
+    timestamp: BigInt(c.timestamp),
   };
 }
 
-function fromBackendContactInquiry(c: BackendContactInquiry): ContactInquiry {
+function fromBackendContactInquiry(c: ContactInquiry): FrontendContactInquiry {
   return {
-    id: c.id.toString(),
+    id: Number(c.id),
     name: c.name,
     email: c.email,
     message: c.message,
-    status: c.status as ContactInquiry['status'],
-    timestamp: Number(c.timestamp / BigInt(1_000_000)),
+    status: c.status,
+    timestamp: Number(c.timestamp),
   };
 }
 
-function toBackendNotification(n: Notification): BackendNotification {
+function toBackendNotification(n: FrontendNotification): Notification {
   return {
-    id: BigInt(n.id.replace(/\D/g, '') || '0'),
+    id: BigInt(n.id),
     sourceType: n.sourceType,
     submitterName: n.submitterName,
     submitterEmail: n.submitterEmail,
     messagePreview: n.messagePreview,
     fullPayload: n.fullPayload,
-    timestamp: BigInt(n.timestamp) * BigInt(1_000_000),
+    timestamp: BigInt(n.timestamp),
     status: n.status,
   };
 }
 
-function fromBackendNotification(n: BackendNotification): Notification {
+function fromBackendNotification(n: Notification): FrontendNotification {
   return {
-    id: n.id.toString(),
-    sourceType: n.sourceType as Notification['sourceType'],
+    id: Number(n.id),
+    sourceType: n.sourceType,
     submitterName: n.submitterName,
     submitterEmail: n.submitterEmail,
     messagePreview: n.messagePreview,
     fullPayload: n.fullPayload,
-    timestamp: Number(n.timestamp / BigInt(1_000_000)),
-    status: n.status as Notification['status'],
+    timestamp: Number(n.timestamp),
+    status: n.status,
   };
 }
 
-function toBackendBlogPost(b: BlogPost): BackendBlogPost {
+function toBackendBlogPost(b: FrontendBlogPost): BlogPost {
   return {
-    id: BigInt(b.id.replace(/\D/g, '') || '0'),
+    id: BigInt(b.id),
     title: b.title,
     slug: b.slug,
     content: b.content,
-    publishDate: BigInt(b.publishDate) * BigInt(1_000_000),
+    publishDate: BigInt(b.publishDate),
     status: b.status,
   };
 }
 
-function fromBackendBlogPost(b: BackendBlogPost): BlogPost {
+function fromBackendBlogPost(b: BlogPost): FrontendBlogPost {
   return {
-    id: b.id.toString(),
+    id: Number(b.id),
     title: b.title,
     slug: b.slug,
     content: b.content,
-    publishDate: Number(b.publishDate / BigInt(1_000_000)),
-    status: b.status as BlogPost['status'],
+    publishDate: Number(b.publishDate),
+    status: b.status,
   };
 }
 
-function toBackendFAQItem(f: FAQItem): BackendFAQItem {
+function toBackendFAQItem(f: FrontendFAQItem): FAQItem {
   return {
-    id: BigInt(f.id.replace(/\D/g, '') || '0'),
+    id: BigInt(f.id),
     question: f.question,
     answer: f.answer,
   };
 }
 
-function fromBackendFAQItem(f: BackendFAQItem): FAQItem {
+function fromBackendFAQItem(f: FAQItem): FrontendFAQItem {
   return {
-    id: f.id.toString(),
+    id: Number(f.id),
     question: f.question,
     answer: f.answer,
   };
 }
 
-function toBackendProcessStep(s: ProcessStep): BackendProcessStep {
+function toBackendProcessStep(s: FrontendProcessStep): CommissionProcessStep {
   return {
-    id: BigInt(s.id.replace(/\D/g, '') || '0'),
+    id: BigInt(s.id),
     stepNumber: BigInt(s.stepNumber),
     title: s.title,
     description: s.description,
   };
 }
 
-function fromBackendProcessStep(s: BackendProcessStep): ProcessStep {
+function fromBackendProcessStep(s: CommissionProcessStep): FrontendProcessStep {
   return {
-    id: s.id.toString(),
+    id: Number(s.id),
     stepNumber: Number(s.stepNumber),
     title: s.title,
     description: s.description,
   };
 }
 
-function toBackendCareerMilestone(m: CareerMilestone): BackendCareerMilestone {
+function toBackendCareerMilestone(m: FrontendCareerMilestone): CareerMilestone {
   return {
-    id: BigInt(m.id.replace(/\D/g, '') || '0'),
+    id: BigInt(m.id),
     year: m.year,
     event: m.event,
   };
 }
 
-function fromBackendCareerMilestone(m: BackendCareerMilestone): CareerMilestone {
+function fromBackendCareerMilestone(m: CareerMilestone): FrontendCareerMilestone {
   return {
-    id: m.id.toString(),
+    id: Number(m.id),
     year: m.year,
     event: m.event,
   };
 }
 
-function toBackendSiteSettings(s: SiteSettings): BackendSiteSettings {
+function toBackendSiteSettings(s: FrontendSiteSettings): SiteSettings {
   return {
     siteTitle: s.siteTitle,
     siteTagline: s.siteTagline,
-    socialPlatforms: s.socialPlatforms,
-    seoSettings: s.seoSettings,
+    socialPlatforms: s.socialPlatforms.map((p): SocialPlatform => ({
+      name: p.name,
+      url: p.url,
+      icon: p.icon,
+    })),
+    seoSettings: s.seoSettings.map((e): SEOSettings => ({
+      page: e.page,
+      title: e.title,
+      description: e.description,
+      keywords: e.keywords,
+    })),
     googleAnalyticsId: s.googleAnalyticsId,
     newsletterPlaceholder: s.newsletterPlaceholder,
     aboutBio: s.aboutBio,
@@ -271,12 +418,21 @@ function toBackendSiteSettings(s: SiteSettings): BackendSiteSettings {
   };
 }
 
-function fromBackendSiteSettings(s: BackendSiteSettings): SiteSettings {
+function fromBackendSiteSettings(s: SiteSettings): FrontendSiteSettings {
   return {
     siteTitle: s.siteTitle,
     siteTagline: s.siteTagline,
-    socialPlatforms: Array.from(s.socialPlatforms),
-    seoSettings: Array.from(s.seoSettings),
+    socialPlatforms: Array.from(s.socialPlatforms).map((p) => ({
+      name: p.name,
+      url: p.url,
+      icon: p.icon,
+    })),
+    seoSettings: Array.from(s.seoSettings).map((e) => ({
+      page: e.page,
+      title: e.title,
+      description: e.description,
+      keywords: e.keywords,
+    })),
     googleAnalyticsId: s.googleAnalyticsId,
     newsletterPlaceholder: s.newsletterPlaceholder,
     aboutBio: s.aboutBio,
@@ -289,184 +445,175 @@ function fromBackendSiteSettings(s: BackendSiteSettings): SiteSettings {
   };
 }
 
-function toBackendNavigationItem(n: NavigationItem): BackendNavigationItem {
+function toBackendNavigationItem(n: FrontendNavigationItem): NavigationItem {
   return {
-    id: BigInt(n.id.replace(/\D/g, '') || '0'),
+    id: BigInt(n.id),
     name: n.name,
     path: n.path,
     order: BigInt(n.order),
   };
 }
 
-function fromBackendNavigationItem(n: BackendNavigationItem): NavigationItem {
+function fromBackendNavigationItem(n: NavigationItem): FrontendNavigationItem {
   return {
-    id: n.id.toString(),
+    id: Number(n.id),
     name: n.name,
     path: n.path,
     order: Number(n.order),
   };
 }
 
-export interface CMSBackendData {
-  artworks: Artwork[];
-  testimonials: Testimonial[];
-  pressMentions: PressMention[];
-  commissionInquiries: CommissionInquiry[];
-  contactInquiries: ContactInquiry[];
-  notifications: Notification[];
-  blogPosts: BlogPost[];
-  faqItems: FAQItem[];
-  processSteps: ProcessStep[];
-  careerMilestones: CareerMilestone[];
-  siteSettings: SiteSettings | null;
-  navigationItems: NavigationItem[];
-}
+// ─── Hook ────────────────────────────────────────────────────────────────────
 
 export function useCMSBackend() {
   const { actor } = useActor();
 
-  async function loadAllData(): Promise<CMSBackendData> {
-    if (!actor) {
-      return {
-        artworks: [],
-        testimonials: [],
-        pressMentions: [],
-        commissionInquiries: [],
-        contactInquiries: [],
-        notifications: [],
-        blogPosts: [],
-        faqItems: [],
-        processSteps: [],
-        careerMilestones: [],
-        siteSettings: null,
-        navigationItems: [],
-      };
-    }
-
+  async function loadAllCMSData(): Promise<FrontendAllCMSData | null> {
+    if (!actor) return null;
     try {
-      const [
-        artworksRaw,
-        testimonialsRaw,
-        pressMentionsRaw,
-        commissionInquiriesRaw,
-        contactInquiriesRaw,
-        notificationsRaw,
-        blogPostsRaw,
-        faqItemsRaw,
-        processStepsRaw,
-        careerMilestonesRaw,
-        siteSettingsRaw,
-        navigationItemsRaw,
-      ] = await Promise.all([
-        actor.getArtworks(),
-        actor.getTestimonials(),
-        actor.getPressMentions(),
-        actor.getCommissionInquiries(),
-        actor.getContactInquiries(),
-        actor.getNotifications(),
-        actor.getBlogPosts(),
-        actor.getFAQItems(),
-        actor.getCommissionProcessSteps(),
-        actor.getCareerMilestones(),
-        actor.getSiteSettings(),
-        actor.getNavigationItems(),
-      ]);
-
+      const data: AllCMSData = await actor.getAllCMSData();
       return {
-        artworks: artworksRaw.map(fromBackendArtwork),
-        testimonials: testimonialsRaw.map(fromBackendTestimonial),
-        pressMentions: pressMentionsRaw.map(fromBackendPressMention),
-        commissionInquiries: commissionInquiriesRaw.map(fromBackendCommissionInquiry),
-        contactInquiries: contactInquiriesRaw.map(fromBackendContactInquiry),
-        notifications: notificationsRaw.map(fromBackendNotification),
-        blogPosts: blogPostsRaw.map(fromBackendBlogPost),
-        faqItems: faqItemsRaw.map(fromBackendFAQItem),
-        processSteps: processStepsRaw.map(fromBackendProcessStep),
-        careerMilestones: careerMilestonesRaw.map(fromBackendCareerMilestone),
-        siteSettings: siteSettingsRaw ? fromBackendSiteSettings(siteSettingsRaw) : null,
-        navigationItems: navigationItemsRaw.map(fromBackendNavigationItem),
+        artworks: Array.from(data.artworks).map(fromBackendArtwork),
+        testimonials: Array.from(data.testimonials).map(fromBackendTestimonial),
+        pressMentions: Array.from(data.pressMentions).map(fromBackendPressMention),
+        commissionInquiries: Array.from(data.commissionInquiries).map(fromBackendCommissionInquiry),
+        contactInquiries: Array.from(data.contactInquiries).map(fromBackendContactInquiry),
+        notifications: Array.from(data.notifications).map(fromBackendNotification),
+        blogPosts: Array.from(data.blogPosts).map(fromBackendBlogPost),
+        faqItems: Array.from(data.faqItems).map(fromBackendFAQItem),
+        processSteps: Array.from(data.commissionProcessSteps).map(fromBackendProcessStep),
+        careerMilestones: Array.from(data.careerMilestones).map(fromBackendCareerMilestone),
+        siteSettings: data.siteSettings ? fromBackendSiteSettings(data.siteSettings) : null,
+        navigationItems: Array.from(data.navigationItems).map(fromBackendNavigationItem),
       };
     } catch (err) {
-      console.error('Error loading CMS data:', err);
-      return {
-        artworks: [],
-        testimonials: [],
-        pressMentions: [],
-        commissionInquiries: [],
-        contactInquiries: [],
-        notifications: [],
-        blogPosts: [],
-        faqItems: [],
-        processSteps: [],
-        careerMilestones: [],
-        siteSettings: null,
-        navigationItems: [],
-      };
+      console.error('[useCMSBackend] loadAllCMSData failed:', err);
+      return null;
     }
   }
 
-  async function saveArtworks(artworks: Artwork[]): Promise<void> {
-    if (!actor) return;
-    await actor.setArtworks(artworks.map(toBackendArtwork));
+  async function saveArtworks(artworks: FrontendArtwork[]): Promise<void> {
+    if (!actor) { console.error('[useCMSBackend] saveArtworks: actor not ready'); return; }
+    try {
+      await actor.setArtworks(artworks.map(toBackendArtwork));
+    } catch (err) {
+      console.error('[useCMSBackend] saveArtworks failed:', err);
+      throw err;
+    }
   }
 
-  async function saveTestimonials(testimonials: Testimonial[]): Promise<void> {
-    if (!actor) return;
-    await actor.setTestimonials(testimonials.map(toBackendTestimonial));
+  async function saveTestimonials(testimonials: FrontendTestimonial[]): Promise<void> {
+    if (!actor) { console.error('[useCMSBackend] saveTestimonials: actor not ready'); return; }
+    try {
+      await actor.setTestimonials(testimonials.map(toBackendTestimonial));
+    } catch (err) {
+      console.error('[useCMSBackend] saveTestimonials failed:', err);
+      throw err;
+    }
   }
 
-  async function savePressMentions(mentions: PressMention[]): Promise<void> {
-    if (!actor) return;
-    await actor.setPressMentions(mentions.map(toBackendPressMention));
+  async function savePressMentions(pressMentions: FrontendPressMention[]): Promise<void> {
+    if (!actor) { console.error('[useCMSBackend] savePressMentions: actor not ready'); return; }
+    try {
+      await actor.setPressMentions(pressMentions.map(toBackendPressMention));
+    } catch (err) {
+      console.error('[useCMSBackend] savePressMentions failed:', err);
+      throw err;
+    }
   }
 
-  async function saveCommissionInquiries(inquiries: CommissionInquiry[]): Promise<void> {
-    if (!actor) return;
-    await actor.setCommissionInquiries(inquiries.map(toBackendCommissionInquiry));
+  async function saveCommissionInquiries(inquiries: FrontendCommissionInquiry[]): Promise<void> {
+    if (!actor) { console.error('[useCMSBackend] saveCommissionInquiries: actor not ready'); return; }
+    try {
+      await actor.setCommissionInquiries(inquiries.map(toBackendCommissionInquiry));
+    } catch (err) {
+      console.error('[useCMSBackend] saveCommissionInquiries failed:', err);
+      throw err;
+    }
   }
 
-  async function saveContactInquiries(inquiries: ContactInquiry[]): Promise<void> {
-    if (!actor) return;
-    await actor.setContactInquiries(inquiries.map(toBackendContactInquiry));
+  async function saveContactInquiries(inquiries: FrontendContactInquiry[]): Promise<void> {
+    if (!actor) { console.error('[useCMSBackend] saveContactInquiries: actor not ready'); return; }
+    try {
+      await actor.setContactInquiries(inquiries.map(toBackendContactInquiry));
+    } catch (err) {
+      console.error('[useCMSBackend] saveContactInquiries failed:', err);
+      throw err;
+    }
   }
 
-  async function saveNotifications(notifications: Notification[]): Promise<void> {
-    if (!actor) return;
-    await actor.setNotifications(notifications.map(toBackendNotification));
+  async function saveNotifications(notifications: FrontendNotification[]): Promise<void> {
+    if (!actor) { console.error('[useCMSBackend] saveNotifications: actor not ready'); return; }
+    try {
+      await actor.setNotifications(notifications.map(toBackendNotification));
+    } catch (err) {
+      console.error('[useCMSBackend] saveNotifications failed:', err);
+      throw err;
+    }
   }
 
-  async function saveBlogPosts(posts: BlogPost[]): Promise<void> {
-    if (!actor) return;
-    await actor.setBlogPosts(posts.map(toBackendBlogPost));
+  async function saveBlogPosts(blogPosts: FrontendBlogPost[]): Promise<void> {
+    if (!actor) { console.error('[useCMSBackend] saveBlogPosts: actor not ready'); return; }
+    try {
+      await actor.setBlogPosts(blogPosts.map(toBackendBlogPost));
+    } catch (err) {
+      console.error('[useCMSBackend] saveBlogPosts failed:', err);
+      throw err;
+    }
   }
 
-  async function saveFAQItems(items: FAQItem[]): Promise<void> {
-    if (!actor) return;
-    await actor.setFAQItems(items.map(toBackendFAQItem));
+  async function saveFAQItems(faqItems: FrontendFAQItem[]): Promise<void> {
+    if (!actor) { console.error('[useCMSBackend] saveFAQItems: actor not ready'); return; }
+    try {
+      await actor.setFAQItems(faqItems.map(toBackendFAQItem));
+    } catch (err) {
+      console.error('[useCMSBackend] saveFAQItems failed:', err);
+      throw err;
+    }
   }
 
-  async function saveProcessSteps(steps: ProcessStep[]): Promise<void> {
-    if (!actor) return;
-    await actor.setCommissionProcessSteps(steps.map(toBackendProcessStep));
+  async function saveProcessSteps(steps: FrontendProcessStep[]): Promise<void> {
+    if (!actor) { console.error('[useCMSBackend] saveProcessSteps: actor not ready'); return; }
+    try {
+      await actor.setCommissionProcessSteps(steps.map(toBackendProcessStep));
+    } catch (err) {
+      console.error('[useCMSBackend] saveProcessSteps failed:', err);
+      throw err;
+    }
   }
 
-  async function saveCareerMilestones(milestones: CareerMilestone[]): Promise<void> {
-    if (!actor) return;
-    await actor.setCareerMilestones(milestones.map(toBackendCareerMilestone));
+  async function saveCareerMilestones(milestones: FrontendCareerMilestone[]): Promise<void> {
+    if (!actor) { console.error('[useCMSBackend] saveCareerMilestones: actor not ready'); return; }
+    try {
+      await actor.setCareerMilestones(milestones.map(toBackendCareerMilestone));
+    } catch (err) {
+      console.error('[useCMSBackend] saveCareerMilestones failed:', err);
+      throw err;
+    }
   }
 
-  async function saveSiteSettings(settings: SiteSettings): Promise<void> {
-    if (!actor) return;
-    await actor.setSiteSettings(toBackendSiteSettings(settings));
+  async function saveSiteSettings(settings: FrontendSiteSettings): Promise<void> {
+    if (!actor) { console.error('[useCMSBackend] saveSiteSettings: actor not ready'); return; }
+    try {
+      await actor.setSiteSettings(toBackendSiteSettings(settings));
+    } catch (err) {
+      console.error('[useCMSBackend] saveSiteSettings failed:', err);
+      throw err;
+    }
   }
 
-  async function saveNavigationItems(items: NavigationItem[]): Promise<void> {
-    if (!actor) return;
-    await actor.setNavigationItems(items.map(toBackendNavigationItem));
+  async function saveNavigationItems(items: FrontendNavigationItem[]): Promise<void> {
+    if (!actor) { console.error('[useCMSBackend] saveNavigationItems: actor not ready'); return; }
+    try {
+      await actor.setNavigationItems(items.map(toBackendNavigationItem));
+    } catch (err) {
+      console.error('[useCMSBackend] saveNavigationItems failed:', err);
+      throw err;
+    }
   }
 
   return {
-    loadAllData,
+    loadAllCMSData,
     saveArtworks,
     saveTestimonials,
     savePressMentions,

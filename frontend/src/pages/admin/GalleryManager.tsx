@@ -8,13 +8,13 @@ export default function GalleryManager() {
   const { artworks, addArtwork, updateArtwork, deleteArtwork, isLoading } = useCMS();
   const [editingArtwork, setEditingArtwork] = useState<Artwork | undefined>(undefined);
   const [showForm, setShowForm] = useState(false);
-  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const sorted = [...artworks].sort((a, b) => a.order - b.order);
   const allSelected = sorted.length > 0 && selectedIds.size === sorted.length;
 
-  const toggleSelect = (id: string) => {
+  const toggleSelect = (id: number) => {
     setSelectedIds(prev => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
@@ -31,7 +31,7 @@ export default function GalleryManager() {
     }
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = (id: number) => {
     if (window.confirm('Delete this artwork? This cannot be undone.')) {
       deleteArtwork(id);
     }
@@ -39,7 +39,7 @@ export default function GalleryManager() {
 
   function handleSave(data: Omit<Artwork, 'id'> | Artwork) {
     if ('id' in data) {
-      updateArtwork(data.id, data);
+      updateArtwork(data as Artwork);
     } else {
       addArtwork(data);
     }
@@ -49,7 +49,10 @@ export default function GalleryManager() {
 
   // Bulk actions
   const bulkUpdate = (patch: Partial<Artwork>) => {
-    selectedIds.forEach(id => updateArtwork(id, patch));
+    selectedIds.forEach(id => {
+      const art = artworks.find(a => a.id === id);
+      if (art) updateArtwork({ ...art, ...patch });
+    });
     setSelectedIds(new Set());
   };
 
@@ -107,7 +110,7 @@ export default function GalleryManager() {
             onClick={() => {
               selectedIds.forEach(id => {
                 const art = artworks.find(a => a.id === id);
-                if (art) updateArtwork(id, { visible: !art.visible });
+                if (art) updateArtwork({ ...art, visible: !art.visible });
               });
               setSelectedIds(new Set());
             }}
@@ -235,7 +238,7 @@ export default function GalleryManager() {
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
                         <button
-                          onClick={() => updateArtwork(artwork.id, { visible: !artwork.visible })}
+                          onClick={() => updateArtwork({ ...artwork, visible: !artwork.visible })}
                           className="p-1.5 text-charcoal-muted hover:text-charcoal transition-colors"
                           title={artwork.visible ? 'Hide' : 'Show'}
                         >

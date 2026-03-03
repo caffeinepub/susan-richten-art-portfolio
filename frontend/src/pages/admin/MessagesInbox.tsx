@@ -7,8 +7,8 @@ type FilterTab = 'all' | 'unread' | 'responded';
 export default function MessagesInbox() {
   const { notifications, updateNotificationStatus, deleteNotification } = useCMS();
   const [filter, setFilter] = useState<FilterTab>('all');
-  const [expandedId, setExpandedId] = useState<string | null>(null);
-  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+  const [expandedId, setExpandedId] = useState<number | null>(null);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null);
 
   const filtered = notifications.filter(n => {
     if (filter === 'all') return true;
@@ -42,7 +42,7 @@ export default function MessagesInbox() {
     });
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = (id: number) => {
     if (confirmDeleteId === id) {
       deleteNotification(id);
       setConfirmDeleteId(null);
@@ -140,8 +140,8 @@ export default function MessagesInbox() {
                   <div className="shrink-0 flex items-center gap-3">
                     <span className="font-body text-xs text-charcoal-muted hidden sm:block">{formatDate(notification.timestamp)}</span>
                     {expandedId === notification.id
-                      ? <ChevronUp size={16} className="text-charcoal-muted" />
-                      : <ChevronDown size={16} className="text-charcoal-muted" />
+                      ? <ChevronUp size={14} className="text-charcoal-muted" />
+                      : <ChevronDown size={14} className="text-charcoal-muted" />
                     }
                   </div>
                 </div>
@@ -149,49 +149,41 @@ export default function MessagesInbox() {
                 {/* Expanded content */}
                 {expandedId === notification.id && (
                   <div className="px-5 pb-5 border-t border-beige-dark">
-                    <div className="pt-4 mb-4">
-                      <p className="font-body text-sm text-charcoal-light leading-relaxed whitespace-pre-wrap">
-                        {notification.fullPayload || notification.messagePreview}
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-3 flex-wrap">
-                      {notification.status !== 'read' && (
+                    <div className="pt-4 space-y-3">
+                      <div className="bg-beige/50 rounded-sm p-4">
+                        <p className="font-body text-sm text-charcoal whitespace-pre-wrap">{notification.fullPayload}</p>
+                      </div>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        {notification.status !== 'responded' && (
+                          <button
+                            onClick={() => updateNotificationStatus(notification.id, 'responded')}
+                            className="flex items-center gap-1.5 px-3 py-1.5 bg-green-50 text-green-700 font-body text-xs hover:bg-green-100 transition-colors rounded-sm"
+                          >
+                            <CheckCircle size={12} />
+                            Mark Responded
+                          </button>
+                        )}
+                        {notification.status === 'unread' && (
+                          <button
+                            onClick={() => updateNotificationStatus(notification.id, 'read')}
+                            className="flex items-center gap-1.5 px-3 py-1.5 bg-beige text-charcoal font-body text-xs hover:bg-beige-dark transition-colors rounded-sm"
+                          >
+                            <MailOpen size={12} />
+                            Mark Read
+                          </button>
+                        )}
                         <button
-                          onClick={() => updateNotificationStatus(notification.id, 'read')}
-                          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-body border border-beige-dark text-charcoal-muted hover:text-charcoal hover:border-charcoal transition-colors rounded-sm"
+                          onClick={() => handleDelete(notification.id)}
+                          className={`flex items-center gap-1.5 px-3 py-1.5 font-body text-xs transition-colors rounded-sm ${
+                            confirmDeleteId === notification.id
+                              ? 'bg-red-500 text-white hover:bg-red-600'
+                              : 'bg-beige text-charcoal-muted hover:text-red-500 hover:bg-red-50'
+                          }`}
                         >
-                          <MailOpen size={13} />
-                          Mark as Read
+                          <Trash2 size={12} />
+                          {confirmDeleteId === notification.id ? 'Confirm Delete' : 'Delete'}
                         </button>
-                      )}
-                      {notification.status !== 'responded' && (
-                        <button
-                          onClick={() => updateNotificationStatus(notification.id, 'responded')}
-                          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-body border border-green-300 text-green-700 hover:bg-green-50 transition-colors rounded-sm"
-                        >
-                          <CheckCircle size={13} />
-                          Mark as Responded
-                        </button>
-                      )}
-                      <button
-                        onClick={() => handleDelete(notification.id)}
-                        className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-body border transition-colors rounded-sm ${
-                          confirmDeleteId === notification.id
-                            ? 'border-red-400 bg-red-50 text-red-600'
-                            : 'border-beige-dark text-charcoal-muted hover:text-red-500 hover:border-red-300'
-                        }`}
-                      >
-                        <Trash2 size={13} />
-                        {confirmDeleteId === notification.id ? 'Confirm Delete' : 'Delete'}
-                      </button>
-                      {confirmDeleteId === notification.id && (
-                        <button
-                          onClick={() => setConfirmDeleteId(null)}
-                          className="text-xs font-body text-charcoal-muted hover:text-charcoal transition-colors"
-                        >
-                          Cancel
-                        </button>
-                      )}
+                      </div>
                     </div>
                   </div>
                 )}

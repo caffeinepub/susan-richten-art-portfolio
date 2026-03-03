@@ -3,6 +3,15 @@ import { Upload, Search } from 'lucide-react';
 import { useCMS, MediaItem } from '../../contexts/CMSContext';
 import MediaTile from '../../components/admin/MediaTile';
 
+function readFileAsDataURL(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
 export function MediaLibrary() {
   const { mediaLibrary, addMediaItem } = useCMS();
   const [search, setSearch] = useState('');
@@ -12,24 +21,18 @@ export function MediaLibrary() {
     item.tags.some(t => t.toLowerCase().includes(search.toLowerCase()))
   );
 
-  const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files ?? []);
-    files.forEach(file => {
-      const url = URL.createObjectURL(file);
-      const img = new Image();
-      img.onload = () => {
-        const item: Omit<MediaItem, 'id'> = {
-          url,
-          filename: file.name,
-          width: img.naturalWidth,
-          height: img.naturalHeight,
-          tags: [],
-          usedIn: [],
-        };
-        addMediaItem(item);
+    for (const file of files) {
+      const dataUrl = await readFileAsDataURL(file);
+      const item: Omit<MediaItem, 'id'> = {
+        url: dataUrl,
+        filename: file.name,
+        tags: [],
+        uploadedAt: new Date().toISOString(),
       };
-      img.src = url;
-    });
+      addMediaItem(item);
+    }
     e.target.value = '';
   };
 
